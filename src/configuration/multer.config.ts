@@ -1,6 +1,5 @@
 import { diskStorage } from 'multer';
 import {  join } from 'path';
-
 export const multerOptions = {
   storage: diskStorage({
     destination: join('src/Assets'),
