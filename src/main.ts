@@ -10,7 +10,6 @@ import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder, SwaggerDocumentOptions } from '@nestjs/swagger';
-import { join } from 'path';
 import * as express from 'express';
 import * as cors from 'cors';
 import { ConfigurationModule } from './configuration/configuration.module';
