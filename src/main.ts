@@ -41,7 +41,7 @@ async function bootstrap() {
   app.use(express.json({ limit: '50mb' }));
 
   app.useStaticAssets(join(__dirname, '..', 'assets', 'messages'));
-  app.useStaticAssets(join(__dirname, '..', 'assets', 'images'));
+
   app.set('trust proxy', 1); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
   app.use(helmet());
   // app.setGlobalPrefix('/api'); use api as global prefix if you don't have subdomain
