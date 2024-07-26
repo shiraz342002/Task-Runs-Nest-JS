@@ -23,7 +23,7 @@ export class PostEntity {
     type: [],
     example: ['image1.jpg', 'image2.jpg'],
   })
-  @Prop({ type: [String], default: [] })
+  @Prop({ type: [String], default: [],required:false })
   images: string[];
 
   @IsString()

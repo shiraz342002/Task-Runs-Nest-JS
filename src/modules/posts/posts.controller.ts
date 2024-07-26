@@ -83,8 +83,46 @@ export class PostsController {
     description: "Update Post",
     type: PostEntity,
   })
-  @Auth(Action.Update, "Post")
-  async update(@Param("id") id: string, @Body() updateDatato: UpdatePostDto) {
+
+  @Auth(Action.Update, "Update")
+  @ApiConsumes('multipart/form-data')
+  @ApiResponse({ status: 201, description: 'Post Updated successfully.' })
+  @ApiBody({
+    description: 'Post Updation data',
+    type: 'multipart/form-data',
+    schema: {
+      type: 'object',
+      properties: {
+        images: {
+          type: 'array',
+          items: {
+            type: 'string',
+            format: 'binary',
+          },
+        },
+        title:{type:"string"},
+        description:{type:"string"},
+        price:{type:"string"},
+        isUrgent:{type:"boolean"},
+        isHelpFree:{type:"boolean"},
+        obo:{type:"boolean"},
+        streetAddress: { type: 'string' },
+        city: { type: 'string' },
+        zipCode: { type: 'string' },
+        state: { type: 'string' },
+      },
+    },
+  })
+  @UseInterceptors(FilesInterceptor('images', 10, multerOptionsPostImages))
+  async update(@Param("id") id: string,
+  @Body() updateDatato: UpdatePostDto,
+  @UploadedFiles() images: Express.Multer.File[]
+) {
+  if (images) {
+    UpdatePostDto.images = images.map(file => file.path);
+  }
+    console.log(updateDatato);
+    console.log(id);
     return this.postsService.update(id, updateDatato);
   }
 

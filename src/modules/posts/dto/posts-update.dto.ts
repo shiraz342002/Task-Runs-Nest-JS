@@ -1,3 +1,4 @@
+import { Prop } from '@nestjs/mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import { IsBoolean, IsOptional, IsString } from 'class-validator';
@@ -13,6 +14,7 @@ export class UpdatePostDto {
       description: "title of the Post",
       title: "title",
     })
+    @Prop({ type: String, required: true, trim: true })
     title: string;
   
     @IsString()
@@ -100,4 +102,5 @@ export class UpdatePostDto {
     @IsOptional()
     @ApiProperty()
     price: string;
+  static images: string[];
 }
