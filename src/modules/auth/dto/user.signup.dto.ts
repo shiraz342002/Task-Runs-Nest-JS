@@ -5,5 +5,6 @@ export class UserSignupDto extends PickType(User, [
   "name",
   "email",
   "password",
-  "city"
+  "city",
+  
 ] as const) {}

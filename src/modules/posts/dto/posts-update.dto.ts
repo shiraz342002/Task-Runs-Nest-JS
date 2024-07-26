@@ -34,7 +34,7 @@ export class UpdatePostDto {
         type: "string",
       },
     })
-    image: string[];
+    images: string[];
   
     @IsString()
     @IsOptional()
@@ -49,8 +49,8 @@ export class UpdatePostDto {
     @IsOptional()
     @ApiProperty()
     @JSONSchema({
-      description: "streetAddress of Post",
-      title: "streetAddress",
+      description: "Street Address of the Post",
+      title: "Street Address",
     })
     streetAddress: string;
   
@@ -84,12 +84,12 @@ export class UpdatePostDto {
     @IsBoolean()@IsOptional()
     @Transform(({ value }) => value === "true")
     @ApiProperty()
-    urgent: boolean;
+    isUrgent: boolean;
   
     @IsBoolean()@IsOptional()
     @Transform(({ value }) => value === "true")
     @ApiProperty()
-    helpfree: boolean;
+    isHelpFree: boolean;
   
     @IsBoolean()@IsOptional()
     @Transform(({ value }) => value === "true")

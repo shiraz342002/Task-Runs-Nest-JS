@@ -5,6 +5,7 @@ import { Model } from "mongoose";
 import { ResponseCode } from "../../exceptions";
 import { UpdatePostDto } from "./dto/posts-update.dto";
 
+
 @Injectable()
 export class PostsService {
   constructor(
@@ -12,6 +13,8 @@ export class PostsService {
   ) {}
   async create(createDto: PostEntity) {
     const create: PostDocument = new this.schemaModel(createDto);
+    console.log("Yahan sab set ha");
+    
     return await create.save().catch((err) => {
       throw new HttpException(err.message, ResponseCode.BAD_REQUEST);
     });

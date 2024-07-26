@@ -21,7 +21,7 @@ import { LoggerService } from "../../logger/logger.service";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { User } from "./user.schema";
 import { UserService } from "./user.service";
-import { multerOptions } from "src/configuration/multer.config";
+import {  multerOptionsAvatar } from "src/configuration/multer.config";
 import { FileInterceptor } from "@nestjs/platform-express";
 
 @Controller(constTexts.userRoute.name)
@@ -80,7 +80,7 @@ export class UserController {
   })
   @Auth(Action.Read, "User")
   @ApiConsumes('multipart/form-data')
-  @UseInterceptors(FileInterceptor('avatar', multerOptions))
+  @UseInterceptors(FileInterceptor('avatar', multerOptionsAvatar))
   async update(@AuthUser() user: User, @Body() userUpdateDto: UpdateUserDto,@UploadedFile() file: Express.Multer.File) {
     if (file) {
       userUpdateDto.avatar = `/${file.filename}`;

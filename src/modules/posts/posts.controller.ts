@@ -7,15 +7,20 @@ import {
   Patch,
   Post,
   Query,
+  UploadedFiles,
+  UseInterceptors,
 } from "@nestjs/common";
 import { PostsService } from "./posts.service";
 import { constTexts } from "../../constants";
-import { ApiQuery, ApiTags } from "@nestjs/swagger";
+import { ApiBody, ApiConsumes, ApiQuery, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { PostEntity } from "./schema/post.schema";
 import { User } from "../user/user.schema";
 import { ApiPageOkResponse, Auth, AuthUser } from "src/decorators";
 import { Action } from "src/casl/userRoles";
 import { UpdatePostDto } from "./dto/posts-update.dto";
+import { FilesInterceptor } from "@nestjs/platform-express";
+import { multerOptionsPostImages } from "src/configuration/multer.config";
+
 
 @Controller(constTexts.postRoute.name)
 @ApiTags(constTexts.postRoute.name)
@@ -23,15 +28,44 @@ export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @Post()
-  @ApiPageOkResponse({
-    description: "Create Post",
-    type: PostEntity,
-  })
+  @ApiConsumes('multipart/form-data')
   @Auth(Action.Create, "Post")
-  async create(@AuthUser() user: User, @Body() createDto: PostEntity) {
+  @ApiResponse({ status: 201, description: 'Post created successfully.' })
+  @ApiBody({
+    description: 'Post creation data',
+    type: 'multipart/form-data',
+    schema: {
+      type: 'object',
+      properties: {
+        images: {
+          type: 'array',
+          items: {
+            type: 'string',
+            format: 'binary',
+          },
+        },
+        streetAddress: { type: 'string' },
+        city: { type: 'string' },
+        zipCode: { type: 'string' },
+        state: { type: 'string' },
+      },
+    },
+  })
+  @UseInterceptors(FilesInterceptor('images', 10, multerOptionsPostImages))
+  async create(
+    @AuthUser() user: User,
+    @Body() createDto: PostEntity,
+    @UploadedFiles() images: Express.Multer.File[]
+  ) {
+    if (images) {
+      createDto.images = images.map(file => file.path);
+    }
     createDto.userId = user.id;
-    return this.postsService.create(createDto);
+    const post = await this.postsService.create(createDto);
+    return post;
   }
+
+
 
   @Get()
   @ApiPageOkResponse({
