@@ -30,7 +30,6 @@ export class PostsController {
   @Auth(Action.Create, "Post")
   async create(@AuthUser() user: User, @Body() createDto: PostEntity) {
     createDto.userId = user.id;
-
     return this.postsService.create(createDto);
   }
 

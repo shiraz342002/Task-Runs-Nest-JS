@@ -1,10 +1,11 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
 import {
+  IsArray,
+  IsBoolean,
   IsOptional,
   IsString,
   MinLength,
-  // ValidateNested,
 } from "class-validator";
 import {
   JSONSchema,
@@ -13,6 +14,7 @@ import {
 import mongoose, { Document } from "mongoose";
 
 export type PostDocument = PostEntity & Document;
+
 @Schema({
   toJSON: {
     getters: true,
@@ -27,10 +29,10 @@ export class PostEntity {
   @MinLength(1)
   @ApiProperty()
   @JSONSchema({
-    description: "title of the Post",
+    description: "Title of the Post",
     title: "title",
   })
-  @Prop({ type: "string", required: true, trim: true })
+  @Prop({ type: String, required: true, trim: true })
   title: string;
 
   @IsString()
@@ -40,23 +42,82 @@ export class PostEntity {
     description: "Description of Post",
     title: "Description",
   })
-  @Prop({ type: "string", required: true, trim: true })
+  @Prop({ type: String, required: true, trim: true })
   description: string;
+
+  @IsOptional()
+  @IsArray()
+  @ApiProperty({
+    description: 'Images of Post',
+    type: 'array',
+    items: {
+      type: 'string',
+    },
+  })
+  @Prop({ type: [String], default: [] })
+  images: string[];
 
   @IsOptional()
   @ApiProperty()
   @JSONSchema({
-    description: "Images of Post",
-    title: "Images",
-    type: "array",
-    items: {
-      type: "string",
-    },
+    description: "Price of the service",
+    title: "Price",
   })
-  @Prop({ type: [{ type: String, trim: true }] })
-  image: string[];
+  @Prop({ type: Number, required: false })
+  price: number;
+
+  @IsBoolean()
+  @IsOptional()
   @ApiProperty()
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "User" })
+  @JSONSchema({
+    description: "Is the task Urgent?",
+    title: "Urgent Task",
+  })
+  @Prop({ type: Boolean, required: false })
+  isUrgent: boolean;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty()
+  @JSONSchema({
+    description: "Street Address of the Poster",
+    title: "Street Address"
+  })
+  @Prop({ type: String, required: false, trim: true })
+  streetAddress: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty()
+  @JSONSchema({
+    description: "City of the Poster",
+    title: "City"
+  })
+  @Prop({ type: String, required: false, trim: true })
+  city: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty()
+  @JSONSchema({
+    description: "State of the Poster",
+    title: "State"
+  })
+  @Prop({ type: String, required: false, trim: true })
+  state: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty()
+  @JSONSchema({
+    description: "Zip code of the Poster",
+    title: "Zip Code"
+  })
+  @Prop({ type: String, required: false, trim: true })
+  zipcode: string;
+
+  @ApiProperty()
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "User", required: true })
   userId: string;
 }
 
@@ -67,6 +128,6 @@ PostSchema.index({ location: "2dsphere" });
 PostSchema.virtual("id").get(function (this: PostDocument) {
   return this._id.toString();
 });
+
 export { PostSchema };
 export const userJsonSchema = validationMetadatasToSchemas();
-//console.log('schemas=>', JSON.stringify(userJsonSchema)); logger , exclude fileds, test cases
