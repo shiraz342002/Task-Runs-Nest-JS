@@ -102,5 +102,5 @@ export class UpdatePostDto {
     @IsOptional()
     @ApiProperty()
     price: string;
-  static images: string[];
+  //  static images: string[];
 }

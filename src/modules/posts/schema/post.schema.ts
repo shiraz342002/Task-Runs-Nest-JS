@@ -1,7 +1,10 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
+
+import { Transform } from "class-transformer";
 // import { Transform } from "class-transformer";
-import { IsArray, IsOptional, IsString,  } from "class-validator";
+import { IsArray, IsBoolean, IsOptional, IsString,  } from "class-validator";
+import { JSONSchema } from "class-validator-jsonschema";
 import mongoose, { Document } from "mongoose";
 
 export type PostDocument = PostEntity & Document;
@@ -15,6 +18,25 @@ export type PostDocument = PostEntity & Document;
 })
 export class PostEntity {
   
+  @IsString()
+  @IsOptional()
+  @ApiProperty()
+  @JSONSchema({
+    description: "title of the Post",
+    title: "title",
+  })
+  @Prop({ type: String, required: false, trim: true })
+  title: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty()
+  @JSONSchema({
+    description: "Description of Post",
+    title: "Description",
+  })
+  @Prop({ type: String, required: false, trim: true })
+  description: string;
 
   @IsOptional()
   @IsArray()
@@ -65,6 +87,54 @@ export class PostEntity {
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "User", required: true})
   userId: string;
+
+  @IsBoolean()@IsOptional()
+  @Transform(({ value }) => value === "true")
+  @ApiProperty()
+  @Prop({ type: Boolean, required: false, trim: true })
+  isUrgent: boolean;
+
+  @IsBoolean()@IsOptional()
+  @Transform(({ value }) => value === "true")
+  @ApiProperty()
+  @Prop({ type: Boolean, required: false, trim: true })
+  isHelpFree: boolean;
+
+  @IsBoolean()@IsOptional()
+  @Transform(({ value }) => value === "true")
+  @ApiProperty()
+  @Prop({ type: Boolean, required: false, trim: true })
+  obo: boolean;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty()
+  @Prop({ type: String, required: false, trim: true })
+  price: string;
+
+  @ApiProperty({
+    description: "Coordinates of the location [longitude, latitude]",
+    title: "Coordinates",
+  })
+  
+  @Prop({
+    type: {
+      type: String,
+      enum: ['Point'],
+      default: 'Point',
+    },
+    coordinates: {
+      type: [Number],
+      required: true,
+    },
+  })
+  location: {
+    type: 'Point';
+    coordinates: [number, number];
+  };
+
+
+
 }
 
 const PostSchema = SchemaFactory.createForClass(PostEntity);

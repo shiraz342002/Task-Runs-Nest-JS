@@ -79,12 +79,6 @@ export class PostsController {
   }
 
   @Patch(constTexts.postRoute.update)
-  @ApiPageOkResponse({
-    description: "Update Post",
-    type: PostEntity,
-  })
-
-  @Auth(Action.Update, "Update")
   @ApiConsumes('multipart/form-data')
   @ApiResponse({ status: 201, description: 'Post Updated successfully.' })
   @ApiBody({
@@ -100,31 +94,48 @@ export class PostsController {
             format: 'binary',
           },
         },
-        title:{type:"string"},
-        description:{type:"string"},
-        price:{type:"string"},
-        isUrgent:{type:"boolean"},
-        isHelpFree:{type:"boolean"},
-        obo:{type:"boolean"},
-        streetAddress: { type: 'string' },
-        city: { type: 'string' },
-        zipCode: { type: 'string' },
-        state: { type: 'string' },
-      },
+      title: { type: 'string' },
+      description: { type: 'string' },
+      price: { type: 'string' },
+      location: {
+        type: 'object',
+        properties: {
+          type: { type: 'string', example: 'Point' },
+          coordinates: {
+            type: 'array',
+            items: { type: 'number' },
+            example: [40.7128, -74.0060],
+          },
+        },
+        example: {
+          type: 'Point',
+          coordinates: [37.7749, -122.4194],  
+        },},
+      isUrgent: { type: 'boolean' },
+      isHelpFree: { type: 'boolean' },
+      obo: { type: 'boolean' },
+      streetAddress: { type: 'string' },
+      city: { type: 'string' },
+      zipCode: { type: 'string' },
+      state: { type: 'string' },
     },
-  })
-  @UseInterceptors(FilesInterceptor('images', 10, multerOptionsPostImages))
-  async update(@Param("id") id: string,
+  },
+})
+@UseInterceptors(FilesInterceptor('images', 10, multerOptionsPostImages))
+async update(
+  @Param('id') id: string,
   @Body() updateDatato: UpdatePostDto,
-  @UploadedFiles() images: Express.Multer.File[]
+  @UploadedFiles() images: Express.Multer.File[],
 ) {
   if (images) {
-    UpdatePostDto.images = images.map(file => file.path);
+    updateDatato.images = images.map(file => file.path);
   }
-    console.log(updateDatato);
-    console.log(id);
-    return this.postsService.update(id, updateDatato);
-  }
+
+  console.log('Update Data:', updateDatato);
+  console.log('ID:', id);
+
+  return this.postsService.update(id, updateDatato);
+}
 
   @Delete(constTexts.postRoute.delete)
   @ApiPageOkResponse({

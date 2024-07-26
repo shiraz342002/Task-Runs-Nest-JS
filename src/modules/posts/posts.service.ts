@@ -48,12 +48,14 @@ export class PostsService {
   }
 
   async update(id: string, updateDataDto: UpdatePostDto) {
+    console.log(updateDataDto);
     const updateData = await this.schemaModel
       .findByIdAndUpdate(id, updateDataDto, { new: true })
       .exec()
       .catch((err) => {
         throw new HttpException(err.message, ResponseCode.BAD_REQUEST);
       });
+      
     return { data: updateData };
   }
 
