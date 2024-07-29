@@ -51,7 +51,6 @@ export class PostsService {
   async update(id: string, updateDataDto: UpdatePostDto) {
     try {
       const updateData = await this.schemaModel.findByIdAndUpdate(id, { $set: updateDataDto }, { new: true }).exec();
-      console.log('Updated Data:', updateData);
       return { data: updateData };
     } catch (err) {
       console.error('Error updating data:', err.message);
