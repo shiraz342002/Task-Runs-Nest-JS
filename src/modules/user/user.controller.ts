@@ -5,6 +5,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   Patch,
   Query,
   UploadedFile,
@@ -23,6 +24,7 @@ import { User } from "./user.schema";
 import { UserService } from "./user.service";
 import {  multerOptionsAvatar } from "src/configuration/multer.config";
 import { FileInterceptor } from "@nestjs/platform-express";
+
 
 @Controller(constTexts.userRoute.name)
 @ApiTags(constTexts.userRoute.name)
@@ -97,4 +99,31 @@ export class UserController {
   async deleteAccount(@AuthUser() user: User) {
     return this.userService.delete(user.id);
   }
+
+  @Get(constTexts.userRoute.myprofile)
+  @ApiPageOkResponse({
+  description: "View My Profile",
+  type: User,
+  })
+  @Auth(Action.Read, "User")
+  async viewProfile(@AuthUser() user: User): Promise<User> {
+  return this.userService.viewProfile(user.id);
+  }
+
+  @Get(constTexts.userRoute.otherUserProfile)
+  @ApiPageOkResponse({
+    description: "View Other User Profile",
+    type: User,
+  })
+  @Auth(Action.Read, "User") 
+  async viewOtherProfile(
+    @Param('id') id: string, 
+    @AuthUser() user: User 
+  ): Promise<User> {
+    console.log(id);
+    return this.userService.viewOtherProfile(id);
+  }
+
+
+  
 }

@@ -42,7 +42,7 @@ export const ErrorCodesMeta = {
     message: "Your account has been blocked.",
   },
   USER_NOT_EXISTS_WITH_THIS_EMAIL: {
-    message: "User not exist with this email",
+    message: "User not exist with this email or Otp is Invalid",
   },
   USER_NOT_EXISTS_WITH_THIS_REF_CODE: {
     message: "User not exist with this Reference Code!",

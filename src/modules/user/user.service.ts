@@ -139,6 +139,8 @@ export class UserService {
       email: dto.email,
       otp: dto.otp,
     });
+    console.log(accExist);
+    
     if (!accExist) {
       throw new HttpException(
         ErrorCodesMeta.USER_NOT_EXISTS_WITH_THIS_EMAIL,
@@ -335,4 +337,25 @@ export class UserService {
         throw new HttpException(err.message, ResponseCode.BAD_REQUEST);
       });
   }
+  async viewProfile(userId:string){
+    const fieldsToSelect = 'avatar address email phone about';
+    const data = await this.userModel.findById(userId).select(fieldsToSelect).exec().catch((err)=>{
+      throw new HttpException(err.message,ResponseCode.NOT_FOUND);
+    })
+    return data
+  }
+
+  async viewOtherProfile(userId:string){
+    console.log(userId);
+    
+    const fieldsToSelect = 'avatar name profession ratings createdAt task_completed city zip_code about';
+    const data = await this.userModel.findById(userId).select(fieldsToSelect).exec().catch((err)=>{
+      throw new HttpException(err.message,ResponseCode.NOT_FOUND);
+    })
+    return data
+  }
+
+
 }
+
+

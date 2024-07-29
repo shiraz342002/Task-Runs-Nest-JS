@@ -72,13 +72,14 @@ export const constTexts = {
 
   userRoute: {
     name: "users",
-    otherUserProfile: "otherUserProfile",
+    otherUserProfile: ":id",
     allUsers: "allUsers",
     dashUsers: "dashUsersCount",
     delete: ":id",
     schema: "/schema",
     handleBlock: "handleBlock",
     deleteAccount: "deleteAccount",
+    myprofile:"viewMyProfile"
   },
 
   chatRoute: {
