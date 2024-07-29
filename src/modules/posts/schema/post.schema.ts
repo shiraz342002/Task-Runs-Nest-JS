@@ -25,7 +25,7 @@ export class PostEntity {
     description: "title of the Post",
     title: "title",
   })
-  @Prop({ type: String, required: false, trim: true })
+  @Prop({ type: String, required: false, trim: true,default:""})
   title: string;
 
   @IsString()
@@ -35,7 +35,7 @@ export class PostEntity {
     description: "Description of Post",
     title: "Description",
   })
-  @Prop({ type: String, required: false, trim: true })
+  @Prop({ type: String, required: false, trim: true,default:"" })
   description: string;
 
   @IsOptional()
@@ -54,7 +54,7 @@ export class PostEntity {
     description: "City of the Post",
     example: "New York",
   })
-  @Prop({ type: String, required: true, trim: true })
+  @Prop({ type: String, required: true, trim: true,default:"" })
   city?: string;
 
   @IsString()
@@ -63,7 +63,7 @@ export class PostEntity {
     description: "Street Address of the Post",
     example: "123 Main St",
   })
-  @Prop({ type: String, required: true, trim: true })
+  @Prop({ type: String, required: true, trim: true,default:"" })
   streetAddress?: string;
 
   @IsString()
@@ -72,7 +72,7 @@ export class PostEntity {
     description: "State of the Post",
     example: "NY",
   })
-  @Prop({ type: String, required: true, trim: true })
+  @Prop({ type: String, required: true, trim: true,default:"" })
   state?: string;
 
   @IsString()
@@ -81,35 +81,38 @@ export class PostEntity {
     description: "Zip code of the Poster",
     example: "10001",
   })
-  @Prop({ type: String, required: true, trim: true })
+  @Prop({ type: String, required: true, trim: true,default:"" })
   zipCode?: string;
 
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "User", required: true })
   userId: string;
 
-  @IsBoolean() @IsOptional()
+  @IsBoolean()
+  @IsOptional()
   @Transform(({ value }) => value === "true")
-  @ApiProperty()
-  @Prop({ type: Boolean, required: false, trim: true })
+  @ApiProperty({ default: true })
+  @Prop({ type: Boolean, required: false, default: false })
   isUrgent: boolean;
 
-  @IsBoolean() @IsOptional()
+
+  @IsBoolean()
+  @IsOptional()
   @Transform(({ value }) => value === "true")
   @ApiProperty()
-  @Prop({ type: Boolean, required: false, trim: true })
+  @Prop({ type: Boolean, required: false, trim: true ,default: false})
   isHelpFree: boolean;
 
   @IsBoolean() @IsOptional()
   @Transform(({ value }) => value === "true")
   @ApiProperty()
-  @Prop({ type: Boolean, required: false, trim: true })
+  @Prop({ type: Boolean, required: false, trim: true,default: true  })
   obo: boolean;
 
   @IsString()
   @IsOptional()
   @ApiProperty()
-  @Prop({ type: String, required: false, trim: true })
+  @Prop({ type: String, required: false, trim: true,default:"" })
   price: string;
 
   @IsOptional()
@@ -132,7 +135,7 @@ export class PostEntity {
     coordinates: {
       type: [Number],
       required: true,
-      default: [0, 0], // Provide default coordinates
+      default: [0, 0],
       validate: {
         validator: function (value) {
           return value.length === 2;

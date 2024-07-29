@@ -63,6 +63,9 @@ export class PostsController {
     const post = await this.postsService.create(createDto);
     return post;
   }
+
+
+
   @Get()
   @ApiPageOkResponse({
     description: "Get all List",
@@ -104,8 +107,11 @@ export class PostsController {
             },
           },
           example: {
-            type: 'Point',
-            coordinates: [37.7749, -122.4194],
+            "type": "Point",
+            "coordinates": [
+              -122.4194,  // Longitude
+              37.7749     // Latitude
+            ]
           },
         },
         isUrgent: { type: 'boolean' },
@@ -121,25 +127,23 @@ export class PostsController {
   @UseInterceptors(FilesInterceptor('images', 10, multerOptionsPostImages))
   async update(
     @Param('id') id: string,
-    @Body() updateDatato: UpdatePostDto,
+    @Body() updateDataDto: UpdatePostDto,
     @UploadedFiles() images: Express.Multer.File[],
   ) {
     if (images) {
-      updateDatato.images = images.map(file => file.path);
+      updateDataDto.images = images.map(file => file.path);
+    } else {
+      updateDataDto.images = [];
     }
-    if (updateDatato.location) {
-      if (typeof updateDatato.location === 'string') {
-        try {
-          updateDatato.location = JSON.parse(updateDatato.location);
-        } catch (error) {
-          console.log("incorrect");
-        }
+    if (updateDataDto.location && typeof updateDataDto.location === 'string') {
+      try {
+        updateDataDto.location = JSON.parse(updateDataDto.location);
+      } catch (error) {
+        console.error("Invalid location format:", updateDataDto.location);
       }
     }
-    console.log('Update Data:', updateDatato);
-    console.log('ID:', id);
-
-    return this.postsService.update(id, updateDatato);
+    const result = await this.postsService.update(id, updateDataDto);
+    return result;
   }
 
   @Delete(constTexts.postRoute.delete)

@@ -6,7 +6,7 @@ import { ResponseCode } from "../../exceptions";
 import { UpdatePostDto } from "./dto/posts-update.dto";
 
 import { CreatePostDto } from "./dto/create.post.dto";
-import { TestDocument } from "./schema/Update.schema";
+// import { TestDocument } from "./schema/Update.schema";
 
 
 @Injectable()
@@ -14,11 +14,8 @@ export class PostsService {
   constructor(
     @InjectModel(PostEntity.name) private schemaModel: Model<PostDocument>
   ) { }
-  async create(createDto: CreatePostDto): Promise<TestDocument> {
-    console.log(createDto);
-    const create: TestDocument = new this.schemaModel(createDto);
-    console.log(create);
-
+  async create(createDto: CreatePostDto): Promise<PostDocument> {
+    const create: PostDocument = new this.schemaModel(createDto);
     return await create.save().catch((err) => {
       throw new HttpException(err.message, ResponseCode.BAD_REQUEST);
     });
@@ -52,17 +49,16 @@ export class PostsService {
   }
 
   async update(id: string, updateDataDto: UpdatePostDto) {
-    console.log(updateDataDto);
-    const updateData = await this.schemaModel
-
-      .findByIdAndUpdate(id, { $set: updateDataDto }, { new: true })
-      .exec()
-      .catch((err) => {
-        throw new HttpException(err.message, ResponseCode.BAD_REQUEST);
-      });
-
-    return { data: updateData };
+    try {
+      const updateData = await this.schemaModel.findByIdAndUpdate(id, { $set: updateDataDto }, { new: true }).exec();
+      console.log('Updated Data:', updateData);
+      return { data: updateData };
+    } catch (err) {
+      console.error('Error updating data:', err.message);
+      throw new HttpException(err.message, ResponseCode.BAD_REQUEST);
+    }
   }
+  
 
   async deletePost(id: string) {
     return await this.schemaModel

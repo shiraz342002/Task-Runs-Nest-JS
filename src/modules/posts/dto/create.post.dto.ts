@@ -8,4 +8,5 @@ export class CreatePostDto extends PickType(PostEntity, [
   'state',
   'images',
   'userId',
+  "title"
 ] as const) {}
