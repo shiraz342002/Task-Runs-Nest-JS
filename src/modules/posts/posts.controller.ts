@@ -78,6 +78,7 @@ export class PostsController {
   }
 
   @Patch(constTexts.postRoute.update)
+  @Auth(Action.Update, "Post")
   @ApiConsumes('multipart/form-data')
   @ApiResponse({ status: 201, description: 'Post Updated successfully.' })
   @ApiBody({
@@ -151,7 +152,7 @@ export class PostsController {
     description: "Update Post",
     type: PostEntity,
   })
-  @Auth(Action.Update, "Post")
+  @Auth(Action.Delete, "Post")
   async deletePost(@Param("id") id: string) {
     return this.postsService.deletePost(id);
   }
