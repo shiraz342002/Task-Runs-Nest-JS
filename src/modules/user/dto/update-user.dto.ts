@@ -10,23 +10,22 @@ import {
 import { Prop } from "@nestjs/mongoose";
 import { UserUpdateDto } from "src/modules/auth/dto/user.update.dto";
 
-export class UpdateUserDto extends PartialType(UserUpdateDto)
- {
+export class UpdateUserDto extends PartialType(UserUpdateDto) {
   @IsString()
+  @IsOptional()
   @MinLength(3)
   @MaxLength(40)
   @ApiProperty()
-  @IsOptional()
   @JSONSchema({
     description: "Name of User",
     title: "Name",
   })
-  @Prop({ type: "string", trim: true, required: true})
+  @Prop({ type: "string", trim: true, required: false })
   name: string;
 
-  @ApiProperty()
   @IsEmail()
   @IsOptional()
+  @ApiProperty()
   @JSONSchema({
     description: "Email of User",
     title: "Email",
@@ -41,10 +40,9 @@ export class UpdateUserDto extends PartialType(UserUpdateDto)
   email: string;
 
   @IsString()
-  @ApiProperty()
-  @IsString()
-  @MinLength(6)
   @IsOptional()
+  @MinLength(6)
+  @ApiProperty()
   @JSONSchema({
     description: "Password of User",
     title: "Password",
@@ -52,19 +50,19 @@ export class UpdateUserDto extends PartialType(UserUpdateDto)
   @Prop({ type: "string", trim: true, required: false, default: "" })
   password: string;
 
-  @ApiProperty()
   @IsString()
   @IsOptional()
   @MinLength(5)
+  @ApiProperty()
   @JSONSchema({
     description: "Information about User",
     title: "About",
   })
-
   @Prop({ type: "string", default: "" })
   about: string;
-  @IsOptional()
+
   @IsString()
+  @IsOptional()
   @MinLength(3)
   @ApiProperty()
   @JSONSchema({
@@ -78,53 +76,52 @@ export class UpdateUserDto extends PartialType(UserUpdateDto)
   @IsString()
   @ApiProperty()
   @JSONSchema({
-    description: "phone",
-    title: "phone",
+    description: "Phone",
+    title: "Phone",
   })
   @Prop({ type: "string", trim: true, default: "" })
   phone?: string;
 
   @IsString()
-  @ApiProperty()
+  @IsOptional()
   @MinLength(3)
-  @IsOptional()
+  @ApiProperty()
   @JSONSchema({
-    description:"Address of the User",
-    title:"Address"
+    description: "Address of the User",
+    title: "Address",
   })
-  @Prop({type:"string",trim:true,required:false})
-  address?:string;
+  @Prop({ type: "string", trim: true, required: false })
+  address?: string;
 
   @IsString()
-  @ApiProperty()
-  @MinLength(2)
-  @IsOptional()
-  @JSONSchema({
-    description:"Profession of the User",
-    title:"Profession"
-  })
-  @Prop({type:"string",trim:true,required:false})
-  profession?:string;
-
-  @IsString()
-  @ApiProperty()
-  @IsOptional()
-  @JSONSchema({
-    description:"Zip Code",
-    title:"Zip Code"
-  })
-  @Prop({type:"string",trim:true,required:false,default:""})
-  zip_code?:number;
-
-  @IsString()
-  @ApiProperty()
   @IsOptional()
   @MinLength(2)
+  @ApiProperty()
   @JSONSchema({
-    description:"City of the User",
-    title:"City"
+    description: "Profession of the User",
+    title: "Profession",
   })
-  @Prop({type:"string",trim:true,required:false,default:""})
-  city?:string;
+  @Prop({ type: "string", trim: true, required: false })
+  profession?: string;
 
+  @IsString()
+  @IsOptional()
+  @ApiProperty()
+  @JSONSchema({
+    description: "Zip Code",
+    title: "Zip Code",
+  })
+  @Prop({ type: "string", trim: true, required: false, default: "" })
+  zip_code?: number;
+
+  @IsString()
+  @IsOptional()
+  @MinLength(2)
+  @ApiProperty()
+  @JSONSchema({
+    description: "City of the User",
+    title: "City",
+  })
+  @Prop({ type: "string", trim: true, required: false, default: "" })
+  city?: string;
 }

@@ -5,16 +5,20 @@ import { Model } from "mongoose";
 import { ResponseCode } from "../../exceptions";
 import { UpdatePostDto } from "./dto/posts-update.dto";
 
+import { CreatePostDto } from "./dto/create.post.dto";
+import { TestDocument } from "./schema/Update.schema";
+
 
 @Injectable()
 export class PostsService {
   constructor(
     @InjectModel(PostEntity.name) private schemaModel: Model<PostDocument>
-  ) {}
-  async create(createDto: PostEntity) {
-    const create: PostDocument = new this.schemaModel(createDto);
-    console.log("Yahan sab set ha");
-    
+  ) { }
+  async create(createDto: CreatePostDto): Promise<TestDocument> {
+    console.log(createDto);
+    const create: TestDocument = new this.schemaModel(createDto);
+    console.log(create);
+
     return await create.save().catch((err) => {
       throw new HttpException(err.message, ResponseCode.BAD_REQUEST);
     });
@@ -50,12 +54,13 @@ export class PostsService {
   async update(id: string, updateDataDto: UpdatePostDto) {
     console.log(updateDataDto);
     const updateData = await this.schemaModel
-      .findByIdAndUpdate(id, updateDataDto, { new: true })
+
+      .findByIdAndUpdate(id, { $set: updateDataDto }, { new: true })
       .exec()
       .catch((err) => {
         throw new HttpException(err.message, ResponseCode.BAD_REQUEST);
       });
-      
+
     return { data: updateData };
   }
 

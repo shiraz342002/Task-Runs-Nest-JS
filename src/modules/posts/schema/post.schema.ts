@@ -3,7 +3,7 @@ import { ApiProperty } from "@nestjs/swagger";
 
 import { Transform } from "class-transformer";
 // import { Transform } from "class-transformer";
-import { IsArray, IsBoolean, IsOptional, IsString,  } from "class-validator";
+import { IsArray, IsBoolean, IsOptional, IsString, } from "class-validator";
 import { JSONSchema } from "class-validator-jsonschema";
 import mongoose, { Document } from "mongoose";
 
@@ -17,7 +17,7 @@ export type PostDocument = PostEntity & Document;
   timestamps: true,
 })
 export class PostEntity {
-  
+
   @IsString()
   @IsOptional()
   @ApiProperty()
@@ -45,7 +45,7 @@ export class PostEntity {
     type: [],
     example: ['image1.jpg', 'image2.jpg'],
   })
-  @Prop({ type: [String], default: [],required:false })
+  @Prop({ type: [String], default: [], required: false })
   images: string[];
 
   @IsString()
@@ -85,22 +85,22 @@ export class PostEntity {
   zipCode?: string;
 
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "User", required: true})
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "User", required: true })
   userId: string;
 
-  @IsBoolean()@IsOptional()
+  @IsBoolean() @IsOptional()
   @Transform(({ value }) => value === "true")
   @ApiProperty()
   @Prop({ type: Boolean, required: false, trim: true })
   isUrgent: boolean;
 
-  @IsBoolean()@IsOptional()
+  @IsBoolean() @IsOptional()
   @Transform(({ value }) => value === "true")
   @ApiProperty()
   @Prop({ type: Boolean, required: false, trim: true })
   isHelpFree: boolean;
 
-  @IsBoolean()@IsOptional()
+  @IsBoolean() @IsOptional()
   @Transform(({ value }) => value === "true")
   @ApiProperty()
   @Prop({ type: Boolean, required: false, trim: true })
@@ -112,33 +112,45 @@ export class PostEntity {
   @Prop({ type: String, required: false, trim: true })
   price: string;
 
+  @IsOptional()
   @ApiProperty({
-    description: "Coordinates of the location [longitude, latitude]",
-    title: "Coordinates",
+    properties: {
+      coordinates: {
+        type: 'array',
+        items: { type: 'number' },
+        example: [40.7128, -74.0060],
+        description: 'Array of coordinates: [longitude, latitude]',
+      },
+    },
   })
-  
   @Prop({
     type: {
       type: String,
       enum: ['Point'],
-      default: 'Point',
+      default: "Point"
     },
     coordinates: {
       type: [Number],
       required: true,
+      default: [0, 0], // Provide default coordinates
+      validate: {
+        validator: function (value) {
+          return value.length === 2;
+        },
+        message: 'Coordinates must be an array of two numbers [longitude, latitude]',
+      },
     },
   })
   location: {
-    type: 'Point';
+    type: string;
     coordinates: [number, number];
   };
-
 
 
 }
 
 const PostSchema = SchemaFactory.createForClass(PostEntity);
-PostSchema.index({ location: "2dsphere" });
+// PostSchema.index({ location: "2dsphere" });
 
 // Hooks
 PostSchema.virtual("id").get(function (this: PostDocument) {

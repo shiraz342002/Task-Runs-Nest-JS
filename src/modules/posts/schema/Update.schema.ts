@@ -4,7 +4,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsArray, IsOptional, IsString,  } from "class-validator";
 import mongoose, { Document } from "mongoose";
 
-export type PostDocument = UpdateEntity & Document;
+export type TestDocument = UpdateEntity & Document;
 
 @Schema({
   toJSON: {
@@ -71,7 +71,7 @@ const PostSchema = SchemaFactory.createForClass(UpdateEntity);
 PostSchema.index({ location: "2dsphere" });
 
 // Hooks
-PostSchema.virtual("id").get(function (this: PostDocument) {
+PostSchema.virtual("id").get(function (this: TestDocument) {
   return this._id.toString();
 });
 

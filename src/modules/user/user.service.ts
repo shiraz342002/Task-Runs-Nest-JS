@@ -217,7 +217,7 @@ export class UserService {
    */
   async createUser(userRegisterDto: UserSignupDto): Promise<UserSignupDto> {
     const createdUser = await new this.userModel(userRegisterDto).save().catch((err) => {
-        throw new HttpException(err.message, ResponseCode.BAD_REQUEST); });
+        throw new HttpException(err.message, ResponseCode.BAD_REQUEST); });     
     if (createdUser) {
       const getFourDigitRandomNumber = this.generateString(4);
       await this.userModel.findOneAndUpdate(
@@ -226,7 +226,7 @@ export class UserService {
           $set: {
             otp: (await getFourDigitRandomNumber).toString(),
             isOtpUsed: false,
-          },
+          }
         }
       );
       

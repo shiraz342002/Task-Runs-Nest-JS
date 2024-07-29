@@ -8,6 +8,7 @@ import type { Optional } from '../types';
  * @returns {string}
  */
 export function generateHash(password: string): string {
+  console.log("Im here");
   return passwordHash.generate(password);
 }
 

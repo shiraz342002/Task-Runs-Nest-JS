@@ -28,6 +28,7 @@ import { ErrorCodesMeta, ResponseCode } from "src/exceptions";
 import { VerifyAccountDto } from "./dto/verify-account.dto";
 import { UserSignupDto } from "./dto/user.signup.dto";
 import { VerifyAccountOnlyDto } from "./dto/verify-account-only.dto";
+
 // import { FileInterceptor } from "@nestjs/platform-express";
 
 @Controller(constTexts.authRoute.name)
@@ -97,6 +98,7 @@ export class AuthController {
     @Body() userRegisterDto: UserSignupDto
   ): Promise<UserSignupDto> {
     const user = await this.userService.createUser(userRegisterDto);
+    
     return user;
   }
 

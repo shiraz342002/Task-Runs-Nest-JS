@@ -1,106 +1,17 @@
-import { Prop } from '@nestjs/mongoose';
-import { ApiProperty } from '@nestjs/swagger';
-import { Transform } from 'class-transformer';
-import { IsBoolean, IsOptional, IsString } from 'class-validator';
-import { JSONSchema } from 'class-validator-jsonschema';
+import { PartialType, PickType } from "@nestjs/swagger";
+import { PostEntity } from "../schema/post.schema";
 
-export class UpdatePostDto {
-
-
-    @IsString()
-    @IsOptional()
-    @ApiProperty()
-    @JSONSchema({
-      description: "title of the Post",
-      title: "title",
-    })
-    @Prop({ type: String, required: true, trim: true })
-    title: string;
-  
-    @IsString()
-    @IsOptional()
-    @ApiProperty()
-    @JSONSchema({
-      description: "Description of Post",
-      title: "Description",
-    })
-    description: string;
-  
-    @IsOptional()
-    @ApiProperty()
-    @JSONSchema({
-      description: "Images of Post",
-      title: "Images",
-      type: "array",
-      items: {
-        type: "string",
-      },
-    })
-    images: string[];
-  
-    @IsString()
-    @IsOptional()
-    @ApiProperty()
-    @JSONSchema({
-      description: "city of Post",
-      title: "city",
-    })
-    city: string;
-  
-    @IsString()
-    @IsOptional()
-    @ApiProperty()
-    @JSONSchema({
-      description: "Street Address of the Post",
-      title: "Street Address",
-    })
-    streetAddress: string;
-  
-    @IsString()
-    @IsOptional()
-    @ApiProperty()
-    @JSONSchema({
-      description: "state of Post",
-      title: "state",
-    })
-    state: string;
-  
-    @IsString()
-    @IsOptional()
-    @ApiProperty()
-    @JSONSchema({
-      description: "state of Post",
-      title: "state",
-    })
-    zipCode: string;
-  
-    @ApiProperty({
-      description: "Coordinates of the location [longitude, latitude]",
-      title: "Coordinates",
-    })
-    location: {
-      type: String;
-      coordinates: [number, number];
-    } = { type: "Point", coordinates: [0, 0] };
-  
-    @IsBoolean()@IsOptional()
-    @Transform(({ value }) => value === "true")
-    @ApiProperty()
-    isUrgent: boolean;
-  
-    @IsBoolean()@IsOptional()
-    @Transform(({ value }) => value === "true")
-    @ApiProperty()
-    isHelpFree: boolean;
-  
-    @IsBoolean()@IsOptional()
-    @Transform(({ value }) => value === "true")
-    @ApiProperty()
-    obo: boolean;
-  
-    @IsString()
-    @IsOptional()
-    @ApiProperty()
-    price: string;
-  //  static images: string[];
-}
+export class UpdatePostDto extends PartialType(PickType(PostEntity, [
+  'title',
+  'description',
+  'images',
+  'city',
+  'streetAddress',
+  'state',
+  'zipCode',
+  'location',
+  'isUrgent',
+  'isHelpFree',
+  'obo',
+  'price'
+] as const)) { }

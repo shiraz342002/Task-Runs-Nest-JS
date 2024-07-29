@@ -6,7 +6,7 @@ import { AuthService } from "./auth.service";
 import { UserModule } from "../user/user.module";
 import { JwtStrategy } from "./jwt.strategy";
 import { AppConfig } from "./../../configuration/app.config";
-import { HttpModule } from "@nestjs/axios";
+// import { HttpModule } from "@nestjs/axios";
 
 @Module({
   imports: [
@@ -20,10 +20,10 @@ import { HttpModule } from "@nestjs/axios";
         },
       }),
     }),
-    HttpModule,
+    // HttpModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
   exports: [AuthService],
 })
-export class AuthModule {}
+export class AuthModule { }
