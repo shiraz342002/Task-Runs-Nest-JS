@@ -345,9 +345,7 @@ export class UserService {
     return data
   }
 
-  async viewOtherProfile(userId:string){
-    console.log(userId);
-    
+  async viewOtherProfile(userId:string){    
     const fieldsToSelect = 'avatar name profession ratings createdAt task_completed city zip_code about';
     const data = await this.userModel.findById(userId).select(fieldsToSelect).exec().catch((err)=>{
       throw new HttpException(err.message,ResponseCode.NOT_FOUND);

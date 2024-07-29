@@ -72,7 +72,7 @@ export const constTexts = {
 
   userRoute: {
     name: "users",
-    otherUserProfile: ":id",
+    otherUserProfile: "ViewOtherUserProfile/:id",
     allUsers: "allUsers",
     dashUsers: "dashUsersCount",
     delete: ":id",
