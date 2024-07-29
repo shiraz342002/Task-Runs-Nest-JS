@@ -14,6 +14,6 @@ import { PostsModule } from "../posts/posts.module";
   ],
   controllers: [UserController],
   providers: [UserService, LoggerService, MailService],
-  exports: [UserService,MongooseModule],
+  exports: [UserService],
 })
 export class UserModule { }

@@ -31,6 +31,8 @@ export const constTexts = {
     details: "details/:id",
     deleteImage: "deleteImage/:id",
     search: "search",
+    viewOtherPosts:"ViewOthersPost/:id"
+    
   },
   commentRoute: {
     name: "comment",

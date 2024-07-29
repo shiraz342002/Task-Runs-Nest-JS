@@ -6,7 +6,7 @@ import { ResponseCode } from "../../exceptions";
 import { UpdatePostDto } from "./dto/posts-update.dto";
 
 import { CreatePostDto } from "./dto/create.post.dto";
-import { User, UserDocument } from "../user/user.schema";
+import { UserService } from "../user/user.service";
 // import { TestDocument } from "./schema/Update.schema";
 
 
@@ -14,7 +14,7 @@ import { User, UserDocument } from "../user/user.schema";
 export class PostsService {
   constructor(
     @InjectModel(PostEntity.name) private schemaModel: Model<PostDocument>,
-    @InjectModel(User.name) private userModel: Model<UserDocument>,
+    private readonly userService: UserService
   ) { }
   async create(createDto: CreatePostDto): Promise<PostDocument> {
     const create: PostDocument = new this.schemaModel(createDto);
@@ -71,9 +71,10 @@ export class PostsService {
     try {
       const p_selecedfields='title price createdAt'
       const u_selecedfields='name ratings'
+
       const p_data = await this.schemaModel.find({ userId }).select(p_selecedfields).exec();
-      const u_data = await this.userModel.findById(userId).select(u_selecedfields).exec();
-      if (!p_data || p_data.length === 0) {
+      const u_data = await this.userService.findCustomData(userId,u_selecedfields)
+      if (!p_data || p_data.length === 0 || !u_data) {
         throw new HttpException('No posts found for this user', ResponseCode.NOT_FOUND);
       }
       const combinedData = p_data.map(post => ({
@@ -87,6 +88,32 @@ export class PostsService {
     } catch (err) {
       throw new HttpException(err.message, ResponseCode.NOT_FOUND);
     }
+  }
+
+  async viewOtherUserPost(id:string):Promise<any>{   
+    console.log(id);
+     
+    const p_fieldsToSelect = 'title images createdAt description price userId';
+    const u_selecedfields='name ratings'
+    const p_data = await this.schemaModel.findById(id).select(p_fieldsToSelect).exec();
+    console.log(p_data.userId);
+    
+    const u_data = await this.userService.findCustomData(p_data.userId,u_selecedfields);
+    if (!p_data) {
+      throw new HttpException('no Post not found', ResponseCode.NOT_FOUND);
+    }
+    if (!u_data) {
+      throw new HttpException('User not found', ResponseCode.NOT_FOUND);
+    }
+    const combinedData = {
+      ...p_data.toObject(),
+      user: {
+        name: u_data.name,
+        ratings: u_data.ratings,
+      },
+    };
+   //Yahan se Userid ko final returned data se urana ha 
+    return combinedData
   }
 }
 

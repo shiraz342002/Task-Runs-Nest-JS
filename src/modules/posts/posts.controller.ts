@@ -156,4 +156,20 @@ export class PostsController {
   async deletePost(@Param("id") id: string) {
     return this.postsService.deletePost(id);
   }
+
+  @Get(constTexts.postRoute.viewOtherPosts)
+  @ApiPageOkResponse({
+    description: "View Other User Specefic Post",
+    type: User,
+  })
+  @Auth(Action.Read, "User") 
+  async viewOtherUserPost(
+    @Param('id') id: string, 
+    @AuthUser() user: User 
+  ): Promise<PostEntity> {
+    return this.postsService.viewOtherUserPost(id);
+  }
+
+
+
 }

@@ -353,6 +353,13 @@ export class UserService {
     return data
   }
 
+  async findCustomData(userId:string,custom_fields){
+    const data = await this.userModel.findById(userId).select(custom_fields).exec().catch((err)=>{
+      throw new HttpException(err.message,ResponseCode.NOT_FOUND);
+    })
+    return data
+  }
+
 
 }
 
