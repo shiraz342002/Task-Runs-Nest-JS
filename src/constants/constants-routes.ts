@@ -79,7 +79,8 @@ export const constTexts = {
     schema: "/schema",
     handleBlock: "handleBlock",
     deleteAccount: "deleteAccount",
-    myprofile:"viewMyProfile"
+    myprofile:"viewMyProfile",
+    viewMyAds:"ViewMyPosts"
   },
 
   chatRoute: {

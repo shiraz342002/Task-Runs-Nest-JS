@@ -61,9 +61,6 @@ async function bootstrap() {
   if (!configService.isDevelopment) {
     app.enableShutdownHooks();
   }
-
-
-
   const port = configService.appConfig.port;
   await app.listen(port || 3000);
   console.info(`server running on ${await app.getUrl()}`);
