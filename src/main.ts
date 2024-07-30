@@ -48,15 +48,10 @@ async function bootstrap() {
       max: 100, // limit each IP to 100 requests per windowMs
     }),
   );
-
   app.enableVersioning();
-
   app.useGlobalPipes(new ValidationPipe({}));
-
   const configService = app.select(ConfigurationModule).get(ConfigurationService);
-
   app.use(expressCtx);
-
   // Starts listening for shutdown hook
   if (!configService.isDevelopment) {
     app.enableShutdownHooks();
@@ -64,9 +59,7 @@ async function bootstrap() {
   const port = configService.appConfig.port;
   await app.listen(port || 3000);
   console.info(`server running on ${await app.getUrl()}`);
-
   return app;
 }
 bootstrap();
-
 // https://www.figma.com/design/4f2SPQVgzvKyYksyNIjadp/Task-Runs?node-id=0-1&t=o53f4oimuVOye0o6-0
