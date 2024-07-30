@@ -7,6 +7,24 @@ import { IsArray, IsBoolean, IsOptional, IsString, } from "class-validator";
 import { JSONSchema } from "class-validator-jsonschema";
 import mongoose, { Document } from "mongoose";
 
+@Schema({ _id: false })
+class Comment {
+  @IsString()
+  @ApiProperty()
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true })
+  userId: string;
+
+  @IsString()
+  @ApiProperty()
+  @Prop({ type: String, required: true })
+  content: string;
+
+  @IsArray()
+  @ApiProperty({ type: [Object], description: 'Replies to the comment' })
+  @Prop({ type: [this], default: [] })
+  replies: Comment[];
+}
+
 export type PostDocument = PostEntity & Document;
 
 @Schema({
@@ -149,6 +167,10 @@ export class PostEntity {
     coordinates: [number, number];
   };
 
+  @IsArray()
+  @ApiProperty({ type: [Array], description: "Comments on the post" })
+  @Prop({ type: [], default: [] })
+  comments: Comment[];
 
 }
 

@@ -338,7 +338,7 @@ export class UserService {
       });
   }
   async viewProfile(userId:string){
-    const fieldsToSelect = 'avatar address email phone about';
+    const fieldsToSelect = 'name avatar address email phone about';
     const data = await this.userModel.findById(userId).select(fieldsToSelect).exec().catch((err)=>{
       throw new HttpException(err.message,ResponseCode.NOT_FOUND);
     })

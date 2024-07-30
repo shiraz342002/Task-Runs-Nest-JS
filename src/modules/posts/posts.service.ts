@@ -7,17 +7,18 @@ import { UpdatePostDto } from "./dto/posts-update.dto";
 
 import { CreatePostDto } from "./dto/create.post.dto";
 import { UserService } from "../user/user.service";
+import { CommentDto } from "./dto/comment.dto";
 // import { TestDocument } from "./schema/Update.schema";
 
 
 @Injectable()
 export class PostsService {
   constructor(
-    @InjectModel(PostEntity.name) private schemaModel: Model<PostDocument>,
+    @InjectModel(PostEntity.name) private postService: Model<PostDocument>,
     private readonly userService: UserService
   ) { }
   async create(createDto: CreatePostDto): Promise<PostDocument> {
-    const create: PostDocument = new this.schemaModel(createDto);
+    const create: PostDocument = new this.postService(createDto);
     return await create.save().catch((err) => {
       throw new HttpException(err.message, ResponseCode.BAD_REQUEST);
     });
@@ -27,9 +28,9 @@ export class PostsService {
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
 
-    const totalCount = await this.schemaModel.find().exec();
+    const totalCount = await this.postService.find().exec();
     const totalPages = Math.ceil(totalCount.length / limit);
-    const data = await this.schemaModel
+    const data = await this.postService
       .aggregate([
         {
           $skip: startIndex,
@@ -52,7 +53,7 @@ export class PostsService {
 
   async update(id: string, updateDataDto: UpdatePostDto) {
     try {
-      const updateData = await this.schemaModel.findByIdAndUpdate(id, { $set: updateDataDto }, { new: true }).exec();
+      const updateData = await this.postService.findByIdAndUpdate(id, { $set: updateDataDto }, { new: true }).exec();
       return { data: updateData };
     } catch (err) {
       console.error('Error updating data:', err.message);
@@ -60,7 +61,7 @@ export class PostsService {
     }
   }
   async deletePost(id: string) {
-    return await this.schemaModel
+    return await this.postService
       .findByIdAndDelete(id)
       .exec()
       .catch((err) => {
@@ -72,7 +73,7 @@ export class PostsService {
       const p_selecedfields='title price createdAt'
       const u_selecedfields='name ratings'
 
-      const p_data = await this.schemaModel.find({ userId }).select(p_selecedfields).exec();
+      const p_data = await this.postService.find({ userId }).select(p_selecedfields).exec();
       const u_data = await this.userService.findCustomData(userId,u_selecedfields)
       if (!p_data || p_data.length === 0 || !u_data) {
         throw new HttpException('No posts found for this user', ResponseCode.NOT_FOUND);
@@ -95,9 +96,8 @@ export class PostsService {
      
     const p_fieldsToSelect = 'title images createdAt description price userId';
     const u_selecedfields='name ratings'
-    const p_data = await this.schemaModel.findById(id).select(p_fieldsToSelect).exec();
+    const p_data = await this.postService.findById(id).select(p_fieldsToSelect).exec();
     console.log(p_data.userId);
-    
     const u_data = await this.userService.findCustomData(p_data.userId,u_selecedfields);
     if (!p_data) {
       throw new HttpException('no Post not found', ResponseCode.NOT_FOUND);
@@ -113,8 +113,26 @@ export class PostsService {
       },
     };
    //Yahan se Userid ko final returned data se urana ha 
+   delete (combinedData as any).userId;
     return combinedData
   }
+
+  async addComment(PostId:string,userId:string,commentDto:CommentDto):Promise<void>{
+    console.log("Comment "+commentDto);
+    
+    const post = await this.postService.findById(PostId);
+    if(!post){
+      throw new HttpException('no Post not found', ResponseCode.NOT_FOUND);
+    }
+    post.comments.push({
+      userId:userId,
+      content:commentDto.content,
+      replies:[],
+    })
+    await post.save()
+  }
+
+
 }
 
 

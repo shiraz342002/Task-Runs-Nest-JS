@@ -24,7 +24,7 @@ export const constTexts = {
     getAllPosts: "getAllPosts",
     my: "myPost",
     specific: "specific",
-    reply: "reply",
+    reply: "reply/:id",
     completedByOther: "completedByOther",
     update: ":id",
     delete: ":id",
