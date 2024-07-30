@@ -38,11 +38,14 @@ export const constTexts = {
     name: "comment",
     my: "myreply",
     specific: "specific",
-    post: "post",
-    update: ":id",
+    Add: "AddComent/:postId",
+    Reply:"AddReply/:comentId",
+    update: ":commentId",
     delete: ":id",
-    details: "details/:id",
+    details: "details",
     search: "search",
+    getCommentWithReplies:"getCommentWithReplies/:commentId",
+    getPostCommentsWithReplies:"getPostCommentsWithReplies/:PostId"
   },
   mailRoute: {
     name: "mail",

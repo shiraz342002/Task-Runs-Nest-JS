@@ -7,23 +7,6 @@ import { IsArray, IsBoolean, IsOptional, IsString, } from "class-validator";
 import { JSONSchema } from "class-validator-jsonschema";
 import mongoose, { Document } from "mongoose";
 
-@Schema({ _id: false })
-class Comment {
-  @IsString()
-  @ApiProperty()
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true })
-  userId: string;
-
-  @IsString()
-  @ApiProperty()
-  @Prop({ type: String, required: true })
-  content: string;
-
-  @IsArray()
-  @ApiProperty({ type: [Object], description: 'Replies to the comment' })
-  @Prop({ type: [this], default: [] })
-  replies: Comment[];
-}
 
 export type PostDocument = PostEntity & Document;
 
@@ -72,7 +55,7 @@ export class PostEntity {
     description: "City of the Post",
     example: "New York",
   })
-  @Prop({ type: String, required: true, trim: true,default:"" })
+  @Prop({ type: String, required: false, trim: true,default:"" })
   city?: string;
 
   @IsString()
@@ -81,7 +64,7 @@ export class PostEntity {
     description: "Street Address of the Post",
     example: "123 Main St",
   })
-  @Prop({ type: String, required: true, trim: true,default:"" })
+  @Prop({ type: String, required: false, trim: true,default:"" })
   streetAddress?: string;
 
   @IsString()
@@ -90,7 +73,7 @@ export class PostEntity {
     description: "State of the Post",
     example: "NY",
   })
-  @Prop({ type: String, required: true, trim: true,default:"" })
+  @Prop({ type: String, required: false, trim: true,default:"" })
   state?: string;
 
   @IsString()
@@ -99,7 +82,7 @@ export class PostEntity {
     description: "Zip code of the Poster",
     example: "10001",
   })
-  @Prop({ type: String, required: true, trim: true,default:"" })
+  @Prop({ type: String, required: false, trim: true,default:"" })
   zipCode?: string;
 
 
@@ -166,12 +149,10 @@ export class PostEntity {
     type: string;
     coordinates: [number, number];
   };
-
-  @IsArray()
-  @ApiProperty({ type: [Array], description: "Comments on the post" })
-  @Prop({ type: [], default: [] })
-  comments: Comment[];
-
+  
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }], default: [] })
+  comments: mongoose.Schema.Types.ObjectId[];
+  
 }
 
 const PostSchema = SchemaFactory.createForClass(PostEntity);

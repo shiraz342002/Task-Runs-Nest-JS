@@ -14,9 +14,8 @@ import { AuthModule } from "./modules/auth/auth.module";
 import { MailModule } from "./modules/mail/mail.module";
 import { AppConfig } from "./configuration/app.config";
 import { PostsModule } from "./modules/posts/posts.module";
-import { CommentsModule } from './modules/comments/comments.module';
-import { CommentsController } from './modules/comments/comments.controller';
-import { CommentsService } from './modules/comments/comments.service';
+import { CommentsModule } from "./modules/comments/comments.module";
+
 
 @Module({
   imports: [
@@ -60,10 +59,10 @@ import { CommentsService } from './modules/comments/comments.service';
     AuthModule,
     CaslModule,
     PostsModule,
-    CommentsModule,
+    CommentsModule
   ],
-  controllers: [AppController, CommentsController],
-  providers: [AppService, CommentsService],
+  controllers: [AppController],
+  providers: [AppService],
   exports: [AppModule],
 })
 export class AppModule {}

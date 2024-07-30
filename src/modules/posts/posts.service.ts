@@ -7,7 +7,6 @@ import { UpdatePostDto } from "./dto/posts-update.dto";
 
 import { CreatePostDto } from "./dto/create.post.dto";
 import { UserService } from "../user/user.service";
-import { CommentDto } from "./dto/comment.dto";
 // import { TestDocument } from "./schema/Update.schema";
 
 
@@ -116,21 +115,28 @@ export class PostsService {
    delete (combinedData as any).userId;
     return combinedData
   }
-
-  async addComment(PostId:string,userId:string,commentDto:CommentDto):Promise<void>{
-    console.log("Comment "+commentDto);
-    
-    const post = await this.postService.findById(PostId);
-    if(!post){
-      throw new HttpException('no Post not found', ResponseCode.NOT_FOUND);
-    }
-    post.comments.push({
-      userId:userId,
-      content:commentDto.content,
-      replies:[],
-    })
-    await post.save()
+  async findById(postId: string): Promise<any> {
+   return await this.postService.findById(postId).exec();
   }
+
+  async getPostWithPopulatedComments(postId: string): Promise<PostDocument | null> {
+    return this.postService
+      .findById(postId)
+      .populate({
+        path: 'comments',
+         populate: {
+            path: 'replies',
+                populate:{
+                    path:'replies',
+                       populate:{
+                           path:'replies'
+        }
+        }
+        },
+      })
+      .exec();
+  }
+
 
 
 }

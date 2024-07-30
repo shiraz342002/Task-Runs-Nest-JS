@@ -21,7 +21,6 @@ import { UpdatePostDto } from "./dto/posts-update.dto";
 import { FilesInterceptor } from "@nestjs/platform-express";
 import { multerOptionsPostImages } from "src/configuration/multer.config";
 import { CreatePostDto } from "./dto/create.post.dto";
-import { CommentDto } from "./dto/comment.dto";
 @Controller(constTexts.postRoute.name)
 @ApiTags(constTexts.postRoute.name)
 export class PostsController {
@@ -171,19 +170,21 @@ export class PostsController {
     return this.postsService.viewOtherUserPost(id);
   }
 
-  @Post(constTexts.postRoute.reply)
-  @ApiBody({ description: 'Add a comment to a post' })
-  @ApiResponse({ status: 201, description: 'Comment added successfully' })
-  @ApiResponse({ status: 400, description: 'Invalid input' })
-  @Auth(Action.Create, "User") 
-  async addComment(
-    @Param('id')id:string,
-    @Body()commentDto:CommentDto,
-    @AuthUser() user: User
-  ):Promise<void>{
-    console.log("post Id "+id);
-    return this.postsService.addComment(id, user.id, commentDto);
-  }
+  // Scrapped Code (Purpose was to implement comment system in post collection itself)
+
+  // @Post(constTexts.postRoute.reply)
+  // @ApiBody({ description: 'Add a comment to a post' })
+  // @ApiResponse({ status: 201, description: 'Comment added successfully' })
+  // @ApiResponse({ status: 400, description: 'Invalid input' })
+  // @Auth(Action.Create, "User") 
+  // async addComment(
+  //   @Param('id')id:string,
+  //   @Body()commentDto:CommentDto,
+  //   @AuthUser() user: User
+  // ):Promise<void>{
+  //   console.log("post Id "+id);
+  //   return this.postsService.addComment(id, user.id, commentDto);
+  // }
 
 
 }
