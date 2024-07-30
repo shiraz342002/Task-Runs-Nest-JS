@@ -66,4 +66,8 @@ export class CommentsService {
   async updateComment(commentId:string,updatedComment:UpdateCommentDto):Promise<any>{
       return await this.commentModel.findByIdAndUpdate(commentId,updatedComment)
   }
+
+  async deleteComment(commentId:string):Promise<any>{
+      return await this.commentModel.findByIdAndDelete(commentId)
+  }
 }

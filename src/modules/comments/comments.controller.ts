@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpException, HttpStatus, Param, Patch, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Patch, Post } from "@nestjs/common";
 import { constTexts } from "src/constants/constants-routes";
 import { CommentsService } from "./comments.service";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
@@ -88,18 +88,17 @@ constructor(private readonly commentService: CommentsService) { }
     return this.commentService.updateComment(commentId,commentdto)
   }
 
-  
-  @ApiOperation({ summary: 'Edit Your Comments' })
-  @ApiResponse({ status: 201, description: 'Comments Edited successfully' })
+
+  @ApiOperation({ summary: 'Delete Your Comments' })
+  @ApiResponse({ status: 201, description: 'Comments Deleted successfully' })
   @ApiResponse({ status: 400, description: 'Invalid input' })
   @Auth(Action.Read, 'User')
-  @Patch(constTexts.commentRoute.update)
+  @Delete(constTexts.commentRoute.delete)
   @Auth(Action.Update, 'User')
-  async updateComment(
+  async deleteComment(
     @Param('commentId')commentId:string,
-    @Body()commentdto:UpdateCommentDto
   ):Promise<any>{
-    return this.commentService.updateComment(commentId,commentdto)
+    return this.commentService.deleteComment(commentId)
   }
 
 

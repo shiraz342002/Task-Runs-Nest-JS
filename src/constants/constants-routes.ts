@@ -41,7 +41,7 @@ export const constTexts = {
     Add: "AddComent/:postId",
     Reply:"AddReply/:comentId",
     update: ":commentId",
-    delete: ":id",
+    delete: ":commentId",
     details: "details",
     search: "search",
     getCommentWithReplies:"getCommentWithReplies/:commentId",
