@@ -57,7 +57,7 @@ async function bootstrap() {
 
   app.use(expressCtx);
 
-  // Starts listening for shutdown hooks
+  // Starts listening for shutdown hook
   if (!configService.isDevelopment) {
     app.enableShutdownHooks();
   }

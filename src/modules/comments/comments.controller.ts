@@ -31,7 +31,6 @@ constructor(private readonly commentService: CommentsService) { }
        await this.commentService.addComment(postId, user.id, content);
         return { message: 'Comment added successfully' };
       } catch (error) {
-        // console.error('Error adding comment:', error);
         throw new HttpException('Unable to add comment', HttpStatus.INTERNAL_SERVER_ERROR);
       }
   }
@@ -88,7 +87,6 @@ constructor(private readonly commentService: CommentsService) { }
     return this.commentService.updateComment(commentId,commentdto)
   }
 
-
   @ApiOperation({ summary: 'Delete Your Comments' })
   @ApiResponse({ status: 201, description: 'Comments Deleted successfully' })
   @ApiResponse({ status: 400, description: 'Invalid input' })
@@ -100,6 +98,5 @@ constructor(private readonly commentService: CommentsService) { }
   ):Promise<any>{
     return this.commentService.deleteComment(commentId)
   }
-
 
 }
