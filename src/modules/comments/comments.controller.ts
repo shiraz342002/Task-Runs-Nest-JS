@@ -65,6 +65,7 @@ constructor(private readonly commentService: CommentsService) { }
   async getCommentWithReplies(@Param('commentId') commentId: string) {
     return this.commentService.getCommentWithReplies(commentId);
   }
+
   @ApiOperation({ summary: 'View Post Comments and Replies' })
   @ApiResponse({ status: 201, description: 'Post Comments Retrived successfully' })
   @ApiResponse({ status: 400, description: 'Invalid input' })
@@ -73,6 +74,7 @@ constructor(private readonly commentService: CommentsService) { }
   async getPostCommentsWithReplies(@Param('postId') postId: string) {
     return this.commentService.getPostCommentsWithReplies(postId);
   }
+  
   @ApiOperation({ summary: 'Edit Your Comments' })
   @ApiResponse({ status: 201, description: 'Comments Edited successfully' })
   @ApiResponse({ status: 400, description: 'Invalid input' })

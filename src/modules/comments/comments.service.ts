@@ -42,69 +42,62 @@ export class CommentsService {
     await orignal_coment.save();
   }
 
-
-  
   //Get Specefic Comment With Replies
-  // async getCommentWithReplies(commentId: string): Promise<CommentDocument> {
-  //   return this.commentModel
-  //     .findById(commentId)
-  //     .populate({
-  //       path: 'replies',
-  //       populate: {
-  //         path: 'replies',  
-  //         populate: {
-  //           path: 'replies',
-  //         populate:{
-  //           path:'replies'
-  //         }  
-  //         },
-  //       },
-  //     })
-  //     .exec();
-  //    }
+  async getCommentWithReplies(commentId: string): Promise<CommentDocument> {
+    try {
+      // Fetch the initial comment with populated user details
+      const comment = await this.commentModel
+        .findById(commentId)
+        .populate({
+          path: 'userId',
+          select: 'name avatar rating',
+        })
+        .exec();
+      if (!comment) return null;
+      async function fetchReplies(comment: CommentDocument, commentModel: any): Promise<CommentDocument> {
+        if (!comment.replies || comment.replies.length === 0) return comment;
+        const replies = await commentModel.find({ '_id': { $in: comment.replies } })
+          .populate({
+            path: 'userId',
+            select: 'name avatar rating',
+          })
+          .exec();
 
-  async  getCommentWithReplies(commentId: string): Promise<CommentDocument> {
-    const comment = await this.commentModel.findById(commentId).exec();
-    if (!comment) return null;
-  
-    async function fetchReplies(comment: CommentDocument): Promise<CommentDocument> {
-      if (!comment.replies || comment.replies.length === 0) return comment;
-  
-      // Fetch all replies
-      const replies = await this.commentModel.find({ '_id': { $in: comment.replies } }).exec();
-      
-      // Recursively fetch replies for each reply
-      comment.replies = await Promise.all(replies.map(async reply => {
-        reply = await fetchReplies(reply);
-        return reply;
-      }));
-      
-      return comment;
+        comment.replies = await Promise.all(replies.map(async reply => {
+          reply = await fetchReplies(reply, commentModel);
+          return reply;
+        }));
+        return comment;
+      }
+      return fetchReplies(comment, this.commentModel);
+    } catch (error) {
+      console.error('Error fetching comment with replies:', error);
+      throw new Error('Failed to fetch comment with replies');
     }
-  
-    return fetchReplies(comment);
   }
-  
-
 
 
   //Get All the Comments on a Specefic Post Along with Replies
   async getPostCommentsWithReplies(postId: string): Promise<CommentDocument[]> {
-    const populatedPost = await this.postService.getPostWithPopulatedComments(postId);
-    if (!populatedPost || !populatedPost.comments) {
-      throw new HttpException('Post not found or no comments available', HttpStatus.NOT_FOUND);
+    const post = await this.postService.findPostComments(postId);
+    if (!post) {
+      throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
     }
-    return populatedPost.comments as unknown as CommentDocument[];
+    const comments = await this.commentModel.find({ _id: { $in: post.comments } }).populate({
+      path: 'userId',
+      select: 'name avatar ratings'
+    }).exec();
+    return comments
   }
 
   //Update Comment
-  async updateComment(commentId:string,updatedComment:UpdateCommentDto):Promise<any>{
-      return await this.commentModel.findByIdAndUpdate(commentId,updatedComment)
+  async updateComment(commentId: string, updatedComment: UpdateCommentDto): Promise<any> {
+    return await this.commentModel.findByIdAndUpdate(commentId, updatedComment)
   }
 
   //Delete Comments
-  async deleteComment(commentId:string):Promise<any>{
-      return await this.commentModel.findByIdAndDelete(commentId)
+  async deleteComment(commentId: string): Promise<any> {
+    return await this.commentModel.findByIdAndDelete(commentId)
   }
 
   //Get Only Comments From A Speceifc Post
@@ -114,8 +107,8 @@ export class CommentsService {
       throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
     }
     const comments = await this.commentModel.find({ _id: { $in: post.comments } }).populate({
-      path:'userId',
-      select:'name avatar ratings'
+      path: 'userId',
+      select: 'name avatar ratings'
     }).exec();
     return comments.map(comment => {
       const { replies, ...commentWithoutReplies } = comment.toObject();
