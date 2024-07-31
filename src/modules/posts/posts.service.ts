@@ -16,6 +16,9 @@ export class PostsService {
     @InjectModel(PostEntity.name) private postService: Model<PostDocument>,
     private readonly userService: UserService
   ) { }
+
+  //Create A post/Ad
+
   async create(createDto: CreatePostDto): Promise<PostDocument> {
     const create: PostDocument = new this.postService(createDto);
     return await create.save().catch((err) => {
@@ -23,6 +26,7 @@ export class PostsService {
     });
   }
 
+  //Find All
   async findall(page = 1, limit = 20) {
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
@@ -50,6 +54,7 @@ export class PostsService {
     };
   }
 
+  //Update Post
   async update(id: string, updateDataDto: UpdatePostDto) {
     try {
       const updateData = await this.postService.findByIdAndUpdate(id, { $set: updateDataDto }, { new: true }).exec();
@@ -59,6 +64,8 @@ export class PostsService {
       throw new HttpException(err.message, ResponseCode.BAD_REQUEST);
     }
   }
+
+  //Delete Post
   async deletePost(id: string) {
     return await this.postService
       .findByIdAndDelete(id)
@@ -67,6 +74,8 @@ export class PostsService {
         throw new HttpException(err.message, ResponseCode.BAD_REQUEST);
       });
   }
+
+  //View LoggedIn User Ads
   async viewMyAds(userId: string): Promise<any> {
     try {
       const p_selecedfields = 'title price createdAt'
@@ -90,6 +99,7 @@ export class PostsService {
     }
   }
 
+  //View Other User Post/Ads
   async viewOtherUserPost(id: string): Promise<any> {
     console.log(id);
 
@@ -115,13 +125,16 @@ export class PostsService {
     delete (combinedData as any).userId;
     return combinedData
   }
+
+  //Find post by id (This is the function to be used by other APis)
   async findById(postId: string): Promise<PostDocument> {
     return this.postService.findById(postId)
   }
+  //Find comments of a Specefic Post (This is the function to be used by other APis)
   async findPostComments(postId: string): Promise<PostDocument> {
     return this.postService.findById(postId).populate('comments').exec();
   }
-
+  // Find post with populated fields
   async getPostWithPopulatedComments(postId: string): Promise<PostDocument | null> {
     return this.postService
       .findById(postId)

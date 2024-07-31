@@ -24,8 +24,6 @@ import { User } from "./user.schema";
 import { UserService } from "./user.service";
 import {  multerOptionsAvatar } from "src/configuration/multer.config";
 import { FileInterceptor } from "@nestjs/platform-express";
-import { PostsService } from "../posts/posts.service";
-import { PostEntity } from "../posts/schema/post.schema";
 
 
 @Controller(constTexts.userRoute.name)
@@ -33,7 +31,6 @@ import { PostEntity } from "../posts/schema/post.schema";
 export class UserController {
   constructor(
     private userService: UserService,
-    private postService:PostsService,
     private readonly loggerService: LoggerService
   ) {
     this.loggerService.setContext("users controller");
@@ -126,15 +123,5 @@ export class UserController {
     return this.userService.viewOtherProfile(id);
   }
 
-  @Get(constTexts.userRoute.viewMyAds)
-  @ApiPageOkResponse({
-    description: "View Users Ads/Posts",
-    type: PostEntity,
-  })
-  @Auth(Action.Read, "User") 
-  async viewMyAds(
-    @AuthUser() user: User 
-  ): Promise<PostEntity[]> {
-    return this.postService.viewMyAds(user.id);
-  }
+ 
 }

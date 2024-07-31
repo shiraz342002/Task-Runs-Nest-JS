@@ -31,8 +31,8 @@ export const constTexts = {
     details: "details/:id",
     deleteImage: "deleteImage/:id",
     search: "search",
-    viewOtherPosts:"ViewOthersPost/:id"
-    
+    viewOtherPosts:"ViewOthersPost/:id",
+    viewMyAds:"ViewMyPosts"
   },
   commentRoute: {
     name: "comment",
@@ -86,7 +86,7 @@ export const constTexts = {
     handleBlock: "handleBlock",
     deleteAccount: "deleteAccount",
     myprofile:"viewMyProfile",
-    viewMyAds:"ViewMyPosts"
+    
   },
 
   chatRoute: {
