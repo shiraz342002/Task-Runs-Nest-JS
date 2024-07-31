@@ -309,6 +309,9 @@ export class UserService {
    *
    */
   async update(userId: string, userUpdateDto: UpdateUserDto) {
+    if (userUpdateDto.password) {
+      userUpdateDto.password = generateHash(userUpdateDto.password);
+    }
     const returnObj = await this.userModel
       .findByIdAndUpdate(userId, userUpdateDto, { new: true })
       .exec()

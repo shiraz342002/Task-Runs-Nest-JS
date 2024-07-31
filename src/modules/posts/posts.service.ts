@@ -128,14 +128,9 @@ export class PostsService {
       .populate({
         path: 'comments',
         populate: {
-          path: 'replies',
-          populate: {
-            path: 'replies',
-            populate: {
-              path: 'replies'
-            }
-          }
-        },
+          path: 'userId',
+          select: 'name avatar rating',
+        }
       })
       .exec();
   }

@@ -104,6 +104,9 @@ export class PostEntity {
   @Prop({ type: Boolean, required: false, trim: true ,default: false})
   isHelpFree: boolean;
 
+  @Prop({type:Boolean,trim:true,default:false})
+  isCompleted:boolean
+
   @IsBoolean() @IsOptional()
   @Transform(({ value }) => value === "true")
   @ApiProperty()
