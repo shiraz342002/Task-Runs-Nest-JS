@@ -42,24 +42,51 @@ export class CommentsService {
     await orignal_coment.save();
   }
 
+
+  
   //Get Specefic Comment With Replies
-  async getCommentWithReplies(commentId: string): Promise<CommentDocument> {
-    return this.commentModel
-      .findById(commentId)
-      .populate({
-        path: 'replies',
-        populate: {
-          path: 'replies',  
-          populate: {
-            path: 'replies',
-          populate:{
-            path:'replies'
-          }  
-          },
-        },
-      })
-      .exec();
-     }
+  // async getCommentWithReplies(commentId: string): Promise<CommentDocument> {
+  //   return this.commentModel
+  //     .findById(commentId)
+  //     .populate({
+  //       path: 'replies',
+  //       populate: {
+  //         path: 'replies',  
+  //         populate: {
+  //           path: 'replies',
+  //         populate:{
+  //           path:'replies'
+  //         }  
+  //         },
+  //       },
+  //     })
+  //     .exec();
+  //    }
+
+  async  getCommentWithReplies(commentId: string): Promise<CommentDocument> {
+    const comment = await this.commentModel.findById(commentId).exec();
+    if (!comment) return null;
+  
+    async function fetchReplies(comment: CommentDocument): Promise<CommentDocument> {
+      if (!comment.replies || comment.replies.length === 0) return comment;
+  
+      // Fetch all replies
+      const replies = await this.commentModel.find({ '_id': { $in: comment.replies } }).exec();
+      
+      // Recursively fetch replies for each reply
+      comment.replies = await Promise.all(replies.map(async reply => {
+        reply = await fetchReplies(reply);
+        return reply;
+      }));
+      
+      return comment;
+    }
+  
+    return fetchReplies(comment);
+  }
+  
+
+
 
   //Get All the Comments on a Specefic Post Along with Replies
   async getPostCommentsWithReplies(postId: string): Promise<CommentDocument[]> {
