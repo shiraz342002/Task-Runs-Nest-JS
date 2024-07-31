@@ -45,7 +45,8 @@ export const constTexts = {
     details: "details",
     search: "search",
     getCommentWithReplies:"getCommentWithReplies/:commentId",
-    getPostCommentsWithReplies:"getPostCommentsWithReplies/:PostId"
+    getPostCommentsWithReplies:"getPostCommentsWithReplies/:postId",
+    getPostComments:"getPostComments/:postId"
   },
   mailRoute: {
     name: "mail",

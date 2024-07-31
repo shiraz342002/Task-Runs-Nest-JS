@@ -69,11 +69,11 @@ export class PostsService {
   }
   async viewMyAds(userId: string): Promise<any> {
     try {
-      const p_selecedfields='title price createdAt'
-      const u_selecedfields='name ratings'
+      const p_selecedfields = 'title price createdAt'
+      const u_selecedfields = 'name ratings'
 
       const p_data = await this.postService.find({ userId }).select(p_selecedfields).exec();
-      const u_data = await this.userService.findCustomData(userId,u_selecedfields)
+      const u_data = await this.userService.findCustomData(userId, u_selecedfields)
       if (!p_data || p_data.length === 0 || !u_data) {
         throw new HttpException('No posts found for this user', ResponseCode.NOT_FOUND);
       }
@@ -90,14 +90,14 @@ export class PostsService {
     }
   }
 
-  async viewOtherUserPost(id:string):Promise<any>{   
+  async viewOtherUserPost(id: string): Promise<any> {
     console.log(id);
-     
+
     const p_fieldsToSelect = 'title images createdAt description price userId';
-    const u_selecedfields='name ratings'
+    const u_selecedfields = 'name ratings'
     const p_data = await this.postService.findById(id).select(p_fieldsToSelect).exec();
     console.log(p_data.userId);
-    const u_data = await this.userService.findCustomData(p_data.userId,u_selecedfields);
+    const u_data = await this.userService.findCustomData(p_data.userId, u_selecedfields);
     if (!p_data) {
       throw new HttpException('no Post not found', ResponseCode.NOT_FOUND);
     }
@@ -111,12 +111,15 @@ export class PostsService {
         ratings: u_data.ratings,
       },
     };
-   //Yahan se Userid ko final returned data se urana ha 
-   delete (combinedData as any).userId;
+    //Yahan se Userid ko final returned data se urana ha 
+    delete (combinedData as any).userId;
     return combinedData
   }
-  async findById(postId: string): Promise<any> {
-   return await this.postService.findById(postId).exec();
+  async findById(postId: string): Promise<PostDocument> {
+    return this.postService.findById(postId)
+  }
+  async findPostComments(postId: string): Promise<PostDocument> {
+    return this.postService.findById(postId).populate('comments').exec();
   }
 
   async getPostWithPopulatedComments(postId: string): Promise<PostDocument | null> {
@@ -124,14 +127,14 @@ export class PostsService {
       .findById(postId)
       .populate({
         path: 'comments',
-         populate: {
+        populate: {
+          path: 'replies',
+          populate: {
             path: 'replies',
-                populate:{
-                    path:'replies',
-                       populate:{
-                           path:'replies'
-        }
-        }
+            populate: {
+              path: 'replies'
+            }
+          }
         },
       })
       .exec();

@@ -15,8 +15,6 @@ import { MailModule } from "./modules/mail/mail.module";
 import { AppConfig } from "./configuration/app.config";
 import { PostsModule } from "./modules/posts/posts.module";
 import { CommentsModule } from "./modules/comments/comments.module";
-
-
 @Module({
   imports: [
     ConfigurationModule,
@@ -27,7 +25,6 @@ import { CommentsModule } from "./modules/comments/comments.module";
     MailModule,
     MailerModule.forRoot({
       // transport: 'smtps://user@example.com:topsecret@smtp.example.com',
-      
       transport: {
         // host: 'smtp.example.com',
         host: AppConfig.sendGridConfig.host,

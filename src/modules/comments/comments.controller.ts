@@ -65,14 +65,13 @@ constructor(private readonly commentService: CommentsService) { }
   async getCommentWithReplies(@Param('commentId') commentId: string) {
     return this.commentService.getCommentWithReplies(commentId);
   }
-
-  @ApiOperation({ summary: 'View Post along with Comments and Replies' })
+  @ApiOperation({ summary: 'View Post Comments and Replies' })
   @ApiResponse({ status: 201, description: 'Post Comments Retrived successfully' })
   @ApiResponse({ status: 400, description: 'Invalid input' })
   @Auth(Action.Read, 'User')
   @Get(constTexts.commentRoute.getPostCommentsWithReplies)
-  async getPostCommentsWithReplies(@Param('PostId') PostId: string) {
-    return this.commentService.getPostCommentsWithReplies(PostId);
+  async getPostCommentsWithReplies(@Param('postId') postId: string) {
+    return this.commentService.getPostCommentsWithReplies(postId);
   }
   @ApiOperation({ summary: 'Edit Your Comments' })
   @ApiResponse({ status: 201, description: 'Comments Edited successfully' })
@@ -98,5 +97,15 @@ constructor(private readonly commentService: CommentsService) { }
   ):Promise<any>{
     return this.commentService.deleteComment(commentId)
   }
+
+  @ApiOperation({ summary: 'View Post Comments Only' })
+  @ApiResponse({ status: 201, description: 'Post Comments Retrived successfully' })
+  @ApiResponse({ status: 400, description: 'Invalid input' })
+  @Auth(Action.Read, 'User')
+  @Get(constTexts.commentRoute.getPostComments)
+  async getPostComments(@Param('postId') postId: string) {
+    return this.commentService.getOnlyCommentsByPostId(postId);
+  }
+
 
 }
