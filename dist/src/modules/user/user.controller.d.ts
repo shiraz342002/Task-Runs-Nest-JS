@@ -4,6 +4,7 @@ import { LoggerService } from "../../logger/logger.service";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { User } from "./schema/user.schema";
 import { UserService } from "./user.service";
+import { Review } from "../Reviews/schema/review.schema";
 export declare class UserController {
     private userService;
     private readonly loggerService;
@@ -20,4 +21,5 @@ export declare class UserController {
     }>;
     viewProfile(user: User): Promise<User>;
     viewOtherProfile(id: string, user: User): Promise<User>;
+    getProfileReviews(): Promise<Review>;
 }

@@ -69,7 +69,7 @@ export const constTexts = {
     PostReview:"ReviewUserService/:revieweeId",
     update: ":id",
     delete: ":id",
-    getOne: ":id",
+    getOne: "/:id",
   },
 
   searcRoute: {
@@ -87,7 +87,7 @@ export const constTexts = {
     handleBlock: "handleBlock",
     deleteAccount: "deleteAccount",
     myprofile:"viewMyProfile",
-    
+    getMyReviews:"GetAllReviewsOfTheCurrentProfile"
   },
 
   messageRoute:{

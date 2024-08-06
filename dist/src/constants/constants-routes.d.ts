@@ -83,6 +83,7 @@ export declare const constTexts: {
         handleBlock: string;
         deleteAccount: string;
         myprofile: string;
+        getMyReviews: string;
     };
     messageRoute: {
         create: string;

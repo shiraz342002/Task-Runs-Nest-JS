@@ -41,6 +41,20 @@ let ReviewsService = class ReviewsService {
         }
         return review;
     }
+    async deleteReview(userId, reviewId) {
+        const review = await this.reviewModel.findById(reviewId);
+        if (!review) {
+            throw new common_1.NotFoundException('Review not found');
+        }
+        const reviewUserId = new mongoose_2.Types.ObjectId(review.reviewerId);
+        const userObjectId = new mongoose_2.Types.ObjectId(userId);
+        if (!reviewUserId.equals(userObjectId)) {
+            throw new common_1.ForbiddenException('You do not have permission to delete this review');
+        }
+        await this.reviewModel.findByIdAndDelete(reviewId);
+        await this.userService.removeReviewFromUser(userId, reviewId);
+        return review;
+    }
 };
 ReviewsService = __decorate([
     (0, common_1.Injectable)(),

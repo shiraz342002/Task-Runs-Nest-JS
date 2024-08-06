@@ -55,6 +55,9 @@ let UserController = class UserController {
     async viewOtherProfile(id, user) {
         return this.userService.viewOtherProfile(id);
     }
+    async getProfileReviews() {
+        return this.userService.getProfileReviews();
+    }
 };
 __decorate([
     (0, common_1.Get)(),
@@ -136,6 +139,17 @@ __decorate([
     __metadata("design:paramtypes", [String, user_schema_1.User]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "viewOtherProfile", null);
+__decorate([
+    (0, common_1.Get)(constants_1.constTexts.userRoute.getMyReviews),
+    (0, decorators_1.ApiPageOkResponse)({
+        description: "View Other User Profile",
+        type: user_schema_1.User,
+    }),
+    (0, decorators_1.Auth)(userRoles_1.Action.Read, "Reviews"),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "getProfileReviews", null);
 UserController = __decorate([
     (0, common_1.Controller)(constants_1.constTexts.userRoute.name),
     (0, swagger_1.ApiTags)(constants_1.constTexts.userRoute.name),

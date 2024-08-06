@@ -1,6 +1,6 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Review, ReviewDocument } from './schema/review.schema';
 import { CreateReviewDto } from './Dto/create.review.dto';
 import { UserService } from '../user/user.service';
@@ -36,4 +36,20 @@ export class ReviewsService {
     }
     return review;
   }
+
+  async deleteReview(userId: string, reviewId: string): Promise<Review> {
+    const review = await this.reviewModel.findById(reviewId);
+    if (!review) {
+      throw new NotFoundException('Review not found');
+    }
+    const reviewUserId = new Types.ObjectId(review.reviewerId);
+    const userObjectId = new Types.ObjectId(userId);
+    if (!reviewUserId.equals(userObjectId)) {
+      throw new ForbiddenException('You do not have permission to delete this review');
+    }
+    await this.reviewModel.findByIdAndDelete(reviewId);
+    await this.userService.removeReviewFromUser(userId, reviewId);
+    return review
+  }
 }
+

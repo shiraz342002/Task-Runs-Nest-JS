@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Param, Get } from '@nestjs/common';
+import { Controller, Post, Body, Param, Get, Delete } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ReviewsService } from './review.service';
 import { CreateReviewDto } from './Dto/create.review.dto';
@@ -24,11 +24,20 @@ export class ReviewsController {
   ) {
     return this.reviewsService.create(user.id,revieweeId,createReviewDto);
   }
-
-  @Get(':revieweeId')
+  @Auth(Action.Read, "Review")
+  @Get(constTexts.reviewsRoute.getOne)
   @ApiOperation({ summary: 'Get reviews by reviewee ID' })
   @ApiResponse({ status: 200, description: 'Reviews fetched successfully.', type: [Review] })
-  async findByRevieweeId(@Param('revieweeId') revieweeId: string) {
-    return this.reviewsService.findByRevieweeId(revieweeId);
+  async findByRevieweeId(@Param('id') id: string) {
+    
+    return this.reviewsService.findById(id);
+  }
+
+  @Delete(constTexts.reviewsRoute.delete)
+  @Auth(Action.Delete,"Review")
+  @ApiOperation({ summary: 'Delete Your  review By ID' })
+  @ApiResponse({ status: 200, description: 'Review Deleted successfully.',})
+  async DeleteReviewById(@Param('id')id:string,@AuthUser() user: User ){
+    return this.reviewsService.deleteReview(user.id,id)
   }
 }

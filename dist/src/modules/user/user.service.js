@@ -283,6 +283,21 @@ let UserService = class UserService {
         const roundedRating = Math.round(updatedRating * 2) / 2;
         await this.userModel.findByIdAndUpdate(revieweeId, { ratings: roundedRating }, { new: true }).exec();
     }
+    async removeReviewFromUser(userId, reviewId) {
+        const reviewObjectId = new mongoose_2.Types.ObjectId(reviewId);
+        try {
+            const result = await this.userModel.findByIdAndUpdate(userId, { $pull: { reviews: reviewObjectId } }, { new: true }).exec();
+            if (!result) {
+                throw new common_1.NotFoundException('User not found');
+            }
+        }
+        catch (error) {
+            console.error('Error updating user:', error);
+            throw new common_1.InternalServerErrorException('Failed to update user');
+        }
+    }
+    async getProfileReviews() {
+    }
 };
 UserService = __decorate([
     (0, common_1.Injectable)(),

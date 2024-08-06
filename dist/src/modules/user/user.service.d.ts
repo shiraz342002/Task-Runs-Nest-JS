@@ -1,4 +1,4 @@
-import { Model } from "mongoose";
+import { Model, Types } from "mongoose";
 import { PageOptionsDto } from "../../common/dto/page-options.dto";
 import { ResponseCode, ResponseMessage } from "../../exceptions";
 import type { Optional } from "../../types";
@@ -25,7 +25,7 @@ export declare class UserService {
     logout(userId: string): Promise<any>;
     resetPassword(resetPasswordDto: ResetPasswordDto): Promise<{
         data: User & import("mongoose").Document<any, any, any> & {
-            _id: import("mongoose").Types.ObjectId;
+            _id: Types.ObjectId;
         };
     }>;
     getSchema(): Promise<import("openapi3-ts").SchemaObject>;
@@ -41,24 +41,26 @@ export declare class UserService {
     getUsers(pageOptionsDto: PageOptionsDto): Promise<User[]>;
     update(userId: string, userUpdateDto: UpdateUserDto): Promise<{
         data: User & import("mongoose").Document<any, any, any> & {
-            _id: import("mongoose").Types.ObjectId;
+            _id: Types.ObjectId;
         };
     }>;
     getProfileData(userId: string): Promise<User & import("mongoose").Document<any, any, any> & {
-        _id: import("mongoose").Types.ObjectId;
+        _id: Types.ObjectId;
     }>;
     delete(userId: string): Promise<User & import("mongoose").Document<any, any, any> & {
-        _id: import("mongoose").Types.ObjectId;
+        _id: Types.ObjectId;
     }>;
     viewProfile(userId: string): Promise<User & import("mongoose").Document<any, any, any> & {
-        _id: import("mongoose").Types.ObjectId;
+        _id: Types.ObjectId;
     }>;
     viewOtherProfile(userId: string): Promise<User & import("mongoose").Document<any, any, any> & {
-        _id: import("mongoose").Types.ObjectId;
+        _id: Types.ObjectId;
     }>;
     findCustomData(userId: string, custom_fields: any): Promise<User & import("mongoose").Document<any, any, any> & {
-        _id: import("mongoose").Types.ObjectId;
+        _id: Types.ObjectId;
     }>;
     updateReviews(userId: string, reviewId: string): Promise<void>;
     CalcRatings(revieweeId: string, newRating: number): Promise<void>;
+    removeReviewFromUser(userId: string, reviewId: string): Promise<void>;
+    getProfileReviews(): any;
 }

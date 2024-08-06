@@ -6,5 +6,6 @@ export declare class ReviewsController {
     private readonly reviewsService;
     constructor(reviewsService: ReviewsService);
     create(revieweeId: string, createReviewDto: CreateReviewDto, user: User): Promise<Review>;
-    findByRevieweeId(revieweeId: string): Promise<Review[]>;
+    findByRevieweeId(id: string): Promise<Review>;
+    DeleteReviewById(id: string, user: User): Promise<Review>;
 }

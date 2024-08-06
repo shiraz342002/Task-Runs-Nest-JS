@@ -1,6 +1,6 @@
-import { HttpException, Injectable, NotFoundException } from "@nestjs/common";
+import { HttpException, Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
+import { Model, Types } from "mongoose";
 import { generateHash, getCharacterString } from "../../common/utils";
 import { PageOptionsDto } from "../../common/dto/page-options.dto";
 import {
@@ -18,6 +18,7 @@ import { ForgotPasswordDto } from "../auth/dto/forgot-password.dto";
 import { VerifyAccountDto } from "../auth/dto/verify-account.dto";
 import { UserSignupDto } from "../auth/dto/user.signup.dto";
 import { VerifyAccountOnlyDto } from "../auth/dto/verify-account-only.dto";
+import { Review } from "../Reviews/schema/review.schema";
 
 @Injectable()
 export class UserService {
@@ -397,8 +398,25 @@ export class UserService {
     const roundedRating = Math.round(updatedRating * 2) / 2;
     await this.userModel.findByIdAndUpdate(revieweeId, { ratings: roundedRating }, { new: true }).exec();
   }
-
-
+  async removeReviewFromUser(userId: string, reviewId: string): Promise<void> {
+    const reviewObjectId = new Types.ObjectId(reviewId);
+    try {
+      const result = await this.userModel.findByIdAndUpdate(
+        userId,
+        { $pull: { reviews: reviewObjectId } },
+        { new: true }
+      ).exec();
+      if (!result) {
+        throw new NotFoundException('User not found');
+      }
+    } catch (error) {
+      console.error('Error updating user:', error);
+      throw new InternalServerErrorException('Failed to update user');
+    }
+  }
+  async getProfileReviews():promise<Review>{
+    
+  }
 
 }
 

@@ -24,6 +24,7 @@ import { User } from "./schema/user.schema";
 import { UserService } from "./user.service";
 import {  multerOptionsAvatar } from "src/configuration/multer.config";
 import { FileInterceptor } from "@nestjs/platform-express";
+import { Review } from "../Reviews/schema/review.schema";
 
 
 @Controller(constTexts.userRoute.name)
@@ -121,6 +122,16 @@ export class UserController {
     @AuthUser() user: User 
   ): Promise<User> {
     return this.userService.viewOtherProfile(id);
+  }
+
+  @Get(constTexts.userRoute.getMyReviews)
+  @ApiPageOkResponse({
+    description: "View Other User Profile",
+    type: User,
+  })
+  @Auth(Action.Read, "Reviews")
+  async getProfileReviews():Promise<Review>{
+    return this.userService.getProfileReviews();
   }
 
  

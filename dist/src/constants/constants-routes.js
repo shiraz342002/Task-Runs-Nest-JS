@@ -70,7 +70,7 @@ exports.constTexts = {
         PostReview: "ReviewUserService/:revieweeId",
         update: ":id",
         delete: ":id",
-        getOne: ":id",
+        getOne: "/:id",
     },
     searcRoute: {
         name: "search",
@@ -86,6 +86,7 @@ exports.constTexts = {
         handleBlock: "handleBlock",
         deleteAccount: "deleteAccount",
         myprofile: "viewMyProfile",
+        getMyReviews: "GetAllReviewsOfTheCurrentProfile"
     },
     messageRoute: {
         create: "createMessage/:chatId"

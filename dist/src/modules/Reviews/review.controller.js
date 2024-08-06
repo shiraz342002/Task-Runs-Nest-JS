@@ -29,8 +29,11 @@ let ReviewsController = class ReviewsController {
     async create(revieweeId, createReviewDto, user) {
         return this.reviewsService.create(user.id, revieweeId, createReviewDto);
     }
-    async findByRevieweeId(revieweeId) {
-        return this.reviewsService.findByRevieweeId(revieweeId);
+    async findByRevieweeId(id) {
+        return this.reviewsService.findById(id);
+    }
+    async DeleteReviewById(id, user) {
+        return this.reviewsService.deleteReview(user.id, id);
     }
 };
 __decorate([
@@ -47,14 +50,26 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ReviewsController.prototype, "create", null);
 __decorate([
-    (0, common_1.Get)(':revieweeId'),
+    (0, decorators_1.Auth)(userRoles_1.Action.Read, "Review"),
+    (0, common_1.Get)(constants_1.constTexts.reviewsRoute.getOne),
     (0, swagger_1.ApiOperation)({ summary: 'Get reviews by reviewee ID' }),
     (0, swagger_1.ApiResponse)({ status: 200, description: 'Reviews fetched successfully.', type: [review_schema_1.Review] }),
-    __param(0, (0, common_1.Param)('revieweeId')),
+    __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], ReviewsController.prototype, "findByRevieweeId", null);
+__decorate([
+    (0, common_1.Delete)(constants_1.constTexts.reviewsRoute.delete),
+    (0, decorators_1.Auth)(userRoles_1.Action.Delete, "Review"),
+    (0, swagger_1.ApiOperation)({ summary: 'Delete Your  review By ID' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Review Deleted successfully.', }),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, decorators_1.AuthUser)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, user_schema_1.User]),
+    __metadata("design:returntype", Promise)
+], ReviewsController.prototype, "DeleteReviewById", null);
 ReviewsController = __decorate([
     (0, common_1.Controller)(constants_1.constTexts.reviewsRoute.name),
     (0, swagger_1.ApiTags)(constants_1.constTexts.reviewsRoute.name),
