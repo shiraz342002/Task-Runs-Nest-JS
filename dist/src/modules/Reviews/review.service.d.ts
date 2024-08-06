@@ -10,4 +10,5 @@ export declare class ReviewsService {
     findByRevieweeId(revieweeId: string): Promise<Review[]>;
     findById(id: string): Promise<Review>;
     deleteReview(userId: string, reviewId: string): Promise<Review>;
+    getProfileReviews(userId: string): Promise<void>;
 }

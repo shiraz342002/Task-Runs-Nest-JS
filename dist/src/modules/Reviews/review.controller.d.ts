@@ -8,4 +8,6 @@ export declare class ReviewsController {
     create(revieweeId: string, createReviewDto: CreateReviewDto, user: User): Promise<Review>;
     findByRevieweeId(id: string): Promise<Review>;
     DeleteReviewById(id: string, user: User): Promise<Review>;
+    getProfileReviews(user: User): Promise<any>;
+    getReviewsById(id: string, user: User): Promise<any>;
 }

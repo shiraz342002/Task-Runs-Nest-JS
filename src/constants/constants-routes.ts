@@ -70,6 +70,8 @@ export const constTexts = {
     update: ":id",
     delete: ":id",
     getOne: "/:id",
+    getMyReviews:"GetAllReviewsOfTheCurrentProfile",
+    getReviewsById:"GetAllReviewsOfProfileById/:id"
   },
 
   searcRoute: {
@@ -87,7 +89,7 @@ export const constTexts = {
     handleBlock: "handleBlock",
     deleteAccount: "deleteAccount",
     myprofile:"viewMyProfile",
-    getMyReviews:"GetAllReviewsOfTheCurrentProfile"
+    
   },
 
   messageRoute:{

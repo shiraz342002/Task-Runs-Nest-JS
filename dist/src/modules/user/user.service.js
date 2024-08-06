@@ -296,7 +296,22 @@ let UserService = class UserService {
             throw new common_1.InternalServerErrorException('Failed to update user');
         }
     }
-    async getProfileReviews() {
+    async getProfileReviews(userId) {
+        const user = await this.userModel
+            .findById(userId)
+            .populate({
+            path: 'reviews',
+            select: 'reviewerId revieweeId rating text',
+            populate: {
+                path: 'reviewerId',
+                select: 'avatar name',
+            },
+        })
+            .exec();
+        if (!user) {
+            throw new common_1.NotFoundException('User not found');
+        }
+        return user.reviews;
     }
 };
 UserService = __decorate([

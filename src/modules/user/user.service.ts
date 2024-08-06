@@ -18,7 +18,6 @@ import { ForgotPasswordDto } from "../auth/dto/forgot-password.dto";
 import { VerifyAccountDto } from "../auth/dto/verify-account.dto";
 import { UserSignupDto } from "../auth/dto/user.signup.dto";
 import { VerifyAccountOnlyDto } from "../auth/dto/verify-account-only.dto";
-import { Review } from "../Reviews/schema/review.schema";
 
 @Injectable()
 export class UserService {
@@ -414,8 +413,22 @@ export class UserService {
       throw new InternalServerErrorException('Failed to update user');
     }
   }
-  async getProfileReviews():promise<Review>{
-    
+  async getProfileReviews(userId: string): Promise<any> {
+    const user = await this.userModel
+      .findById(userId)
+      .populate({
+        path: 'reviews',
+        select: 'reviewerId revieweeId rating text',
+        populate:{
+          path: 'reviewerId',
+          select: 'avatar name',
+        },
+      })
+      .exec();
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }  
+    return user.reviews;
   }
 
 }

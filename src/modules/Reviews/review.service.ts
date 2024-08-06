@@ -51,5 +51,8 @@ export class ReviewsService {
     await this.userService.removeReviewFromUser(userId, reviewId);
     return review
   }
+  async getProfileReviews(userId:string){
+    await this.userService.getProfileReviews(userId)
+  }
 }
 

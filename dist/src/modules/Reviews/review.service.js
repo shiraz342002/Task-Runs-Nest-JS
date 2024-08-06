@@ -55,6 +55,9 @@ let ReviewsService = class ReviewsService {
         await this.userService.removeReviewFromUser(userId, reviewId);
         return review;
     }
+    async getProfileReviews(userId) {
+        await this.userService.getProfileReviews(userId);
+    }
 };
 ReviewsService = __decorate([
     (0, common_1.Injectable)(),

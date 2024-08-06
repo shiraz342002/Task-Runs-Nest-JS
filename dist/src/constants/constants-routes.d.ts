@@ -68,6 +68,8 @@ export declare const constTexts: {
         update: string;
         delete: string;
         getOne: string;
+        getMyReviews: string;
+        getReviewsById: string;
     };
     searcRoute: {
         name: string;
@@ -83,7 +85,6 @@ export declare const constTexts: {
         handleBlock: string;
         deleteAccount: string;
         myprofile: string;
-        getMyReviews: string;
     };
     messageRoute: {
         create: string;
