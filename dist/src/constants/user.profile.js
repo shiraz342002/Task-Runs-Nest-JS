@@ -1,0 +1,48 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PostFields = exports.UserFields = void 0;
+var UserFields;
+(function (UserFields) {
+    UserFields["ID"] = "_id";
+    UserFields["NAME"] = "name";
+    UserFields["EMAIL"] = "email";
+    UserFields["PASSWORD"] = "password";
+    UserFields["ABOUT"] = "about";
+    UserFields["VERIFY"] = "verify";
+    UserFields["ROLE"] = "role";
+    UserFields["OTP"] = "otp";
+    UserFields["IS_OTP_USED"] = "isOtpUsed";
+    UserFields["AVATAR"] = "avatar";
+    UserFields["PHONE"] = "phone";
+    UserFields["TASK_COMPLETED"] = "task_completed";
+    UserFields["MY_ORDERS"] = "my_orders";
+    UserFields["RATINGS"] = "ratings";
+    UserFields["ZIP_CODE"] = "zip_code";
+    UserFields["CITY"] = "city";
+    UserFields["CREATED_AT"] = "createdAt";
+    UserFields["UPDATED_AT"] = "updatedAt";
+    UserFields["VERSION"] = "__v";
+    UserFields["PROFESSION"] = "profession";
+    UserFields["ADDRESS"] = "address";
+})(UserFields = exports.UserFields || (exports.UserFields = {}));
+var PostFields;
+(function (PostFields) {
+    PostFields["ID"] = "_id";
+    PostFields["TITLE"] = "title";
+    PostFields["DESCRIPTION"] = "description";
+    PostFields["IMAGES"] = "images";
+    PostFields["CITY"] = "city";
+    PostFields["STREET_ADDRESS"] = "streetAddress";
+    PostFields["STATE"] = "state";
+    PostFields["ZIP_CODE"] = "zipCode";
+    PostFields["USER_ID"] = "userId";
+    PostFields["IS_URGENT"] = "isUrgent";
+    PostFields["IS_HELP_FREE"] = "isHelpFree";
+    PostFields["OBO"] = "obo";
+    PostFields["PRICE"] = "price";
+    PostFields["LOCATION"] = "location";
+    PostFields["CREATED_AT"] = "createdAt";
+    PostFields["UPDATED_AT"] = "updatedAt";
+    PostFields["VERSION"] = "__v";
+})(PostFields = exports.PostFields || (exports.PostFields = {}));
+//# sourceMappingURL=user.profile.js.map
