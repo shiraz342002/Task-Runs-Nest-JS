@@ -18,14 +18,23 @@ export class PostsService {
   ) { }
 
   //Create A post/Ad
-
   async create(createDto: CreatePostDto): Promise<PostDocument> {
-    const create: PostDocument = new this.postService(createDto);
-    return await create.save().catch((err) => {
+    try {
+      if (createDto.obo && createDto.price !== undefined && createDto.price >= 0) {
+        throw new HttpException('Price should not be provided when obo is true', ResponseCode.BAD_REQUEST);
+      }
+        if (!createDto.obo && (createDto.price === undefined || createDto.price <= 0)) {
+        throw new HttpException('Price is required and must be greater than 0 when obo is false', ResponseCode.BAD_REQUEST);
+      }
+      const create: PostDocument = new this.postService(createDto);
+      return await create.save();
+    } catch (err) {
       throw new HttpException(err.message, ResponseCode.BAD_REQUEST);
-    });
+    }
   }
-
+  
+  
+  
   //Find All
   async findall(page = 1, limit = 20) {
     const startIndex = (page - 1) * limit;
@@ -64,7 +73,6 @@ export class PostsService {
       throw new HttpException(err.message, ResponseCode.BAD_REQUEST);
     }
   }
-
   //Delete Post
   async deletePost(id: string) {
     return await this.postService
@@ -74,7 +82,6 @@ export class PostsService {
         throw new HttpException(err.message, ResponseCode.BAD_REQUEST);
       });
   }
-
   //View LoggedIn User Ads
   async viewMyAds(userId: string): Promise<any> {
     try {
@@ -98,7 +105,6 @@ export class PostsService {
       throw new HttpException(err.message, ResponseCode.NOT_FOUND);
     }
   }
-
   //View Other User Post/Ads
   async viewOtherUserPost(id: string): Promise<any> {
     console.log(id);
@@ -145,9 +151,6 @@ export class PostsService {
       })
       .exec();
   }
-
-
-
 }
 
 

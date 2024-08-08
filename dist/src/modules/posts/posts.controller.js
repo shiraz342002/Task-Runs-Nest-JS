@@ -33,6 +33,17 @@ let PostsController = class PostsController {
         if (images) {
             createDto.images = images.map(file => file.path);
         }
+        else {
+            createDto.images = [];
+        }
+        if (createDto.location && typeof createDto.location === 'string') {
+            try {
+                createDto.location = JSON.parse(createDto.location);
+            }
+            catch (error) {
+                console.error("Invalid location format:", createDto.location);
+            }
+        }
         createDto.userId = user.id;
         const post = await this.postsService.create(createDto);
         return post;
@@ -79,6 +90,30 @@ __decorate([
         schema: {
             type: 'object',
             properties: {
+                title: { type: 'string' },
+                description: { type: 'string' },
+                price: { type: 'string' },
+                obo: { type: 'boolean' },
+                location: {
+                    type: 'object',
+                    properties: {
+                        type: { type: 'string', example: 'Point' },
+                        coordinates: {
+                            type: 'array',
+                            items: { type: 'number' },
+                            example: [40.7128, -74.0060],
+                        },
+                    },
+                    example: {
+                        "type": "Point",
+                        "coordinates": [
+                            -122.4194,
+                            37.7749
+                        ]
+                    },
+                },
+                isUrgent: { type: 'boolean' },
+                isHelpFree: { type: 'boolean' },
                 streetAddress: { type: 'string' },
                 city: { type: 'string' },
                 zipCode: { type: 'string' },

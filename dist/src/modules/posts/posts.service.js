@@ -25,10 +25,19 @@ let PostsService = class PostsService {
         this.userService = userService;
     }
     async create(createDto) {
-        const create = new this.postService(createDto);
-        return await create.save().catch((err) => {
+        try {
+            if (createDto.obo && createDto.price !== undefined && createDto.price >= 0) {
+                throw new common_1.HttpException('Price should not be provided when obo is true', exceptions_1.ResponseCode.BAD_REQUEST);
+            }
+            if (!createDto.obo && (createDto.price === undefined || createDto.price <= 0)) {
+                throw new common_1.HttpException('Price is required and must be greater than 0 when obo is false', exceptions_1.ResponseCode.BAD_REQUEST);
+            }
+            const create = new this.postService(createDto);
+            return await create.save();
+        }
+        catch (err) {
             throw new common_1.HttpException(err.message, exceptions_1.ResponseCode.BAD_REQUEST);
-        });
+        }
     }
     async findall(page = 1, limit = 20) {
         const startIndex = (page - 1) * limit;

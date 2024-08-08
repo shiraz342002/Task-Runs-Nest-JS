@@ -13,7 +13,7 @@ export declare class PostEntity {
     isHelpFree: boolean;
     isCompleted: boolean;
     obo: boolean;
-    price: string;
+    price: number;
     location: {
         type: string;
         coordinates: [number, number];
