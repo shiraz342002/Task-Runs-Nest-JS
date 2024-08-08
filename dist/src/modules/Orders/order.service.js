@@ -17,20 +17,24 @@ const common_1 = require("@nestjs/common");
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 const order_schema_1 = require("./Schema/order.schema");
+const user_service_1 = require("../user/user.service");
 let OrderService = class OrderService {
-    constructor(orderModel) {
+    constructor(orderModel, userService) {
         this.orderModel = orderModel;
+        this.userService = userService;
     }
     async assignTask(userId, TaskAssignedToId, CreateOrderDto) {
-        const review = this.orderModel.(Object.assign({ userId,
-            TaskAssignedToId }, CreateOrderDto));
-        return review;
+        const order = new this.orderModel(Object.assign({ TaskAssignedBy: userId, TaskAssignedTo: TaskAssignedToId }, CreateOrderDto));
+        const Assignedorder = await order.save();
+        await this.userService.incrementMyOrder(TaskAssignedToId);
+        return Assignedorder;
     }
 };
 OrderService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, mongoose_1.InjectModel)(order_schema_1.Order.name)),
-    __metadata("design:paramtypes", [mongoose_2.Model])
+    __metadata("design:paramtypes", [mongoose_2.Model,
+        user_service_1.UserService])
 ], OrderService);
 exports.OrderService = OrderService;
 //# sourceMappingURL=order.service.js.map

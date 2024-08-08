@@ -10,15 +10,27 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateOrderDto = void 0;
+const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
 class CreateOrderDto {
 }
 __decorate([
+    (0, swagger_1.ApiProperty)({
+        description: 'The ID of the post related to the task',
+        example: '60d21b4667d0d8992e610c85',
+        type: String,
+    }),
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsMongoId)(),
     __metadata("design:type", String)
 ], CreateOrderDto.prototype, "PostId", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({
+        description: 'The deadline for the task',
+        example: '2024-08-31T23:59:59Z',
+        type: String,
+        format: 'date-time',
+    }),
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsDateString)(),
     __metadata("design:type", String)

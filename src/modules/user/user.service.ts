@@ -458,6 +458,20 @@ export class UserService {
     }
     return user
   }
+  async incrementMyOrder(userId: string){
+    const user = await this.userModel.findById(userId);
+    if (!user) {
+      throw new NotFoundException("User does not exist");
+    }
+
+   
+   const updated_user= await this.userModel.findByIdAndUpdate(
+      userId,
+      { $inc: { my_orders: 1 } },
+      { new: true }
+    );
+    console.log(updated_user);
+  }
   
   
   

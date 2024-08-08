@@ -100,8 +100,8 @@ exports.constTexts = {
         create: "CreateChatRoom/:id"
     },
     orderMgmt: {
-        name: "Order Management",
-        assignOrder: "AssignTask"
+        name: "OrderManagement",
+        assignOrder: "AssignTask/:TaskAssignedToId"
     },
     notifyRoute: {
         name: "notification",

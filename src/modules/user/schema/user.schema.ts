@@ -149,7 +149,6 @@ export class User {
   @Prop({type:"string",trim:true,required:false})
   profession?:string;
 
-  @IsString()
   @IsOptional()
   @ApiProperty()
   @ApiHideProperty()
@@ -157,10 +156,10 @@ export class User {
     description:"Completed Task of the User",
     title:"Completed Task"
   })
-  @Prop({type:"string",trim:true,required:false,default:0})
+  @Prop({type:"number",trim:true,required:false,default:0})
   task_completed?:number;
 
-  @IsString()
+  
   @IsOptional()
   @ApiProperty()
   @ApiHideProperty()
@@ -168,7 +167,7 @@ export class User {
     description:"Completed Order of the User",
     title:"Completed Order"
   })
-  @Prop({type:"string",trim:true,required:false,default:0})
+  @Prop({type:"number",trim:true,required:false,default:0})
   my_orders?:number;
 
  

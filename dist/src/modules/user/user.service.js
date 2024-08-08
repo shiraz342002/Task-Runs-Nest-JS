@@ -337,6 +337,14 @@ let UserService = class UserService {
         }
         return user;
     }
+    async incrementMyOrder(userId) {
+        const user = await this.userModel.findById(userId);
+        if (!user) {
+            throw new common_1.NotFoundException("User does not exist");
+        }
+        const updated_user = await this.userModel.findByIdAndUpdate(userId, { $inc: { my_orders: 1 } }, { new: true });
+        console.log(updated_user);
+    }
 };
 UserService = __decorate([
     (0, common_1.Injectable)(),

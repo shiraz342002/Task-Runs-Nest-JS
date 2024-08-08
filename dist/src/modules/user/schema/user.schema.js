@@ -153,7 +153,6 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "profession", void 0);
 __decorate([
-    (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
     (0, swagger_1.ApiProperty)(),
     (0, swagger_1.ApiHideProperty)(),
@@ -161,11 +160,10 @@ __decorate([
         description: "Completed Task of the User",
         title: "Completed Task"
     }),
-    (0, mongoose_1.Prop)({ type: "string", trim: true, required: false, default: 0 }),
+    (0, mongoose_1.Prop)({ type: "number", trim: true, required: false, default: 0 }),
     __metadata("design:type", Number)
 ], User.prototype, "task_completed", void 0);
 __decorate([
-    (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
     (0, swagger_1.ApiProperty)(),
     (0, swagger_1.ApiHideProperty)(),
@@ -173,7 +171,7 @@ __decorate([
         description: "Completed Order of the User",
         title: "Completed Order"
     }),
-    (0, mongoose_1.Prop)({ type: "string", trim: true, required: false, default: 0 }),
+    (0, mongoose_1.Prop)({ type: "number", trim: true, required: false, default: 0 }),
     __metadata("design:type", Number)
 ], User.prototype, "my_orders", void 0);
 __decorate([

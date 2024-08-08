@@ -1,7 +1,10 @@
 import { Model } from "mongoose";
 import { Order } from "./Schema/order.schema";
+import { CreateOrderDto } from "./Dto/create.order.dto";
+import { UserService } from "../user/user.service";
 export declare class OrderService {
     private orderModel;
-    constructor(orderModel: Model<Order>);
-    assignTask(userId: string, TaskAssignedToId: string, CreateOrderDto: any): Promise<Order>;
+    private readonly userService;
+    constructor(orderModel: Model<Order>, userService: UserService);
+    assignTask(userId: string, TaskAssignedToId: string, CreateOrderDto: CreateOrderDto): Promise<Order>;
 }
