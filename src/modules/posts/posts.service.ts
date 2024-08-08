@@ -20,18 +20,44 @@ export class PostsService {
   //Create A post/Ad
   async create(createDto: CreatePostDto): Promise<PostDocument> {
     try {
-      if (createDto.obo && createDto.price !== undefined && createDto.price >= 0) {
+      console.log(typeof createDto.obo);
+      console.log(createDto.obo);
+      const isObo = typeof createDto.obo === 'string' ? createDto.obo === 'true' : createDto.obo;
+      console.log(typeof createDto.obo);
+      console.log(createDto.obo);
+      
+      // Check if obo is true and price is provided
+      if (isObo && createDto.price !== undefined && createDto.price > 0) {
         throw new HttpException('Price should not be provided when obo is true', ResponseCode.BAD_REQUEST);
       }
-        if (!createDto.obo && (createDto.price === undefined || createDto.price <= 0)) {
+      
+      // Check if obo is false and price is not provided or is less than or equal to 0
+      if (!isObo && (createDto.price === undefined || createDto.price <= 0)) {
         throw new HttpException('Price is required and must be greater than 0 when obo is false', ResponseCode.BAD_REQUEST);
       }
+  
+      // Remove price if obo is true
+      if (isObo) {
+        createDto.price = undefined;
+      }
+  
+      // Create and save the post
       const create: PostDocument = new this.postService(createDto);
       return await create.save();
     } catch (err) {
+      console.error('Error creating post:', err);
       throw new HttpException(err.message, ResponseCode.BAD_REQUEST);
     }
   }
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   
   

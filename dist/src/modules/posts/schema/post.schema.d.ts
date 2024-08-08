@@ -12,7 +12,7 @@ export declare class PostEntity {
     isUrgent: boolean;
     isHelpFree: boolean;
     isCompleted: boolean;
-    obo: boolean;
+    obo?: boolean;
     price: number;
     location: {
         type: string;

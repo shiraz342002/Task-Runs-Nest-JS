@@ -92,7 +92,7 @@ __decorate([
             properties: {
                 title: { type: 'string' },
                 description: { type: 'string' },
-                price: { type: 'string' },
+                price: { type: 'number' },
                 obo: { type: 'boolean' },
                 location: {
                     type: 'object',
@@ -171,7 +171,7 @@ __decorate([
                 },
                 title: { type: 'string' },
                 description: { type: 'string' },
-                price: { type: 'string' },
+                price: { type: 'number' },
                 location: {
                     type: 'object',
                     properties: {

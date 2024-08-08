@@ -118,16 +118,13 @@ __decorate([
 __decorate([
     (0, class_validator_1.IsBoolean)(),
     (0, class_validator_1.IsOptional)(),
-    (0, class_transformer_1.Transform)(({ value }) => value === "true"),
-    (0, swagger_1.ApiProperty)(),
-    (0, mongoose_1.Prop)({ type: Boolean, required: false, trim: true, default: false }),
+    (0, class_transformer_1.Transform)(({ value }) => value === 'true', { toClassOnly: true }),
+    (0, mongoose_1.Prop)({ type: Boolean, default: false }),
     __metadata("design:type", Boolean)
 ], PostEntity.prototype, "obo", void 0);
 __decorate([
-    (0, class_validator_1.IsNumber)(),
     (0, class_validator_1.IsOptional)(),
-    (0, swagger_1.ApiProperty)(),
-    (0, mongoose_1.Prop)({ type: Number, required: false, trim: true, default: 0 }),
+    (0, mongoose_1.Prop)({ type: Number, required: false, default: 0 }),
     __metadata("design:type", Number)
 ], PostEntity.prototype, "price", void 0);
 __decorate([

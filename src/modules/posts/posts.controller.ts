@@ -38,7 +38,7 @@ export class PostsController {
       properties: {
         title:{type:'string'},
         description:{type:'string'},
-        price:{type:'string'},
+        price:{type:'number'},
         obo:{type:'boolean'},
         location: {
           type: 'object',
@@ -129,7 +129,7 @@ export class PostsController {
         },
         title: { type: 'string' },
         description: { type: 'string' },
-        price: { type: 'string' },
+        price: { type: 'number' },
         location: {
           type: 'object',
           properties: {

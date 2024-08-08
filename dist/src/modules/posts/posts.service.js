@@ -26,16 +26,25 @@ let PostsService = class PostsService {
     }
     async create(createDto) {
         try {
-            if (createDto.obo && createDto.price !== undefined && createDto.price >= 0) {
+            console.log(typeof createDto.obo);
+            console.log(createDto.obo);
+            const isObo = typeof createDto.obo === 'string' ? createDto.obo === 'true' : createDto.obo;
+            console.log(typeof createDto.obo);
+            console.log(createDto.obo);
+            if (isObo && createDto.price !== undefined && createDto.price > 0) {
                 throw new common_1.HttpException('Price should not be provided when obo is true', exceptions_1.ResponseCode.BAD_REQUEST);
             }
-            if (!createDto.obo && (createDto.price === undefined || createDto.price <= 0)) {
+            if (!isObo && (createDto.price === undefined || createDto.price <= 0)) {
                 throw new common_1.HttpException('Price is required and must be greater than 0 when obo is false', exceptions_1.ResponseCode.BAD_REQUEST);
+            }
+            if (isObo) {
+                createDto.price = undefined;
             }
             const create = new this.postService(createDto);
             return await create.save();
         }
         catch (err) {
+            console.error('Error creating post:', err);
             throw new common_1.HttpException(err.message, exceptions_1.ResponseCode.BAD_REQUEST);
         }
     }

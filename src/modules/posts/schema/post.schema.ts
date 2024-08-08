@@ -3,7 +3,7 @@ import { ApiProperty } from "@nestjs/swagger";
 
 import { Transform } from "class-transformer";
 // import { Transform } from "class-transformer";
-import { IsArray, IsBoolean, IsNumber, IsOptional, IsString, } from "class-validator";
+import { IsArray, IsBoolean, IsOptional, IsString,  } from "class-validator";
 import { JSONSchema } from "class-validator-jsonschema";
 import mongoose, { Document } from "mongoose";
 
@@ -107,16 +107,14 @@ export class PostEntity {
   @Prop({type:Boolean,trim:true,default:false})
   isCompleted:boolean
 
-  @IsBoolean() @IsOptional()
-  @Transform(({ value }) => value === "true")
-  @ApiProperty()
-  @Prop({ type: Boolean, required: false, trim: true,default: false  })
-  obo: boolean;
-
-  @IsNumber()
+  @IsBoolean()
   @IsOptional()
-  @ApiProperty()
-  @Prop({ type: Number, required: false, trim: true,default:0 })
+  @Transform(({ value }) => value === 'true', { toClassOnly: true })
+  @Prop({ type: Boolean, default: false })
+  obo?: boolean;
+
+  @IsOptional()
+  @Prop({ type: Number, required: false, default: 0 })
   price: number;
 
   @IsOptional()
