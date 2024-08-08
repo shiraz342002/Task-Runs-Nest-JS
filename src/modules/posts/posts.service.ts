@@ -102,7 +102,6 @@ export class PostsService {
   //View Other User Post/Ads
   async viewOtherUserPost(id: string): Promise<any> {
     console.log(id);
-
     const p_fieldsToSelect = 'title images createdAt description price userId';
     const u_selecedfields = 'name ratings'
     const p_data = await this.postService.findById(id).select(p_fieldsToSelect).exec();
@@ -125,7 +124,6 @@ export class PostsService {
     delete (combinedData as any).userId;
     return combinedData
   }
-
   //Find post by id (This is the function to be used by other APis)
   async findById(postId: string): Promise<PostDocument> {
     return this.postService.findById(postId)
