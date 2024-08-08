@@ -18,6 +18,7 @@ import { CommentsModule } from "./modules/comments/comments.module";
 import { MessagesModule } from './modules/messages/messages.module';
 import { ChatRoomModule } from './modules/chat-room/chat-room.module';
 import { ReviewsModule } from "./modules/Reviews/review.module";
+import { OrdersModule } from "./modules/Orders/order.module";
 @Module({
   imports: [
     ConfigurationModule,
@@ -62,7 +63,8 @@ import { ReviewsModule } from "./modules/Reviews/review.module";
     CommentsModule,
     MessagesModule,
     ChatRoomModule,
-    ReviewsModule
+    ReviewsModule,
+    OrdersModule
   ],
   controllers: [AppController],
   providers: [AppService],

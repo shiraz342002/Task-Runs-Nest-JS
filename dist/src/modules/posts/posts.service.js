@@ -30,7 +30,6 @@ let PostsService = class PostsService {
             console.log(createDto.obo);
             const isObo = typeof createDto.obo === 'string' ? createDto.obo === 'true' : createDto.obo;
             console.log(typeof createDto.obo);
-            console.log(createDto.obo);
             if (isObo && createDto.price !== undefined && createDto.price > 0) {
                 throw new common_1.HttpException('Price should not be provided when obo is true', exceptions_1.ResponseCode.BAD_REQUEST);
             }
@@ -108,26 +107,6 @@ let PostsService = class PostsService {
         catch (err) {
             throw new common_1.HttpException(err.message, exceptions_1.ResponseCode.NOT_FOUND);
         }
-    }
-    async viewOtherUserPost(id) {
-        console.log(id);
-        const p_fieldsToSelect = 'title images createdAt description price userId';
-        const u_selecedfields = 'name ratings';
-        const p_data = await this.postService.findById(id).select(p_fieldsToSelect).exec();
-        console.log(p_data.userId);
-        const u_data = await this.userService.findCustomData(p_data.userId, u_selecedfields);
-        if (!p_data) {
-            throw new common_1.HttpException('no Post not found', exceptions_1.ResponseCode.NOT_FOUND);
-        }
-        if (!u_data) {
-            throw new common_1.HttpException('User not found', exceptions_1.ResponseCode.NOT_FOUND);
-        }
-        const combinedData = Object.assign(Object.assign({}, p_data.toObject()), { user: {
-                name: u_data.name,
-                ratings: u_data.ratings,
-            } });
-        delete combinedData.userId;
-        return combinedData;
     }
     async findById(postId) {
         return this.postService.findById(postId);

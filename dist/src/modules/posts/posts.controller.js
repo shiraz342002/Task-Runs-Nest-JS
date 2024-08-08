@@ -73,7 +73,7 @@ let PostsController = class PostsController {
         return this.postsService.deletePost(id);
     }
     async viewOtherUserPost(id, user) {
-        return this.postsService.viewOtherUserPost(id);
+        return this.postsService.viewMyAds(id);
     }
     async viewMyAds(user) {
         return this.postsService.viewMyAds(user.id);

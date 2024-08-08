@@ -66,11 +66,11 @@ let CommentsService = class CommentsService {
                 .findById(commentId)
                 .populate({
                 path: 'userId',
-                select: 'name avatar rating',
+                select: 'name avatar ratings',
             })
                 .exec();
             if (!comment) {
-                throw new common_1.HttpException('Post not found', common_1.HttpStatus.NOT_FOUND);
+                throw new common_1.NotFoundException('Comment not found');
             }
             ;
             async function fetchReplies(comment, commentModel) {
@@ -79,7 +79,7 @@ let CommentsService = class CommentsService {
                 const replies = await commentModel.find({ '_id': { $in: comment.replies } })
                     .populate({
                     path: 'userId',
-                    select: 'name avatar rating',
+                    select: 'name avatar ratings',
                 })
                     .exec();
                 comment.replies = await Promise.all(replies.map(async (reply) => {
@@ -107,7 +107,7 @@ let CommentsService = class CommentsService {
             const replies = await commentModel.find({ '_id': { $in: comment.replies } })
                 .populate({
                 path: 'userId',
-                select: 'name avatar rating',
+                select: 'name avatar ratings',
             })
                 .exec();
             comment.replies = await Promise.all(replies.map(async (reply) => {
@@ -119,7 +119,7 @@ let CommentsService = class CommentsService {
         const comments = await this.commentModel.find({ _id: { $in: post.comments } })
             .populate({
             path: 'userId',
-            select: 'name avatar rating',
+            select: 'name avatar ratings',
         })
             .exec();
         const commentsWithReplies = await Promise.all(comments.map(comment => fetchReplies(comment, this.commentModel)));
@@ -129,6 +129,10 @@ let CommentsService = class CommentsService {
         return await this.commentModel.findByIdAndUpdate(commentId, updatedComment);
     }
     async deleteComment(commentId) {
+        const comment = await this.commentModel.findById(commentId);
+        if (!comment) {
+            throw new common_1.NotFoundException("No comment found");
+        }
         return await this.commentModel.findByIdAndDelete(commentId);
     }
     async getOnlyCommentsByPostId(postId) {

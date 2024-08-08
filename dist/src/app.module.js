@@ -28,6 +28,7 @@ const comments_module_1 = require("./modules/comments/comments.module");
 const messages_module_1 = require("./modules/messages/messages.module");
 const chat_room_module_1 = require("./modules/chat-room/chat-room.module");
 const review_module_1 = require("./modules/Reviews/review.module");
+const order_module_1 = require("./modules/Orders/order.module");
 let AppModule = AppModule_1 = class AppModule {
 };
 AppModule = AppModule_1 = __decorate([
@@ -71,7 +72,8 @@ AppModule = AppModule_1 = __decorate([
             comments_module_1.CommentsModule,
             messages_module_1.MessagesModule,
             chat_room_module_1.ChatRoomModule,
-            review_module_1.ReviewsModule
+            review_module_1.ReviewsModule,
+            order_module_1.OrdersModule
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

@@ -25,8 +25,10 @@
 import { Document, Types } from 'mongoose';
 export type OrderDocument = Order & Document;
 export declare class Order {
-    serviceProviderId: Types.ObjectId;
-    clientId: Types.ObjectId;
+    TaskAssignedBy: Types.ObjectId;
+    TaskAssignedTo: Types.ObjectId;
+    PostId: Types.ObjectId;
     taskStatus: boolean;
+    deadline: Date;
 }
 export declare const OrderSchema: import("mongoose").Schema<Order, import("mongoose").Model<Order, any, any, any, any>, {}, {}, {}, {}, import("mongoose").DefaultSchemaOptions, Order>;

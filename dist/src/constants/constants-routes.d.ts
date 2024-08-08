@@ -96,6 +96,10 @@ export declare const constTexts: {
         detail: string;
         create: string;
     };
+    orderMgmt: {
+        name: string;
+        assignOrder: string;
+    };
     notifyRoute: {
         name: string;
         count: string;

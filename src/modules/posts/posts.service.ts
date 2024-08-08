@@ -23,25 +23,16 @@ export class PostsService {
       console.log(typeof createDto.obo);
       console.log(createDto.obo);
       const isObo = typeof createDto.obo === 'string' ? createDto.obo === 'true' : createDto.obo;
-      console.log(typeof createDto.obo);
-      console.log(createDto.obo);
-      
-      // Check if obo is true and price is provided
+      console.log(typeof createDto.obo);      
       if (isObo && createDto.price !== undefined && createDto.price > 0) {
         throw new HttpException('Price should not be provided when obo is true', ResponseCode.BAD_REQUEST);
       }
-      
-      // Check if obo is false and price is not provided or is less than or equal to 0
       if (!isObo && (createDto.price === undefined || createDto.price <= 0)) {
         throw new HttpException('Price is required and must be greater than 0 when obo is false', ResponseCode.BAD_REQUEST);
       }
-  
-      // Remove price if obo is true
       if (isObo) {
         createDto.price = undefined;
       }
-  
-      // Create and save the post
       const create: PostDocument = new this.postService(createDto);
       return await create.save();
     } catch (err) {
@@ -49,18 +40,7 @@ export class PostsService {
       throw new HttpException(err.message, ResponseCode.BAD_REQUEST);
     }
   }
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+ 
   //Find All
   async findall(page = 1, limit = 20) {
     const startIndex = (page - 1) * limit;
@@ -131,31 +111,31 @@ export class PostsService {
       throw new HttpException(err.message, ResponseCode.NOT_FOUND);
     }
   }
-  //View Other User Post/Ads
-  async viewOtherUserPost(id: string): Promise<any> {
-    console.log(id);
-    const p_fieldsToSelect = 'title images createdAt description price userId';
-    const u_selecedfields = 'name ratings'
-    const p_data = await this.postService.findById(id).select(p_fieldsToSelect).exec();
-    console.log(p_data.userId);
-    const u_data = await this.userService.findCustomData(p_data.userId, u_selecedfields);
-    if (!p_data) {
-      throw new HttpException('no Post not found', ResponseCode.NOT_FOUND);
-    }
-    if (!u_data) {
-      throw new HttpException('User not found', ResponseCode.NOT_FOUND);
-    }
-    const combinedData = {
-      ...p_data.toObject(),
-      user: {
-        name: u_data.name,
-        ratings: u_data.ratings,
-      },
-    };
-    //Yahan se Userid ko final returned data se urana ha 
-    delete (combinedData as any).userId;
-    return combinedData
-  }
+  //View Other User Post/Ads (Code broken will fix later)
+
+  // async viewOtherUserPost(id: string): Promise<any> {
+  //   const p_fieldsToSelect = 'title images createdAt description price userId';
+  //   const u_selecedfields = 'name ratings'
+  //   const p_data = await this.postService.findById({ id }).select(p_fieldsToSelect).exec();
+  //   const u_data = await this.userService.findCustomData(p_data.userId, u_selecedfields);
+  //   if (!p_data) {
+  //     throw new HttpException('no Post not found', ResponseCode.NOT_FOUND);
+  //   }
+  //   if (!u_data) {
+  //     throw new HttpException('User not found', ResponseCode.NOT_FOUND);
+  //   }
+  //   const combinedData = {
+  //     ...p_data.toObject(),
+  //     user: {
+  //       name: u_data.name,
+  //       ratings: u_data.ratings,
+  //     },
+  //   };
+  //   delete (combinedData as any).userId;
+  //   return combinedData
+  // }
+
+
   //Find post by id (This is the function to be used by other APis)
   async findById(postId: string): Promise<PostDocument> {
     return this.postService.findById(postId)

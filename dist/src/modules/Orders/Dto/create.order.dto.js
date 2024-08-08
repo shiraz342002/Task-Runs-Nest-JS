@@ -10,31 +10,18 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateOrderDto = void 0;
-const swagger_1 = require("@nestjs/swagger");
-const mongoose_1 = require("mongoose");
+const class_validator_1 = require("class-validator");
 class CreateOrderDto {
 }
 __decorate([
-    (0, swagger_1.ApiProperty)({
-        description: 'The ID of the service provider who is handling the order',
-        example: '60d21b4667d0d8992e610c85',
-    }),
-    __metadata("design:type", mongoose_1.Types.ObjectId)
-], CreateOrderDto.prototype, "serviceProviderId", void 0);
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsMongoId)(),
+    __metadata("design:type", String)
+], CreateOrderDto.prototype, "PostId", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({
-        description: 'The ID of the client who is placing the order',
-        example: '60d21b4667d0d8992e610c85',
-    }),
-    __metadata("design:type", mongoose_1.Types.ObjectId)
-], CreateOrderDto.prototype, "clientId", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({
-        description: 'The status of the task for this order',
-        example: false,
-        type: Boolean,
-    }),
-    __metadata("design:type", Boolean)
-], CreateOrderDto.prototype, "taskStatus", void 0);
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsDateString)(),
+    __metadata("design:type", String)
+], CreateOrderDto.prototype, "deadline", void 0);
 exports.CreateOrderDto = CreateOrderDto;
 //# sourceMappingURL=create.order.dto.js.map

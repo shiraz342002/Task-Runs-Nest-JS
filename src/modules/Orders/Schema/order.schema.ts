@@ -6,14 +6,19 @@ export type OrderDocument = Order & Document;
 @Schema({ timestamps: true })
 export class Order {
   @Prop({ required: true, type: Types.ObjectId, ref: 'User' })
-  serviceProviderId: Types.ObjectId; 
+  TaskAssignedBy: Types.ObjectId; 
 
   @Prop({ required: true, type: Types.ObjectId, ref: 'User' })
-  clientId: Types.ObjectId; 
+  TaskAssignedTo: Types.ObjectId; 
+
+  @Prop({ required: true, type: Types.ObjectId, ref: 'PostEntity' })
+  PostId: Types.ObjectId; 
 
   @Prop({ required: true, type: Boolean, default: false })
   taskStatus: boolean; 
+
+  @Prop({ required: true, type: Date })
+  deadline: Date;  
 }
 
 export const OrderSchema = SchemaFactory.createForClass(Order);
-

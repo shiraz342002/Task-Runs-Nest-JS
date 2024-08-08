@@ -200,7 +200,7 @@ export class PostsController {
     @Param('id') id: string, 
     @AuthUser() user: User 
   ): Promise<PostEntity> {
-    return this.postsService.viewOtherUserPost(id);
+    return this.postsService.viewMyAds(id);
   }
 
   @Get(constTexts.postRoute.viewMyAds)

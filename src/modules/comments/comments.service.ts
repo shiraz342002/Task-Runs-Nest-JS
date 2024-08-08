@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Comment, CommentDocument } from './schema/comments.schema';
 import { PostsService } from '../posts/posts.service';
@@ -49,18 +49,18 @@ export class CommentsService {
         .findById(commentId)
         .populate({
           path: 'userId',
-          select: 'name avatar rating',
+          select: 'name avatar ratings',
         })
         .exec();
       if (!comment){
-        throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
+        throw new NotFoundException('Comment not found');
       };
       async function fetchReplies(comment: CommentDocument, commentModel: any): Promise<CommentDocument> {
         if (!comment.replies || comment.replies.length === 0) return comment;
         const replies = await commentModel.find({ '_id': { $in: comment.replies } })
           .populate({
             path: 'userId',
-            select: 'name avatar rating',
+            select: 'name avatar ratings',
           })
           .exec();
         comment.replies = await Promise.all(replies.map(async reply => {
@@ -88,7 +88,7 @@ export class CommentsService {
       const replies = await commentModel.find({ '_id': { $in: comment.replies } })
         .populate({
           path: 'userId',
-          select: 'name avatar rating',
+          select: 'name avatar ratings',
         })
         .exec();        
       comment.replies = await Promise.all(replies.map(async reply => {
@@ -100,7 +100,7 @@ export class CommentsService {
     const comments = await this.commentModel.find({ _id: { $in: post.comments } })
       .populate({
         path: 'userId',
-        select: 'name avatar rating',
+        select: 'name avatar ratings',
       })
       .exec();
     const commentsWithReplies = await Promise.all(comments.map(comment => fetchReplies(comment, this.commentModel)));
@@ -114,6 +114,11 @@ export class CommentsService {
 
   //Delete Comments
   async deleteComment(commentId: string): Promise<any> {
+    const comment =await this.commentModel.findById(commentId)
+    if(!comment){
+      throw new NotFoundException("No comment found")
+    }
+    // await this.postService.RemoveCommentFromPost()
     return await this.commentModel.findByIdAndDelete(commentId)
   }
 

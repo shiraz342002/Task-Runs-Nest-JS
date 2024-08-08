@@ -17,15 +17,23 @@ let Order = class Order {
 __decorate([
     (0, mongoose_1.Prop)({ required: true, type: mongoose_2.Types.ObjectId, ref: 'User' }),
     __metadata("design:type", mongoose_2.Types.ObjectId)
-], Order.prototype, "serviceProviderId", void 0);
+], Order.prototype, "TaskAssignedBy", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ required: true, type: mongoose_2.Types.ObjectId, ref: 'User' }),
     __metadata("design:type", mongoose_2.Types.ObjectId)
-], Order.prototype, "clientId", void 0);
+], Order.prototype, "TaskAssignedTo", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: true, type: mongoose_2.Types.ObjectId, ref: 'PostEntity' }),
+    __metadata("design:type", mongoose_2.Types.ObjectId)
+], Order.prototype, "PostId", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ required: true, type: Boolean, default: false }),
     __metadata("design:type", Boolean)
 ], Order.prototype, "taskStatus", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ required: true, type: Date }),
+    __metadata("design:type", Date)
+], Order.prototype, "deadline", void 0);
 Order = __decorate([
     (0, mongoose_1.Schema)({ timestamps: true })
 ], Order);
