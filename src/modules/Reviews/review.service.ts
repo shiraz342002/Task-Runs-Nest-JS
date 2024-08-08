@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Review, ReviewDocument } from './schema/review.schema';
@@ -51,8 +51,18 @@ export class ReviewsService {
     await this.userService.removeReviewFromUser(userId, reviewId);
     return review
   }
-  async getProfileReviews(userId:string){
-    await this.userService.getProfileReviews(userId)
+  async getProfileReviews(userId: string): Promise<any> {
+    try {
+      if (!Types.ObjectId.isValid(userId)) {
+        throw new BadRequestException('Invalid user ID format');
+      }
+      return await this.userService.getProfileReviews(userId);
+    } catch (error) {
+      console.error('Error in ReviewsService.getProfileReviews:', error);
+      throw new InternalServerErrorException('An error occurred while fetching user reviews');
+    }
   }
+  
+  
 }
 

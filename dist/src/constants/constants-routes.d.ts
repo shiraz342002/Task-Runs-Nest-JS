@@ -85,6 +85,7 @@ export declare const constTexts: {
         handleBlock: string;
         deleteAccount: string;
         myprofile: string;
+        viewCompProfile: string;
     };
     messageRoute: {
         create: string;

@@ -56,7 +56,16 @@ let ReviewsService = class ReviewsService {
         return review;
     }
     async getProfileReviews(userId) {
-        await this.userService.getProfileReviews(userId);
+        try {
+            if (!mongoose_2.Types.ObjectId.isValid(userId)) {
+                throw new common_1.BadRequestException('Invalid user ID format');
+            }
+            return await this.userService.getProfileReviews(userId);
+        }
+        catch (error) {
+            console.error('Error in ReviewsService.getProfileReviews:', error);
+            throw new common_1.InternalServerErrorException('An error occurred while fetching user reviews');
+        }
     }
 };
 ReviewsService = __decorate([

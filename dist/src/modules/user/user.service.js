@@ -297,11 +297,35 @@ let UserService = class UserService {
         }
     }
     async getProfileReviews(userId) {
-        const user = await this.userModel
-            .findById(userId)
-            .populate({
+        try {
+            if (!mongoose_2.Types.ObjectId.isValid(userId)) {
+                throw new common_1.BadRequestException('Invalid ID format');
+            }
+            const user = await this.userModel
+                .findById(new mongoose_2.Types.ObjectId(userId))
+                .populate({
+                path: 'reviews',
+                select: 'reviewerId revieweeId rating text',
+                populate: {
+                    path: 'reviewerId',
+                    select: 'avatar name',
+                },
+            })
+                .exec();
+            if (!user) {
+                throw new common_1.NotFoundException('User not found');
+            }
+            return user.reviews;
+        }
+        catch (error) {
+            console.error('Error in UserService.getProfileReviews:', error);
+            throw new common_1.InternalServerErrorException('An error occurred while fetching reviews');
+        }
+    }
+    async viewMyCompleteProfile(userId) {
+        const user = await this.userModel.findById(userId).populate({
             path: 'reviews',
-            select: 'reviewerId revieweeId rating text',
+            select: 'reviwerId revieweeId rating text',
             populate: {
                 path: 'reviewerId',
                 select: 'avatar name',
@@ -309,9 +333,9 @@ let UserService = class UserService {
         })
             .exec();
         if (!user) {
-            throw new common_1.NotFoundException('User not found');
+            throw new common_1.NotFoundException("User Profile Not Found or deleted");
         }
-        return user.reviews;
+        return user;
     }
 };
 UserService = __decorate([

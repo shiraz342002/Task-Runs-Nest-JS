@@ -69,7 +69,7 @@ export const constTexts = {
     PostReview:"ReviewUserService/:revieweeId",
     update: ":id",
     delete: ":id",
-    getOne: "/:id",
+    getOne: "JustGetSpeceficReview/:reviewId",
     getMyReviews:"GetAllReviewsOfTheCurrentProfile",
     getReviewsById:"GetAllReviewsOfProfileById/:id"
   },
@@ -89,6 +89,7 @@ export const constTexts = {
     handleBlock: "handleBlock",
     deleteAccount: "deleteAccount",
     myprofile:"viewMyProfile",
+    viewCompProfile:"viewMyCompleteProfile"
     
   },
 

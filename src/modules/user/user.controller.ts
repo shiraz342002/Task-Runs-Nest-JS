@@ -123,7 +123,13 @@ export class UserController {
     return this.userService.viewOtherProfile(id);
   }
 
-
+  @Get(constTexts.userRoute.viewCompProfile)
+  @ApiPageOkResponse({
+    description: "View Other User Profile", type: User})
+    @Auth(Action.Read, "User") 
+ async ViewMyCompleteProfile(@AuthUser() user: User ):Promise<User>{
+  return this.userService.viewMyCompleteProfile(user.id)
+ }
 
  
 }

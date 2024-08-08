@@ -1,4 +1,4 @@
-import { HttpException, Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
+import { BadRequestException, HttpException, Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, Types } from "mongoose";
 import { generateHash, getCharacterString } from "../../common/utils";
@@ -413,23 +413,54 @@ export class UserService {
       throw new InternalServerErrorException('Failed to update user');
     }
   }
+
   async getProfileReviews(userId: string): Promise<any> {
-    const user = await this.userModel
-      .findById(userId)
-      .populate({
-        path: 'reviews',
-        select: 'reviewerId revieweeId rating text',
-        populate:{
-          path: 'reviewerId',
-          select: 'avatar name',
-        },
-      })
-      .exec();
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }  
-    return user.reviews;
+    try {
+      if (!Types.ObjectId.isValid(userId)) {
+        throw new BadRequestException('Invalid ID format');
+      }
+
+      const user = await this.userModel
+        .findById(new Types.ObjectId(userId))
+        .populate({
+          path: 'reviews',
+          select: 'reviewerId revieweeId rating text',
+          populate: {
+            path: 'reviewerId',
+            select: 'avatar name',
+          },
+        })
+        .exec();
+  
+      if (!user) {
+        throw new NotFoundException('User not found');
+      }
+  
+      return user.reviews;
+    } catch (error) {
+      console.error('Error in UserService.getProfileReviews:', error);
+      throw new InternalServerErrorException('An error occurred while fetching reviews');
+    }
   }
+
+  async viewMyCompleteProfile(userId:string):Promise<User>{
+    const user = await this.userModel.findById(userId).populate({
+      path:'reviews',
+      select:'reviwerId revieweeId rating text',
+      populate:{
+        path:'reviewerId',
+        select:'avatar name',
+      },
+    })
+    .exec()
+    if(!user){
+      throw new NotFoundException("User Profile Not Found or deleted")
+    }
+    return user
+  }
+  
+  
+  
 
 }
 

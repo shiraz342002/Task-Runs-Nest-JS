@@ -7,6 +7,7 @@ import { User } from 'src/modules/user/schema/user.schema';
 import { Action } from 'src/casl/userRoles';
 import { Review } from './schema/review.schema';
 import { constTexts } from 'src/constants';
+// import { Types } from 'mongoose';
 
 @Controller(constTexts.reviewsRoute.name)
 @ApiTags(constTexts.reviewsRoute.name)
@@ -28,9 +29,8 @@ export class ReviewsController {
   @Get(constTexts.reviewsRoute.getOne)
   @ApiOperation({ summary: 'Get reviews by reviewee ID' })
   @ApiResponse({ status: 200, description: 'Reviews fetched successfully.', type: [Review] })
-  async findByRevieweeId(@Param('id') id: string) {
-    
-    return this.reviewsService.findById(id);
+  async findByRevieweeId(@Param('reviewId') reviewId: string) {
+    return this.reviewsService.findById(reviewId);
   }
 
   @Delete(constTexts.reviewsRoute.delete)
@@ -43,20 +43,22 @@ export class ReviewsController {
 
   @Get(constTexts.reviewsRoute.getMyReviews)
   @ApiPageOkResponse({
-    description: "View Other User Profile",
-    type:Review
+    description: "View User's Reviews",
+    type: Review,
   })
-  @Auth(Action.Read, "Reviews")
-  async getProfileReviews(@AuthUser() user: User): Promise<any> {
-    return this.reviewsService.getProfileReviews(user.id);
+  @Auth(Action.Read, "User")
+  async getProfileReviews(@AuthUser() user: User){
+      return await this.reviewsService.getProfileReviews(user.id);
   }
 
+
+  
   @Get(constTexts.reviewsRoute.getReviewsById)
   @ApiPageOkResponse({
     description: "View Reviews By ID",
     type: Review,
   })
-  @Auth(Action.Read, "Reviews")
+  @Auth(Action.Read, "Review")
   async getReviewsById(@Param('id') id: string, @AuthUser() user: User): Promise<any> {
     return this.reviewsService.getProfileReviews(id);
   }

@@ -63,4 +63,5 @@ export declare class UserService {
     CalcRatings(revieweeId: string, newRating: number): Promise<void>;
     removeReviewFromUser(userId: string, reviewId: string): Promise<void>;
     getProfileReviews(userId: string): Promise<any>;
+    viewMyCompleteProfile(userId: string): Promise<User>;
 }

@@ -29,14 +29,14 @@ let ReviewsController = class ReviewsController {
     async create(revieweeId, createReviewDto, user) {
         return this.reviewsService.create(user.id, revieweeId, createReviewDto);
     }
-    async findByRevieweeId(id) {
-        return this.reviewsService.findById(id);
+    async findByRevieweeId(reviewId) {
+        return this.reviewsService.findById(reviewId);
     }
     async DeleteReviewById(id, user) {
         return this.reviewsService.deleteReview(user.id, id);
     }
     async getProfileReviews(user) {
-        return this.reviewsService.getProfileReviews(user.id);
+        return await this.reviewsService.getProfileReviews(user.id);
     }
     async getReviewsById(id, user) {
         return this.reviewsService.getProfileReviews(id);
@@ -60,7 +60,7 @@ __decorate([
     (0, common_1.Get)(constants_1.constTexts.reviewsRoute.getOne),
     (0, swagger_1.ApiOperation)({ summary: 'Get reviews by reviewee ID' }),
     (0, swagger_1.ApiResponse)({ status: 200, description: 'Reviews fetched successfully.', type: [review_schema_1.Review] }),
-    __param(0, (0, common_1.Param)('id')),
+    __param(0, (0, common_1.Param)('reviewId')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
@@ -79,10 +79,10 @@ __decorate([
 __decorate([
     (0, common_1.Get)(constants_1.constTexts.reviewsRoute.getMyReviews),
     (0, decorators_1.ApiPageOkResponse)({
-        description: "View Other User Profile",
-        type: review_schema_1.Review
+        description: "View User's Reviews",
+        type: review_schema_1.Review,
     }),
-    (0, decorators_1.Auth)(userRoles_1.Action.Read, "Reviews"),
+    (0, decorators_1.Auth)(userRoles_1.Action.Read, "User"),
     __param(0, (0, decorators_1.AuthUser)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [user_schema_1.User]),
@@ -94,7 +94,7 @@ __decorate([
         description: "View Reviews By ID",
         type: review_schema_1.Review,
     }),
-    (0, decorators_1.Auth)(userRoles_1.Action.Read, "Reviews"),
+    (0, decorators_1.Auth)(userRoles_1.Action.Read, "Review"),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, decorators_1.AuthUser)()),
     __metadata("design:type", Function),

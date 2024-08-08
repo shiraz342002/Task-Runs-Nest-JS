@@ -70,7 +70,7 @@ exports.constTexts = {
         PostReview: "ReviewUserService/:revieweeId",
         update: ":id",
         delete: ":id",
-        getOne: "/:id",
+        getOne: "JustGetSpeceficReview/:reviewId",
         getMyReviews: "GetAllReviewsOfTheCurrentProfile",
         getReviewsById: "GetAllReviewsOfProfileById/:id"
     },
@@ -88,6 +88,7 @@ exports.constTexts = {
         handleBlock: "handleBlock",
         deleteAccount: "deleteAccount",
         myprofile: "viewMyProfile",
+        viewCompProfile: "viewMyCompleteProfile"
     },
     messageRoute: {
         create: "createMessage/:chatId"

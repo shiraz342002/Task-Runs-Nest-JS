@@ -20,4 +20,5 @@ export declare class UserController {
     }>;
     viewProfile(user: User): Promise<User>;
     viewOtherProfile(id: string, user: User): Promise<User>;
+    ViewMyCompleteProfile(user: User): Promise<User>;
 }
