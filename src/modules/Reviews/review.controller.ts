@@ -51,8 +51,6 @@ export class ReviewsController {
       return await this.reviewsService.getProfileReviews(user.id);
   }
 
-
-  
   @Get(constTexts.reviewsRoute.getReviewsById)
   @ApiPageOkResponse({
     description: "View Reviews By ID",

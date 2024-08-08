@@ -14,6 +14,9 @@ export class ReviewsService {
   ) {}
 
   async create(reviewerId: string,revieweeId:string,createReviewDto: CreateReviewDto): Promise<Review> {
+    if(revieweeId==revieweeId){
+      throw new InternalServerErrorException("Cannot Post Reviews On Your Own Profile")
+    }
     const review = new this.reviewModel({
         reviewerId,
         revieweeId,

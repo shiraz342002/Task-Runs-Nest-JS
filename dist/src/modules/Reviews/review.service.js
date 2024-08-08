@@ -24,6 +24,9 @@ let ReviewsService = class ReviewsService {
         this.userService = userService;
     }
     async create(reviewerId, revieweeId, createReviewDto) {
+        if (revieweeId == revieweeId) {
+            throw new common_1.InternalServerErrorException("Cannot Post Reviews On Your Own Profile");
+        }
         const review = new this.reviewModel(Object.assign({ reviewerId,
             revieweeId }, createReviewDto));
         const savedReview = await review.save();
