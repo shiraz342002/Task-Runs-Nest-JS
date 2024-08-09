@@ -15,7 +15,7 @@ export class Order {
   PostId: Types.ObjectId; 
 
   @Prop({ required: true, type: Boolean, default: false })
-  taskStatus: boolean; 
+  isCompleted: boolean; 
 
   @Prop({ required: true, type: Date })
   deadline: Date;  

@@ -29,7 +29,7 @@ __decorate([
 __decorate([
     (0, mongoose_1.Prop)({ required: true, type: Boolean, default: false }),
     __metadata("design:type", Boolean)
-], Order.prototype, "taskStatus", void 0);
+], Order.prototype, "isCompleted", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ required: true, type: Date }),
     __metadata("design:type", Date)

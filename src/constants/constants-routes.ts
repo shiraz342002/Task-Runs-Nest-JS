@@ -105,7 +105,10 @@ export const constTexts = {
 
   orderMgmt:{
     name:"OrderManagement",
-    assignOrder:"AssignTask/:TaskAssignedToId"
+    assignOrder:"AssignTask/:TaskAssignedToId",
+    getOrderInfo:"GetOrderInformation/:orderId",
+    cancelTask:"CancelAssignedTask/:orderId",
+    completeTask:"TaskCompleted/:orderId",
   },
 
   notifyRoute: {

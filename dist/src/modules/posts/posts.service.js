@@ -126,6 +126,8 @@ let PostsService = class PostsService {
         })
             .exec();
     }
+    async changeisCompleteFlag(postId) {
+    }
 };
 PostsService = __decorate([
     (0, common_1.Injectable)(),

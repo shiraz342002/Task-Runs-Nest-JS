@@ -25,4 +25,5 @@ export declare class PostsService {
     findById(postId: string): Promise<PostDocument>;
     findPostComments(postId: string): Promise<PostDocument>;
     getPostWithPopulatedComments(postId: string): Promise<PostDocument | null>;
+    changeisCompleteFlag(postId: string): Promise<void>;
 }

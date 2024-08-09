@@ -28,7 +28,7 @@ export declare class Order {
     TaskAssignedBy: Types.ObjectId;
     TaskAssignedTo: Types.ObjectId;
     PostId: Types.ObjectId;
-    taskStatus: boolean;
+    isCompleted: boolean;
     deadline: Date;
 }
 export declare const OrderSchema: import("mongoose").Schema<Order, import("mongoose").Model<Order, any, any, any, any>, {}, {}, {}, {}, import("mongoose").DefaultSchemaOptions, Order>;

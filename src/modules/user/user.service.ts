@@ -465,12 +465,11 @@ export class UserService {
     }
 
    
-   const updated_user= await this.userModel.findByIdAndUpdate(
+    await this.userModel.findByIdAndUpdate(
       userId,
       { $inc: { my_orders: 1 } },
       { new: true }
     );
-    console.log(updated_user);
   }
   
   

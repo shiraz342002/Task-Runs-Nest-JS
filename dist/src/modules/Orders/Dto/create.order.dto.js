@@ -9,10 +9,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateOrderDto = void 0;
+exports.AssignOrderDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
-class CreateOrderDto {
+class AssignOrderDto {
 }
 __decorate([
     (0, swagger_1.ApiProperty)({
@@ -23,7 +23,7 @@ __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsMongoId)(),
     __metadata("design:type", String)
-], CreateOrderDto.prototype, "PostId", void 0);
+], AssignOrderDto.prototype, "PostId", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
         description: 'The deadline for the task',
@@ -34,6 +34,6 @@ __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsDateString)(),
     __metadata("design:type", String)
-], CreateOrderDto.prototype, "deadline", void 0);
-exports.CreateOrderDto = CreateOrderDto;
+], AssignOrderDto.prototype, "deadline", void 0);
+exports.AssignOrderDto = AssignOrderDto;
 //# sourceMappingURL=create.order.dto.js.map

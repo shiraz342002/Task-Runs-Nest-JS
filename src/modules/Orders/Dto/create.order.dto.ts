@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsMongoId, IsDateString } from 'class-validator';
 
-export class CreateOrderDto {
+export class AssignOrderDto {
   @ApiProperty({
     description: 'The ID of the post related to the task',
     example: '60d21b4667d0d8992e610c85',
@@ -20,4 +20,6 @@ export class CreateOrderDto {
   @IsNotEmpty()
   @IsDateString()
   deadline: string;
+  
 }
+

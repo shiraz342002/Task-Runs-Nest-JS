@@ -157,6 +157,9 @@ export class PostsService {
       })
       .exec();
   }
+  async changeisCompleteFlag(postId:string){
+
+  }
 }
 
 

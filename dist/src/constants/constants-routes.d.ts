@@ -99,6 +99,9 @@ export declare const constTexts: {
     orderMgmt: {
         name: string;
         assignOrder: string;
+        getOrderInfo: string;
+        cancelTask: string;
+        completeTask: string;
     };
     notifyRoute: {
         name: string;

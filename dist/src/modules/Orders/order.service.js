@@ -18,23 +18,75 @@ const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 const order_schema_1 = require("./Schema/order.schema");
 const user_service_1 = require("../user/user.service");
+const posts_service_1 = require("../posts/posts.service");
 let OrderService = class OrderService {
-    constructor(orderModel, userService) {
+    constructor(orderModel, userService, postService) {
         this.orderModel = orderModel;
         this.userService = userService;
+        this.postService = postService;
     }
     async assignTask(userId, TaskAssignedToId, CreateOrderDto) {
         const order = new this.orderModel(Object.assign({ TaskAssignedBy: userId, TaskAssignedTo: TaskAssignedToId }, CreateOrderDto));
         const Assignedorder = await order.save();
-        await this.userService.incrementMyOrder(TaskAssignedToId);
         return Assignedorder;
+    }
+    async getOrderInfo(orderId) {
+        const order = await this.orderModel.findById(orderId).populate([{
+                path: 'TaskAssignedBy',
+                select: 'name avatar ratings'
+            },
+            {
+                path: 'TaskAssignedTo',
+                select: 'name avatar ratings'
+            },
+            {
+                path: 'PostId',
+                select: 'title description city isCompleted'
+            },
+        ]);
+        if (!order) {
+            throw new common_1.NotFoundException("No Order Exsist");
+        }
+        return order;
+    }
+    async cancelTask(userId, orderId) {
+        console.log(orderId);
+        const order = await this.orderModel.findById(orderId);
+        if (!order) {
+            throw new common_1.NotFoundException("No Order Exsist");
+        }
+        if (order.TaskAssignedBy.toString() === userId) {
+            return await this.orderModel.findByIdAndDelete(orderId);
+        }
+        else {
+            throw new common_1.UnauthorizedException("You are now authorized to perform this operation");
+        }
+    }
+    async completeOrder(userId, orderId) {
+        const order = await this.orderModel.findById(orderId);
+        const customer_id = order.TaskAssignedTo.toString();
+        const postId = order.PostId.toString();
+        if (!order) {
+            throw new common_1.NotFoundException("Cannot find this order");
+        }
+        if (order.TaskAssignedTo.toString() !== userId) {
+            throw new common_1.UnauthorizedException("You are not authorized to complete this order.");
+        }
+        const updatedOrder = await this.orderModel.findByIdAndUpdate(orderId, {
+            $set: { isCompleted: true }
+        }, { new: true });
+        await updatedOrder.save();
+        await this.userService.incrementMyOrder(customer_id);
+        await this.postService.changeisCompleteFlag(postId);
+        return updatedOrder;
     }
 };
 OrderService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, mongoose_1.InjectModel)(order_schema_1.Order.name)),
     __metadata("design:paramtypes", [mongoose_2.Model,
-        user_service_1.UserService])
+        user_service_1.UserService,
+        posts_service_1.PostsService])
 ], OrderService);
 exports.OrderService = OrderService;
 //# sourceMappingURL=order.service.js.map

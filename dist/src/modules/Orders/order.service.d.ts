@@ -1,10 +1,15 @@
 import { Model } from "mongoose";
 import { Order } from "./Schema/order.schema";
-import { CreateOrderDto } from "./Dto/create.order.dto";
+import { AssignOrderDto } from "./Dto/create.order.dto";
 import { UserService } from "../user/user.service";
+import { PostsService } from "../posts/posts.service";
 export declare class OrderService {
     private orderModel;
     private readonly userService;
-    constructor(orderModel: Model<Order>, userService: UserService);
-    assignTask(userId: string, TaskAssignedToId: string, CreateOrderDto: CreateOrderDto): Promise<Order>;
+    private readonly postService;
+    constructor(orderModel: Model<Order>, userService: UserService, postService: PostsService);
+    assignTask(userId: string, TaskAssignedToId: string, CreateOrderDto: AssignOrderDto): Promise<Order>;
+    getOrderInfo(orderId: string): Promise<any>;
+    cancelTask(userId: string, orderId: string): Promise<any>;
+    completeOrder(userId: string, orderId: string): Promise<Order>;
 }
