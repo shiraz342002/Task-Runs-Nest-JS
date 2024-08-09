@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Post } from "@nestjs/common";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { Action } from "src/casl/userRoles";
 import {  Auth, AuthUser } from 'src/decorators';
@@ -7,6 +7,7 @@ import { User } from "../user/schema/user.schema";
 import { Order } from "./Schema/order.schema";
 import { AssignOrderDto } from "./Dto/create.order.dto";
 import { OrderService } from "./order.service";
+import { UpdateOrderDto } from "./Dto/update.order.dto";
 
 @Controller(constTexts.orderMgmt.name)
 @ApiTags(constTexts.orderMgmt.name)
@@ -40,14 +41,28 @@ return completedOrder
 
 
 @Get(constTexts.orderMgmt.getOrderInfo)
-@ApiOperation({summary:"Get Order Information Successfully "})
+@ApiOperation({summary:"Get Order Information "})
 @ApiResponse({status:201,description:"Task Information Retrived Successfully"})
 @Auth(Action.Read,"Order")
 async getOrderInfo(
-    @Param('orderId')orderId:string
+    @Param('orderId')orderId:string,
+    @AuthUser()user:User
 ):Promise<Order>{
-    const order = await this.orderService.getOrderInfo(orderId);
+    const order = await this.orderService.getOrderInfo(user.id,orderId);
     return order
+}
+
+@Patch(constTexts.orderMgmt.changeOrder)
+@ApiOperation({summary:"Change Task Details "})
+@ApiResponse({status:201,description:"Task Updated Successfully"})
+@Auth(Action.Read,"Order")
+async changeTask(
+    @Param('orderId')orderId:string,
+    @AuthUser()user:User,
+    @Body()CreateOrderDto:UpdateOrderDto,
+):Promise<Order>{
+    const updated_task= await this.orderService.changeTask(user.id,orderId,CreateOrderDto)
+    return updated_task
 }
 
 @Delete(constTexts.orderMgmt.cancelTask)

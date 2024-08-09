@@ -55,7 +55,6 @@ let PostsService = class PostsService {
             return await create.save();
         }
         catch (err) {
-            console.error('Error creating post:', err);
             throw new common_1.HttpException(err.message, exceptions_1.ResponseCode.BAD_REQUEST);
         }
     }

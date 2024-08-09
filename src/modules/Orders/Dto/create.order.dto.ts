@@ -20,6 +20,5 @@ export class AssignOrderDto {
   @IsNotEmpty()
   @IsDateString()
   deadline: string;
-  
-}
 
+}

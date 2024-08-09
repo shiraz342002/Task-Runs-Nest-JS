@@ -21,6 +21,7 @@ const constants_1 = require("../../constants");
 const user_schema_1 = require("../user/schema/user.schema");
 const create_order_dto_1 = require("./Dto/create.order.dto");
 const order_service_1 = require("./order.service");
+const update_order_dto_1 = require("./Dto/update.order.dto");
 let OrderController = class OrderController {
     constructor(orderService) {
         this.orderService = orderService;
@@ -33,9 +34,13 @@ let OrderController = class OrderController {
         const completedOrder = await this.orderService.completeOrder(user.id, orderId);
         return completedOrder;
     }
-    async getOrderInfo(orderId) {
-        const order = await this.orderService.getOrderInfo(orderId);
+    async getOrderInfo(orderId, user) {
+        const order = await this.orderService.getOrderInfo(user.id, orderId);
         return order;
+    }
+    async changeTask(orderId, user, CreateOrderDto) {
+        const updated_task = await this.orderService.changeTask(user.id, orderId, CreateOrderDto);
+        return updated_task;
     }
     async cancelOrder(orderId, user) {
         console.log("Order Id: " + orderId);
@@ -69,14 +74,28 @@ __decorate([
 ], OrderController.prototype, "completeOrder", null);
 __decorate([
     (0, common_1.Get)(constants_1.constTexts.orderMgmt.getOrderInfo),
-    (0, swagger_1.ApiOperation)({ summary: "Get Order Information Successfully " }),
+    (0, swagger_1.ApiOperation)({ summary: "Get Order Information " }),
     (0, swagger_1.ApiResponse)({ status: 201, description: "Task Information Retrived Successfully" }),
     (0, decorators_1.Auth)(userRoles_1.Action.Read, "Order"),
     __param(0, (0, common_1.Param)('orderId')),
+    __param(1, (0, decorators_1.AuthUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [String, user_schema_1.User]),
     __metadata("design:returntype", Promise)
 ], OrderController.prototype, "getOrderInfo", null);
+__decorate([
+    (0, common_1.Patch)(constants_1.constTexts.orderMgmt.changeOrder),
+    (0, swagger_1.ApiOperation)({ summary: "Change Task Details " }),
+    (0, swagger_1.ApiResponse)({ status: 201, description: "Task Updated Successfully" }),
+    (0, decorators_1.Auth)(userRoles_1.Action.Read, "Order"),
+    __param(0, (0, common_1.Param)('orderId')),
+    __param(1, (0, decorators_1.AuthUser)()),
+    __param(2, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, user_schema_1.User,
+        update_order_dto_1.UpdateOrderDto]),
+    __metadata("design:returntype", Promise)
+], OrderController.prototype, "changeTask", null);
 __decorate([
     (0, common_1.Delete)(constants_1.constTexts.orderMgmt.cancelTask),
     (0, swagger_1.ApiOperation)({ summary: "Cancel Assigned Task" }),

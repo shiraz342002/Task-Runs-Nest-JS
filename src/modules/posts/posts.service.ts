@@ -46,7 +46,6 @@ export class PostsService {
       const create: PostDocument = new this.postService(createDto);
       return await create.save();
     } catch (err) {
-      console.error('Error creating post:', err);
       throw new HttpException(err.message, ResponseCode.BAD_REQUEST);
     }
   }

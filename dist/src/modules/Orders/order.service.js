@@ -30,7 +30,11 @@ let OrderService = class OrderService {
         const Assignedorder = await order.save();
         return Assignedorder;
     }
-    async getOrderInfo(orderId) {
+    async getOrderInfo(userId, orderId) {
+        const validateorder = await this.orderModel.findById(orderId);
+        if (validateorder.TaskAssignedBy.toString() !== userId) {
+            throw new common_1.ForbiddenException("You are not authoraized to view this Task");
+        }
         const order = await this.orderModel.findById(orderId).populate([{
                 path: 'TaskAssignedBy',
                 select: 'name avatar ratings'
@@ -82,6 +86,20 @@ let OrderService = class OrderService {
         await this.postService.changeisCompleteFlag(post_id);
         await this.userService.incrementTaskCompleted(service_provider_id);
         return updatedOrder;
+    }
+    async changeTask(userId, orderId, updateOrderDto) {
+        const order = await this.orderModel.findById(orderId);
+        if (!order) {
+            throw new common_1.NotFoundException("Order Does not exsist or deleted ");
+        }
+        console.log(order);
+        if (order.TaskAssignedBy.toString() !== userId) {
+            throw new common_1.UnauthorizedException("You are not authorized to complete this order.");
+        }
+        const updated_order = await this.orderModel.findByIdAndUpdate(orderId, {
+            $set: updateOrderDto
+        }, { new: true });
+        return updated_order;
     }
 };
 OrderService = __decorate([

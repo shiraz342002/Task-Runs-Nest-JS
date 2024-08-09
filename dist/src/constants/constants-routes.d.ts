@@ -102,6 +102,7 @@ export declare const constTexts: {
         getOrderInfo: string;
         cancelTask: string;
         completeTask: string;
+        changeOrder: string;
     };
     notifyRoute: {
         name: string;

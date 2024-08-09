@@ -1,10 +1,11 @@
-import { Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
+import { ForbiddenException, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { Order } from "./Schema/order.schema";
 import { AssignOrderDto } from "./Dto/create.order.dto";
 import { UserService } from "../user/user.service";
 import { PostsService } from "../posts/posts.service";
+import { UpdateOrderDto } from "./Dto/update.order.dto";
 
 @Injectable()
 export class OrderService {
@@ -23,7 +24,11 @@ constructor(
   return Assignedorder
  }
 
- async getOrderInfo(orderId:string):Promise<any>{
+ async getOrderInfo(userId:string,orderId:string):Promise<any>{
+   const validateorder = await this.orderModel.findById(orderId)
+   if(validateorder.TaskAssignedBy.toString()!==userId){
+      throw new ForbiddenException("You are not authoraized to view this Task")
+   }
    const order = await this.orderModel.findById(orderId).populate([{
       path: 'TaskAssignedBy',
       select: 'name avatar ratings'
@@ -83,5 +88,21 @@ constructor(
    await this.postService.changeisCompleteFlag(post_id)
    await this.userService.incrementTaskCompleted(service_provider_id)
    return updatedOrder
+ }
+
+ async changeTask(userId:string,orderId:string,updateOrderDto:UpdateOrderDto):Promise<Order>{
+   const order = await this.orderModel.findById(orderId)
+   if(!order){
+      throw new NotFoundException("Order Does not exsist or deleted ")
+   }
+   console.log(order);
+   
+   if(order.TaskAssignedBy.toString()!==userId){
+      throw new UnauthorizedException("You are not authorized to complete this order.");
+   }
+   const updated_order=await this.orderModel.findByIdAndUpdate(orderId,{
+   $set:updateOrderDto
+   },{new:true})
+   return updated_order
  }
 }

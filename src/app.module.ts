@@ -19,6 +19,7 @@ import { MessagesModule } from './modules/messages/messages.module';
 import { ChatRoomModule } from './modules/chat-room/chat-room.module';
 import { ReviewsModule } from "./modules/Reviews/review.module";
 import { OrdersModule } from "./modules/Orders/order.module";
+import { NotificationModule } from "./modules/notifications/notification.module";
 @Module({
   imports: [
     ConfigurationModule,
@@ -64,7 +65,8 @@ import { OrdersModule } from "./modules/Orders/order.module";
     MessagesModule,
     ChatRoomModule,
     ReviewsModule,
-    OrdersModule
+    OrdersModule,
+    NotificationModule
   ],
   controllers: [AppController],
   providers: [AppService],

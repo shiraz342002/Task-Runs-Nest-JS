@@ -109,6 +109,7 @@ export const constTexts = {
     getOrderInfo:"GetOrderInformation/:orderId",
     cancelTask:"CancelAssignedTask/:orderId",
     completeTask:"TaskCompleted/:orderId",
+    changeOrder:"ChangeOrder/:orderId"
   },
 
   notifyRoute: {
