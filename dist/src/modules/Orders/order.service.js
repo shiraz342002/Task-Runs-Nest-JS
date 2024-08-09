@@ -65,7 +65,8 @@ let OrderService = class OrderService {
     async completeOrder(userId, orderId) {
         const order = await this.orderModel.findById(orderId);
         const customer_id = order.TaskAssignedTo.toString();
-        const postId = order.PostId.toString();
+        const service_provider_id = order.TaskAssignedBy.toString();
+        const post_id = order.PostId.toString();
         if (!order) {
             throw new common_1.NotFoundException("Cannot find this order");
         }
@@ -77,7 +78,8 @@ let OrderService = class OrderService {
         }, { new: true });
         await updatedOrder.save();
         await this.userService.incrementMyOrder(customer_id);
-        await this.postService.changeisCompleteFlag(postId);
+        await this.postService.changeisCompleteFlag(post_id);
+        await this.userService.incrementTaskCompleted(service_provider_id);
         return updatedOrder;
     }
 };

@@ -464,10 +464,22 @@ export class UserService {
       throw new NotFoundException("User does not exist");
     }
 
-   
     await this.userModel.findByIdAndUpdate(
       userId,
       { $inc: { my_orders: 1 } },
+      { new: true }
+    );
+  }
+  
+  async incrementTaskCompleted(userId: string){
+    const user = await this.userModel.findById(userId);
+    if (!user) {
+      throw new NotFoundException("User does not exist");
+    }
+
+    await this.userModel.findByIdAndUpdate(
+      userId,
+      { $inc: { task_completed: 1 } },
       { new: true }
     );
   }

@@ -6,7 +6,7 @@ export declare class OrderController {
     private readonly orderService;
     constructor(orderService: OrderService);
     assignTask(user: User, TaskAssignedToId: string, CreateOrderDto: AssignOrderDto): Promise<Order>;
+    completeOrder(user: User, orderId: string): Promise<Order>;
     getOrderInfo(orderId: string): Promise<Order>;
     cancelOrder(orderId: string, user: User): Promise<any>;
-    completeOrder(user: User, orderId: string): Promise<Order>;
 }

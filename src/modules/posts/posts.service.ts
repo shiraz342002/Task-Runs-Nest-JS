@@ -158,8 +158,12 @@ export class PostsService {
       .exec();
   }
   async changeisCompleteFlag(postId:string){
-
+   await this.postService.findByIdAndUpdate(postId,
+      {$set:{isCompleted:true}},
+      {new:true}
+    )
   }
+ 
 }
 
 

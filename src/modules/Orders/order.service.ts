@@ -56,10 +56,12 @@ constructor(
       throw new UnauthorizedException("You are now authorized to perform this operation")
     }
  }
+ //We are meant to display Review page after this function is hit and is successfull
  async completeOrder(userId:string,orderId:string):Promise<Order>{
    const order = await this.orderModel.findById(orderId)
    const customer_id = order.TaskAssignedTo.toString();
-   const postId=order.PostId.toString();
+   const service_provider_id = order.TaskAssignedBy.toString();
+   const post_id=order.PostId.toString();
    if(!order){
       throw new NotFoundException("Cannot find this order")
    }
@@ -72,8 +74,8 @@ constructor(
    )
    await updatedOrder.save();
    await this.userService.incrementMyOrder(customer_id);
-   await this.postService.changeisCompleteFlag(postId)
-   
+   await this.postService.changeisCompleteFlag(post_id)
+   await this.userService.incrementTaskCompleted(service_provider_id)
    return updatedOrder
  }
 }

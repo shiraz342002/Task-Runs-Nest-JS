@@ -344,6 +344,13 @@ let UserService = class UserService {
         }
         await this.userModel.findByIdAndUpdate(userId, { $inc: { my_orders: 1 } }, { new: true });
     }
+    async incrementTaskCompleted(userId) {
+        const user = await this.userModel.findById(userId);
+        if (!user) {
+            throw new common_1.NotFoundException("User does not exist");
+        }
+        await this.userModel.findByIdAndUpdate(userId, { $inc: { task_completed: 1 } }, { new: true });
+    }
 };
 UserService = __decorate([
     (0, common_1.Injectable)(),

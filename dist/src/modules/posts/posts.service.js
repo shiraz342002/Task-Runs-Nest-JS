@@ -127,6 +127,7 @@ let PostsService = class PostsService {
             .exec();
     }
     async changeisCompleteFlag(postId) {
+        await this.postService.findByIdAndUpdate(postId, { $set: { isCompleted: true } }, { new: true });
     }
 };
 PostsService = __decorate([

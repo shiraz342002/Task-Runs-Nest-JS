@@ -26,8 +26,21 @@ async assignTask(
     return order
 }
 
+@Post(constTexts.orderMgmt.completeTask)
+@ApiOperation({summary:"Complete Assigned Task"})
+@ApiResponse({status:201,description:"Task Completed Succeffully"})
+@Auth(Action.Create,"Order")
+async completeOrder(
+@AuthUser()user:User,
+@Param('orderId')orderId:string,
+):Promise<Order>{
+const completedOrder=await this.orderService.completeOrder(user.id,orderId)
+return completedOrder
+}
+
+
 @Get(constTexts.orderMgmt.getOrderInfo)
-@ApiOperation({summary:"Get Order Information Succeffully "})
+@ApiOperation({summary:"Get Order Information Successfully "})
 @ApiResponse({status:201,description:"Task Information Retrived Successfully"})
 @Auth(Action.Read,"Order")
 async getOrderInfo(
@@ -50,16 +63,5 @@ async cancelOrder(
     
 const deletedTask= await this.orderService.cancelTask(user.id,orderId)
 return deletedTask
-}
-@Post(constTexts.orderMgmt.completeTask)
-@ApiOperation({summary:"Complete Assigned Task"})
-@ApiResponse({status:201,description:"Task Completed Succeffully"})
-@Auth(Action.Create,"Order")
-async completeOrder(
-@AuthUser()user:User,
-@Param('orderId')orderId:string,
-):Promise<Order>{
-const completedOrder=await this.orderService.completeOrder(user.id,orderId)
-return completedOrder
 }
 }

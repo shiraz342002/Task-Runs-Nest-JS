@@ -29,6 +29,10 @@ let OrderController = class OrderController {
         const order = await this.orderService.assignTask(user.id, TaskAssignedToId, CreateOrderDto);
         return order;
     }
+    async completeOrder(user, orderId) {
+        const completedOrder = await this.orderService.completeOrder(user.id, orderId);
+        return completedOrder;
+    }
     async getOrderInfo(orderId) {
         const order = await this.orderService.getOrderInfo(orderId);
         return order;
@@ -38,10 +42,6 @@ let OrderController = class OrderController {
         console.log("User Id: " + user.id);
         const deletedTask = await this.orderService.cancelTask(user.id, orderId);
         return deletedTask;
-    }
-    async completeOrder(user, orderId) {
-        const completedOrder = await this.orderService.completeOrder(user.id, orderId);
-        return completedOrder;
     }
 };
 __decorate([
@@ -57,8 +57,19 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], OrderController.prototype, "assignTask", null);
 __decorate([
+    (0, common_1.Post)(constants_1.constTexts.orderMgmt.completeTask),
+    (0, swagger_1.ApiOperation)({ summary: "Complete Assigned Task" }),
+    (0, swagger_1.ApiResponse)({ status: 201, description: "Task Completed Succeffully" }),
+    (0, decorators_1.Auth)(userRoles_1.Action.Create, "Order"),
+    __param(0, (0, decorators_1.AuthUser)()),
+    __param(1, (0, common_1.Param)('orderId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [user_schema_1.User, String]),
+    __metadata("design:returntype", Promise)
+], OrderController.prototype, "completeOrder", null);
+__decorate([
     (0, common_1.Get)(constants_1.constTexts.orderMgmt.getOrderInfo),
-    (0, swagger_1.ApiOperation)({ summary: "Get Order Information Succeffully " }),
+    (0, swagger_1.ApiOperation)({ summary: "Get Order Information Successfully " }),
     (0, swagger_1.ApiResponse)({ status: 201, description: "Task Information Retrived Successfully" }),
     (0, decorators_1.Auth)(userRoles_1.Action.Read, "Order"),
     __param(0, (0, common_1.Param)('orderId')),
@@ -77,17 +88,6 @@ __decorate([
     __metadata("design:paramtypes", [String, user_schema_1.User]),
     __metadata("design:returntype", Promise)
 ], OrderController.prototype, "cancelOrder", null);
-__decorate([
-    (0, common_1.Post)(constants_1.constTexts.orderMgmt.completeTask),
-    (0, swagger_1.ApiOperation)({ summary: "Complete Assigned Task" }),
-    (0, swagger_1.ApiResponse)({ status: 201, description: "Task Completed Succeffully" }),
-    (0, decorators_1.Auth)(userRoles_1.Action.Create, "Order"),
-    __param(0, (0, decorators_1.AuthUser)()),
-    __param(1, (0, common_1.Param)('orderId')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [user_schema_1.User, String]),
-    __metadata("design:returntype", Promise)
-], OrderController.prototype, "completeOrder", null);
 OrderController = __decorate([
     (0, common_1.Controller)(constants_1.constTexts.orderMgmt.name),
     (0, swagger_1.ApiTags)(constants_1.constTexts.orderMgmt.name),
