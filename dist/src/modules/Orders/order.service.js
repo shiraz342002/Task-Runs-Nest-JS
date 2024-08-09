@@ -50,7 +50,6 @@ let OrderService = class OrderService {
         return order;
     }
     async cancelTask(userId, orderId) {
-        console.log(orderId);
         const order = await this.orderModel.findById(orderId);
         if (!order) {
             throw new common_1.NotFoundException("No Order Exsist");
@@ -63,10 +62,7 @@ let OrderService = class OrderService {
         }
     }
     async completeOrder(userId, orderId) {
-        console.log("Idhar taq chal raha ?");
-        console.log("OrderId:" + orderId);
         const order = await this.orderModel.findById(orderId);
-        console.log(order);
         const customer_id = order.TaskAssignedBy.toString();
         const service_provider_id = order.TaskAssignedTo.toString();
         const post_id = order.PostId.toString();

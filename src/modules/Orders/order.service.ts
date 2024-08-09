@@ -44,7 +44,6 @@ constructor(
      return order
  }
  async cancelTask(userId:string,orderId:string):Promise<any>{
-   console.log(orderId);
    const order=await this.orderModel.findById(orderId);
    if(!order){
       throw new NotFoundException("No Order Exsist");
@@ -58,11 +57,11 @@ constructor(
  }
  //We are meant to display Review page after this function is hit and is successfull
  async completeOrder(userId:string,orderId:string):Promise<Order>{
-   console.log("Idhar taq chal raha ?");
-   console.log("OrderId:"+orderId);
+   // console.log("Idhar taq chal raha ?");
+   // console.log("OrderId:"+orderId);
    
    const order = await this.orderModel.findById(orderId)
-   console.log(order);
+   // console.log(order);
    
    const customer_id = order.TaskAssignedBy.toString();
    const service_provider_id = order.TaskAssignedTo.toString();
