@@ -31,7 +31,7 @@ __decorate([
     __metadata("design:type", Boolean)
 ], Order.prototype, "isCompleted", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: true, type: Date }),
+    (0, mongoose_1.Prop)({ required: false, type: Date }),
     __metadata("design:type", Date)
 ], Order.prototype, "deadline", void 0);
 Order = __decorate([

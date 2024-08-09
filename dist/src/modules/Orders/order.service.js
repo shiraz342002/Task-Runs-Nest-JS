@@ -63,9 +63,12 @@ let OrderService = class OrderService {
         }
     }
     async completeOrder(userId, orderId) {
+        console.log("Idhar taq chal raha ?");
+        console.log("OrderId:" + orderId);
         const order = await this.orderModel.findById(orderId);
-        const customer_id = order.TaskAssignedTo.toString();
-        const service_provider_id = order.TaskAssignedBy.toString();
+        console.log(order);
+        const customer_id = order.TaskAssignedBy.toString();
+        const service_provider_id = order.TaskAssignedTo.toString();
         const post_id = order.PostId.toString();
         if (!order) {
             throw new common_1.NotFoundException("Cannot find this order");
@@ -74,7 +77,9 @@ let OrderService = class OrderService {
             throw new common_1.UnauthorizedException("You are not authorized to complete this order.");
         }
         const updatedOrder = await this.orderModel.findByIdAndUpdate(orderId, {
-            $set: { isCompleted: true }
+            $set: { isCompleted: true,
+                deadline: null
+            }
         }, { new: true });
         await updatedOrder.save();
         await this.userService.incrementMyOrder(customer_id);

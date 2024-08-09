@@ -17,7 +17,7 @@ export class Order {
   @Prop({ required: true, type: Boolean, default: false })
   isCompleted: boolean; 
 
-  @Prop({ required: true, type: Date })
+  @Prop({ required: false, type: Date })
   deadline: Date;  
 }
 

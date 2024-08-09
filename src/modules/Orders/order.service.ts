@@ -58,9 +58,14 @@ constructor(
  }
  //We are meant to display Review page after this function is hit and is successfull
  async completeOrder(userId:string,orderId:string):Promise<Order>{
+   console.log("Idhar taq chal raha ?");
+   console.log("OrderId:"+orderId);
+   
    const order = await this.orderModel.findById(orderId)
-   const customer_id = order.TaskAssignedTo.toString();
-   const service_provider_id = order.TaskAssignedBy.toString();
+   console.log(order);
+   
+   const customer_id = order.TaskAssignedBy.toString();
+   const service_provider_id = order.TaskAssignedTo.toString();
    const post_id=order.PostId.toString();
    if(!order){
       throw new NotFoundException("Cannot find this order")
@@ -70,7 +75,9 @@ constructor(
    }
    const updatedOrder= await this.orderModel.findByIdAndUpdate(orderId,
       {
-      $set:{isCompleted:true}},{new:true},
+      $set:{isCompleted:true,
+         deadline: null
+      }},{new:true},
    )
    await updatedOrder.save();
    await this.userService.incrementMyOrder(customer_id);
