@@ -29,6 +29,7 @@ export class PostsService {
       }
       if (!isObo && (createDto.price === undefined || createDto.price <= 0)) {
         throw new HttpException('Price is required and must be greater than 0 when obo is false', ResponseCode.BAD_REQUEST);
+        
       }
       if (isObo) {
         createDto.price = undefined;
