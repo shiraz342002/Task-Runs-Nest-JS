@@ -20,19 +20,28 @@ export class PostsService {
   //Create A post/Ad
   async create(createDto: CreatePostDto): Promise<PostDocument> {
     try {
-      console.log(typeof createDto.obo);
-      console.log(createDto.obo);
-      const isObo = typeof createDto.obo === 'string' ? createDto.obo === 'true' : createDto.obo;
-      console.log(typeof createDto.obo);      
-      if (isObo && createDto.price !== undefined && createDto.price > 0) {
-        throw new HttpException('Price should not be provided when obo is true', ResponseCode.BAD_REQUEST);
-      }
-      if (!isObo && (createDto.price === undefined || createDto.price <= 0)) {
-        throw new HttpException('Price is required and must be greater than 0 when obo is false', ResponseCode.BAD_REQUEST);
-        
-      }
-      if (isObo) {
-        createDto.price = undefined;
+      const isObo = createDto.obo === true || (typeof createDto.obo === 'string' && createDto.obo === 'true');
+      const isHelpFree = createDto.isHelpFree === true || (typeof createDto.isHelpFree === 'string' && createDto.isHelpFree === 'true');
+      if (isHelpFree) {
+        if (createDto.price !== undefined && createDto.price > 0) {
+          throw new HttpException('When isHelpFree is true, price should be 0 and obo should be false', ResponseCode.BAD_REQUEST);
+        }
+        if (isObo) {
+          throw new HttpException('When isHelpFree is true, obo should be false', ResponseCode.BAD_REQUEST);
+        }
+        createDto.price = 0; 
+        createDto.obo = false;
+      } else if (isObo) {
+        if (createDto.price !== undefined) {
+          throw new HttpException('When obo is true, price should not be provided', ResponseCode.BAD_REQUEST);
+        }
+        if (isHelpFree) {
+          throw new HttpException('When obo is true, isHelpFree cannot be true', ResponseCode.BAD_REQUEST);
+        }
+      } else {
+        if (createDto.price === undefined || createDto.price <= 0) {
+          throw new HttpException('Price is required and must be greater than 0 when neither obo nor isHelpFree is selected', ResponseCode.BAD_REQUEST);
+        }
       }
       const create: PostDocument = new this.postService(createDto);
       return await create.save();
@@ -41,7 +50,13 @@ export class PostsService {
       throw new HttpException(err.message, ResponseCode.BAD_REQUEST);
     }
   }
- 
+  
+  
+  
+  
+  
+  
+  
   //Find All
   async findall(page = 1, limit = 20) {
     const startIndex = (page - 1) * limit;
@@ -158,13 +173,13 @@ export class PostsService {
       })
       .exec();
   }
-  async changeisCompleteFlag(postId:string){
-   await this.postService.findByIdAndUpdate(postId,
-      {$set:{isCompleted:true}},
-      {new:true}
+  async changeisCompleteFlag(postId: string) {
+    await this.postService.findByIdAndUpdate(postId,
+      { $set: { isCompleted: true } },
+      { new: true }
     )
   }
- 
+
 }
 
 

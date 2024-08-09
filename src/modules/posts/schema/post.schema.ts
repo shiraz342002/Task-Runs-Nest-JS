@@ -97,25 +97,28 @@ export class PostEntity {
   isUrgent: boolean;
 
 
-  @IsBoolean()
-  @IsOptional()
-  @Transform(({ value }) => value === "true")
-  @ApiProperty()
-  @Prop({ type: Boolean, required: false, trim: true ,default: false})
-  isHelpFree: boolean;
-
   @Prop({type:Boolean,trim:true,default:false})
   isCompleted:boolean
 
-  @IsBoolean()
+  @ApiProperty()
   @IsOptional()
-  @Transform(({ value }) => value === 'true', { toClassOnly: true })
+  @IsBoolean()
+  @Transform(({ value }) => value === 'true' || value === true) // Converts 'true' string or true boolean to a boolean value
+  @Prop({ type: Boolean, default: false })
+  isHelpFree?: boolean;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsBoolean()
+  @Transform(({ value }) => value === 'true' || value === true) // Converts 'true' string or true boolean to a boolean value
   @Prop({ type: Boolean, default: false })
   obo?: boolean;
 
+  @ApiProperty()
   @IsOptional()
   @Prop({ type: Number, required: false, default: 0 })
-  price: number;
+  price?: number;
+
 
   @IsOptional()
   @ApiProperty({

@@ -26,18 +26,30 @@ let PostsService = class PostsService {
     }
     async create(createDto) {
         try {
-            console.log(typeof createDto.obo);
-            console.log(createDto.obo);
-            const isObo = typeof createDto.obo === 'string' ? createDto.obo === 'true' : createDto.obo;
-            console.log(typeof createDto.obo);
-            if (isObo && createDto.price !== undefined && createDto.price > 0) {
-                throw new common_1.HttpException('Price should not be provided when obo is true', exceptions_1.ResponseCode.BAD_REQUEST);
+            const isObo = createDto.obo === true || (typeof createDto.obo === 'string' && createDto.obo === 'true');
+            const isHelpFree = createDto.isHelpFree === true || (typeof createDto.isHelpFree === 'string' && createDto.isHelpFree === 'true');
+            if (isHelpFree) {
+                if (createDto.price !== undefined && createDto.price > 0) {
+                    throw new common_1.HttpException('When isHelpFree is true, price should be 0 and obo should be false', exceptions_1.ResponseCode.BAD_REQUEST);
+                }
+                if (isObo) {
+                    throw new common_1.HttpException('When isHelpFree is true, obo should be false', exceptions_1.ResponseCode.BAD_REQUEST);
+                }
+                createDto.price = 0;
+                createDto.obo = false;
             }
-            if (!isObo && (createDto.price === undefined || createDto.price <= 0)) {
-                throw new common_1.HttpException('Price is required and must be greater than 0 when obo is false', exceptions_1.ResponseCode.BAD_REQUEST);
+            else if (isObo) {
+                if (createDto.price !== undefined) {
+                    throw new common_1.HttpException('When obo is true, price should not be provided', exceptions_1.ResponseCode.BAD_REQUEST);
+                }
+                if (isHelpFree) {
+                    throw new common_1.HttpException('When obo is true, isHelpFree cannot be true', exceptions_1.ResponseCode.BAD_REQUEST);
+                }
             }
-            if (isObo) {
-                createDto.price = undefined;
+            else {
+                if (createDto.price === undefined || createDto.price <= 0) {
+                    throw new common_1.HttpException('Price is required and must be greater than 0 when neither obo nor isHelpFree is selected', exceptions_1.ResponseCode.BAD_REQUEST);
+                }
             }
             const create = new this.postService(createDto);
             return await create.save();

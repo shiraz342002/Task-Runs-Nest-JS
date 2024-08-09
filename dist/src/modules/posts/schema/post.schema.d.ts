@@ -10,10 +10,10 @@ export declare class PostEntity {
     zipCode?: string;
     userId: string;
     isUrgent: boolean;
-    isHelpFree: boolean;
     isCompleted: boolean;
+    isHelpFree?: boolean;
     obo?: boolean;
-    price: number;
+    price?: number;
     location: {
         type: string;
         coordinates: [number, number];
