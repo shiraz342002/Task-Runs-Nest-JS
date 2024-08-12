@@ -190,6 +190,7 @@ let PostsService = class PostsService {
                     },
                 },
             ];
+            console.log('Aggregation pipeline:', pipeline);
             const events = await this.postService.aggregate(pipeline).exec();
             if (!events || events.length === 0) {
                 throw new common_1.HttpException('No posts found within the specified radius', common_1.HttpStatus.NOT_FOUND);

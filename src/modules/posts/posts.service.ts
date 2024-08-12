@@ -211,6 +211,7 @@ export class PostsService {
       return array;
     }
   }
+  
   async getWithinRadius(locationDto: LocationDto): Promise<any> {
     try {
       const { radius, location } = locationDto;
@@ -235,7 +236,7 @@ export class PostsService {
           },
         },
       ];
-      // console.log('Aggregation pipeline:', pipeline);
+      console.log('Aggregation pipeline:', pipeline);
       const events = await this.postService.aggregate(pipeline).exec();
       // console.log('Fetched events:', events);
       if (!events || events.length === 0) {
