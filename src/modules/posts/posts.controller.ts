@@ -15,12 +15,13 @@ import { constTexts } from "../../constants";
 import { ApiBody, ApiConsumes, ApiQuery, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { PostEntity } from "./schema/post.schema";
 import { User } from "../user/schema/user.schema";
-import { ApiPageOkResponse, Auth, AuthUser } from "src/decorators";
+import { ApiPageOkResponse, Auth, AuthUser, Public } from "src/decorators";
 import { Action } from "src/casl/userRoles";
 import { UpdatePostDto } from "./dto/posts-update.dto";
 import { FilesInterceptor } from "@nestjs/platform-express";
 import { multerOptionsPostImages } from "src/configuration/multer.config";
 import { CreatePostDto } from "./dto/create.post.dto";
+import { LocationDto } from "./dto/location.dto";
 @Controller(constTexts.postRoute.name)
 @ApiTags(constTexts.postRoute.name)
 export class PostsController {
@@ -49,13 +50,6 @@ export class PostsController {
               items: { type: 'number' },
               example: [40.7128, -74.0060],
             },
-          },
-          example: {
-            "type": "Point",
-            "coordinates": [
-              -122.4194,  // Longitude
-              37.7749     // Latitude
-            ]
           },
         },
         isUrgent:{type:'boolean'},
@@ -213,6 +207,16 @@ export class PostsController {
     @AuthUser() user: User 
   ): Promise<PostEntity[]> {
     return this.postsService.viewMyAds(user.id);
+  }
+
+  @Post(constTexts.postRoute.getByLoc)
+  @Public()
+  @ApiBody({
+    type: LocationDto,
+    description: 'Location and radius to search for posts within a certain radius.',
+  })
+  async getWithinRadius(@Body() locationDto: LocationDto): Promise<any> {
+    return this.postsService.getWithinRadius(locationDto);
   }
  
 }

@@ -120,22 +120,18 @@ export class PostEntity {
   price?: number;
 
 
-  @IsOptional()
   @ApiProperty({
-    properties: {
-      coordinates: {
-        type: 'array',
-        items: { type: 'number' },
-        example: [40.7128, -74.0060],
-        description: 'Array of coordinates: [longitude, latitude]',
-      },
+    example: {
+      type: 'Point',
+      coordinates: [-74.0060, 40.7128],
     },
+    description: 'Geolocation coordinates of the post',
   })
   @Prop({
     type: {
       type: String,
       enum: ['Point'],
-      default: "Point"
+      default: 'Point',
     },
     coordinates: {
       type: [Number],
@@ -158,9 +154,8 @@ export class PostEntity {
   comments: mongoose.Schema.Types.ObjectId[];
   
 }
-
 const PostSchema = SchemaFactory.createForClass(PostEntity);
-// PostSchema.index({ location: "2dsphere" });
+PostSchema.index({ location: "2dsphere" });
 
 // Hooks
 PostSchema.virtual("id").get(function (this: PostDocument) {

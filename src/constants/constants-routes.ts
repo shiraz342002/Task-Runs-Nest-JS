@@ -33,7 +33,8 @@ export const constTexts = {
     deleteImage: "deleteImage/:id",
     search: "search",
     viewOtherPosts:"ViewOthersPost/:id",
-    viewMyAds:"ViewMyPosts"
+    viewMyAds:"ViewMyPosts",
+    getByLoc:"ViewPostByLocation"
   },
   commentRoute: {
     name: "comment",

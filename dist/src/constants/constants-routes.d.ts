@@ -34,6 +34,7 @@ export declare const constTexts: {
         search: string;
         viewOtherPosts: string;
         viewMyAds: string;
+        getByLoc: string;
     };
     commentRoute: {
         name: string;

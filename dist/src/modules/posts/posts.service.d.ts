@@ -1,32 +1,9 @@
-/// <reference types="mongoose/types/aggregate" />
-/// <reference types="mongoose/types/callback" />
-/// <reference types="mongoose/types/collection" />
-/// <reference types="mongoose/types/connection" />
-/// <reference types="mongoose/types/cursor" />
-/// <reference types="mongoose/types/document" />
-/// <reference types="mongoose/types/error" />
-/// <reference types="mongoose/types/expressions" />
-/// <reference types="mongoose/types/helpers" />
-/// <reference types="mongoose/types/middlewares" />
-/// <reference types="mongoose/types/indexes" />
-/// <reference types="mongoose/types/models" />
-/// <reference types="mongoose/types/mongooseoptions" />
-/// <reference types="mongoose/types/pipelinestage" />
-/// <reference types="mongoose/types/populate" />
-/// <reference types="mongoose/types/query" />
-/// <reference types="mongoose/types/schemaoptions" />
-/// <reference types="mongoose/types/schematypes" />
-/// <reference types="mongoose/types/session" />
-/// <reference types="mongoose/types/types" />
-/// <reference types="mongoose/types/utility" />
-/// <reference types="mongoose/types/validation" />
-/// <reference types="mongoose/types/virtuals" />
-/// <reference types="mongoose/types/inferschematype" />
 import { PostDocument, PostEntity } from "./schema/post.schema";
 import { Model } from "mongoose";
 import { UpdatePostDto } from "./dto/posts-update.dto";
 import { CreatePostDto } from "./dto/create.post.dto";
 import { UserService } from "../user/user.service";
+import { LocationDto } from "./dto/location.dto";
 export declare class PostsService {
     private postService;
     private readonly userService;
@@ -50,6 +27,8 @@ export declare class PostsService {
     findById(postId: string): Promise<PostDocument>;
     findPostComments(postId: string): Promise<PostDocument>;
     getPostWithPopulatedComments(postId: string): Promise<PostDocument | null>;
-    changeisCompleteFlag(postId: string): Promise<void>;
+    changeIsCompleteFlag(postId: string): Promise<void>;
+    getPostsWithinRadius(longitude: number, latitude: number, radius: number): Promise<PostDocument[]>;
     getShuffledPosts(): Promise<PostEntity[]>;
+    getWithinRadius(locationDto: LocationDto): Promise<any>;
 }

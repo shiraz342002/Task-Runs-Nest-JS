@@ -137,13 +137,21 @@ let PostsService = class PostsService {
         })
             .exec();
     }
-    async changeisCompleteFlag(postId) {
+    async changeIsCompleteFlag(postId) {
         await this.postService.findByIdAndUpdate(postId, { $set: { isCompleted: true } }, { new: true });
+    }
+    async getPostsWithinRadius(longitude, latitude, radius) {
+        return this.postModel.find({
+            location: {
+                $geoWithin: {
+                    $centerSphere: [[longitude, latitude], radius / 3963.2],
+                },
+            },
+        }).exec();
     }
     async getShuffledPosts() {
         try {
             const posts = await this.postService.find().exec();
-            console.log(typeof posts);
             const shuffledPosts = shuffleArray(posts);
             return shuffledPosts;
         }
@@ -156,6 +164,41 @@ let PostsService = class PostsService {
                 [array[i], array[j]] = [array[j], array[i]];
             }
             return array;
+        }
+    }
+    async getWithinRadius(locationDto) {
+        try {
+            const { radius, location } = locationDto;
+            if (!location || typeof location !== 'object' || !Array.isArray(location.coordinates) || location.coordinates.length !== 2) {
+                throw new common_1.HttpException('Invalid location coordinates', common_1.HttpStatus.BAD_REQUEST);
+            }
+            const [longitude, latitude] = location.coordinates;
+            if (radius <= 0) {
+                throw new common_1.HttpException('Radius must be greater than 0', common_1.HttpStatus.BAD_REQUEST);
+            }
+            const pipeline = [
+                {
+                    $match: {
+                        location: {
+                            $geoWithin: {
+                                $centerSphere: [
+                                    [longitude, latitude],
+                                    radius / 6371.1,
+                                ],
+                            },
+                        },
+                    },
+                },
+            ];
+            const events = await this.postService.aggregate(pipeline).exec();
+            if (!events || events.length === 0) {
+                throw new common_1.HttpException('No posts found within the specified radius', common_1.HttpStatus.NOT_FOUND);
+            }
+            return events;
+        }
+        catch (error) {
+            console.error('Error fetching posts within radius:', error);
+            throw new common_1.InternalServerErrorException('Failed to fetch posts within radius');
         }
     }
 };

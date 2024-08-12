@@ -25,6 +25,7 @@ const posts_update_dto_1 = require("./dto/posts-update.dto");
 const platform_express_1 = require("@nestjs/platform-express");
 const multer_config_1 = require("../../configuration/multer.config");
 const create_post_dto_1 = require("./dto/create.post.dto");
+const location_dto_1 = require("./dto/location.dto");
 let PostsController = class PostsController {
     constructor(postsService) {
         this.postsService = postsService;
@@ -78,6 +79,9 @@ let PostsController = class PostsController {
     async viewMyAds(user) {
         return this.postsService.viewMyAds(user.id);
     }
+    async getWithinRadius(locationDto) {
+        return this.postsService.getWithinRadius(locationDto);
+    }
 };
 __decorate([
     (0, common_1.Post)(),
@@ -103,13 +107,6 @@ __decorate([
                             items: { type: 'number' },
                             example: [40.7128, -74.0060],
                         },
-                    },
-                    example: {
-                        "type": "Point",
-                        "coordinates": [
-                            -122.4194,
-                            37.7749
-                        ]
                     },
                 },
                 isUrgent: { type: 'boolean' },
@@ -245,6 +242,18 @@ __decorate([
     __metadata("design:paramtypes", [user_schema_1.User]),
     __metadata("design:returntype", Promise)
 ], PostsController.prototype, "viewMyAds", null);
+__decorate([
+    (0, common_1.Post)(constants_1.constTexts.postRoute.getByLoc),
+    (0, decorators_1.Public)(),
+    (0, swagger_1.ApiBody)({
+        type: location_dto_1.LocationDto,
+        description: 'Location and radius to search for posts within a certain radius.',
+    }),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [location_dto_1.LocationDto]),
+    __metadata("design:returntype", Promise)
+], PostsController.prototype, "getWithinRadius", null);
 PostsController = __decorate([
     (0, common_1.Controller)(constants_1.constTexts.postRoute.name),
     (0, swagger_1.ApiTags)(constants_1.constTexts.postRoute.name),

@@ -1,4 +1,4 @@
-import { HttpException, Injectable, InternalServerErrorException } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable, InternalServerErrorException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { PostDocument, PostEntity } from "./schema/post.schema";
 import { Model } from "mongoose";
@@ -7,6 +7,7 @@ import { UpdatePostDto } from "./dto/posts-update.dto";
 
 import { CreatePostDto } from "./dto/create.post.dto";
 import { UserService } from "../user/user.service";
+import { LocationDto } from "./dto/location.dto";
 // import { TestDocument } from "./schema/Update.schema";
 
 
@@ -173,11 +174,20 @@ export class PostsService {
       })
       .exec();
   }
-  async changeisCompleteFlag(postId: string) {
+  async changeIsCompleteFlag(postId: string) {
     await this.postService.findByIdAndUpdate(postId,
       { $set: { isCompleted: true } },
       { new: true }
     )
+  }
+  async getPostsWithinRadius(longitude: number, latitude: number, radius: number): Promise<PostDocument[]> {
+    return this.postModel.find({
+      location: {
+        $geoWithin: {
+          $centerSphere: [[longitude, latitude], radius / 3963.2], // Radius in miles, convert to radians
+        },
+      },
+    }).exec();
   }
  
 
@@ -187,8 +197,7 @@ export class PostsService {
   async getShuffledPosts(): Promise<PostEntity[]> {
     try {
       const posts = await this.postService.find().exec()
-      console.log(typeof posts);
-      
+      // console.log(typeof posts);      
       const shuffledPosts = shuffleArray(posts);
       return shuffledPosts;
     } catch (error) {
@@ -202,9 +211,46 @@ export class PostsService {
       return array;
     }
   }
-  
-  
+  async getWithinRadius(locationDto: LocationDto): Promise<any> {
+    try {
+      const { radius, location } = locationDto;
+      if (!location || typeof location !== 'object' || !Array.isArray(location.coordinates) || location.coordinates.length !== 2) {
+        throw new HttpException('Invalid location coordinates', HttpStatus.BAD_REQUEST);
+      }
+      const [longitude, latitude] = location.coordinates;
+      if (radius <= 0) {
+        throw new HttpException('Radius must be greater than 0', HttpStatus.BAD_REQUEST);
+      }
+      const pipeline = [
+        {
+          $match: {
+            location: {
+              $geoWithin: {
+                $centerSphere: [
+                  [longitude, latitude],
+                  radius / 6371.1,
+                ],
+              },
+            },
+          },
+        },
+      ];
+      // console.log('Aggregation pipeline:', pipeline);
+      const events = await this.postService.aggregate(pipeline).exec();
+      // console.log('Fetched events:', events);
+      if (!events || events.length === 0) {
+        throw new HttpException('No posts found within the specified radius', HttpStatus.NOT_FOUND);
+      }
+      return events;
+    } catch (error) {
+      console.error('Error fetching posts within radius:', error);
+      throw new InternalServerErrorException('Failed to fetch posts within radius');
+    }
+  }
 }
+  
+  
+
   
 
 

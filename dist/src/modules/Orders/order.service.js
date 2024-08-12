@@ -90,7 +90,7 @@ let OrderService = class OrderService {
         }, { new: true });
         await updatedOrder.save();
         await this.userService.incrementMyOrder(customer_id);
-        await this.postService.changeisCompleteFlag(post_id);
+        await this.postService.changeIsCompleteFlag(post_id);
         await this.userService.incrementTaskCompleted(service_provider_id);
         await this.notificationService.createNotification(service_provider_id, customer_id, notification_1.NotificationType.ORDER_COMPLETED, { postId: post_id, orderId: orderId });
         return updatedOrder;

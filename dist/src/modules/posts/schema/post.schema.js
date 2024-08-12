@@ -130,22 +130,18 @@ __decorate([
     __metadata("design:type", Number)
 ], PostEntity.prototype, "price", void 0);
 __decorate([
-    (0, class_validator_1.IsOptional)(),
     (0, swagger_1.ApiProperty)({
-        properties: {
-            coordinates: {
-                type: 'array',
-                items: { type: 'number' },
-                example: [40.7128, -74.0060],
-                description: 'Array of coordinates: [longitude, latitude]',
-            },
+        example: {
+            type: 'Point',
+            coordinates: [-74.0060, 40.7128],
         },
+        description: 'Geolocation coordinates of the post',
     }),
     (0, mongoose_1.Prop)({
         type: {
             type: String,
             enum: ['Point'],
-            default: "Point"
+            default: 'Point',
         },
         coordinates: {
             type: [Number],
@@ -177,6 +173,7 @@ PostEntity = __decorate([
 exports.PostEntity = PostEntity;
 const PostSchema = mongoose_1.SchemaFactory.createForClass(PostEntity);
 exports.PostSchema = PostSchema;
+PostSchema.index({ location: "2dsphere" });
 PostSchema.virtual("id").get(function () {
     return this._id.toString();
 });
