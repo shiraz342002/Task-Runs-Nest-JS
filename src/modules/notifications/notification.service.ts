@@ -31,9 +31,6 @@ export class NotificationService {
   }
 
   private generateNotificationContent(type: NotificationType, user_name: any): string {
-    console.log(NotificationType);
-    console.log(user_name);
-    
     switch (type) {
       case NotificationType.COMMENT_ON_POST:
         return `${user_name} commented on your post.`;

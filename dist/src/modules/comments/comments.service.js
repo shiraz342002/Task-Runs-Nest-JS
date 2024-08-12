@@ -48,6 +48,7 @@ let CommentsService = class CommentsService {
         });
         await comment.save();
         post.comments.push(comment._id);
+        await post.save();
         await this.Notificationservice.createNotification(userId, post.userId, notification_1.NotificationType.COMMENT_ON_POST, { postId, commentId: comment._id.toString() });
     }
     async replyComment(comentId, userId, content) {
@@ -62,6 +63,7 @@ let CommentsService = class CommentsService {
         await reply.save();
         orignal_coment.replies.push(reply._id);
         await orignal_coment.save();
+        await this.Notificationservice.createNotification(userId, orignal_coment.userId.toString(), notification_1.NotificationType.REPLY_TO_COMMENT, { commentId: orignal_coment._id.toString() });
     }
     async getCommentWithReplies(commentId) {
         try {

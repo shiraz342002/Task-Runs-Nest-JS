@@ -27,6 +27,7 @@ export class CommentsService {
     });
     await comment.save();
     post.comments.push(comment._id);
+    await post.save();
     await this.Notificationservice.createNotification(userId,post.userId,NotificationType.COMMENT_ON_POST,{postId,commentId: comment._id.toString()})
   }
 
@@ -43,6 +44,13 @@ export class CommentsService {
     await reply.save();
     orignal_coment.replies.push(reply._id);
     await orignal_coment.save();
+    await this.Notificationservice.createNotification(
+      userId,
+      orignal_coment.userId.toString(),
+      NotificationType.REPLY_TO_COMMENT,
+      { commentId: orignal_coment._id.toString() },
+    );
+  
   }
 
   //Bug ha isme id ka (fix it)
