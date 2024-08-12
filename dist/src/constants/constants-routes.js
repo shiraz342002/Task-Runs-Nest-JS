@@ -66,6 +66,10 @@ exports.constTexts = {
         delete: ":id",
         getOne: ":id",
     },
+    notificationRoute: {
+        name: "notifications",
+        viewMyNotification: "viewMyNotification"
+    },
     reviewsRoute: {
         name: "reviews",
         PostReview: "ReviewUserService/:revieweeId",

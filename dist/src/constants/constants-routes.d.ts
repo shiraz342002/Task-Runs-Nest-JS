@@ -63,6 +63,10 @@ export declare const constTexts: {
         delete: string;
         getOne: string;
     };
+    notificationRoute: {
+        name: string;
+        viewMyNotification: string;
+    };
     reviewsRoute: {
         name: string;
         PostReview: string;

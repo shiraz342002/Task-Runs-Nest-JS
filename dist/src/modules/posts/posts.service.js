@@ -140,13 +140,22 @@ let PostsService = class PostsService {
     async changeisCompleteFlag(postId) {
         await this.postService.findByIdAndUpdate(postId, { $set: { isCompleted: true } }, { new: true });
     }
-    async getAllPosts() {
+    async getShuffledPosts() {
         try {
-            return await this.postModel.find().exec();
+            const posts = await this.postService.find().exec();
+            console.log(typeof posts);
+            const shuffledPosts = shuffleArray(posts);
+            return shuffledPosts;
         }
         catch (error) {
-            console.error('Error fetching all posts:', error);
-            throw new common_1.InternalServerErrorException('Failed to fetch posts');
+            throw new common_1.InternalServerErrorException('Failed to retrieve  posts');
+        }
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
         }
     }
 };

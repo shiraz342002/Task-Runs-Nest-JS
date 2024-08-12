@@ -35,7 +35,7 @@ let ReviewsService = class ReviewsService {
         const savedReview = await review.save();
         await this.userService.updateReviews(revieweeId, savedReview.id);
         await this.userService.CalcRatings(revieweeId, createReviewDto.rating);
-        await this.notificationService.createNotification(reviewerId, revieweeId, notification_1.NotificationType.USER_REVIEWED, { postId: createReviewDto.postId.toString() });
+        await this.notificationService.createNotification(reviewerId, revieweeId, notification_1.NotificationType.USER_REVIEWED, { postId: createReviewDto.postId.toString(), reviewId: savedReview.id });
         return savedReview;
     }
     async findByRevieweeId(revieweeId) {

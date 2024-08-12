@@ -32,7 +32,7 @@ export class ReviewsService {
       reviewerId,
       revieweeId,
       NotificationType.USER_REVIEWED,
-      { postId: createReviewDto.postId.toString() }
+      { postId: createReviewDto.postId.toString(),reviewId:savedReview.id }
     );
     return savedReview
   }

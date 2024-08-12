@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Notification, NotificationDocument } from './schema/notification.schema';
@@ -49,4 +49,20 @@ export class NotificationService {
         return 'You have a new notification.';
     }
   }
-}
+  async getMyNotification(userId: string): Promise<Partial<Notification>[]> {
+    try {
+      const notifications = await this.notificationModel
+        .find({ recipientId: userId })
+        .select('content')
+        .populate({
+          path: 'senderId',
+          select: 'avatar'
+        })
+        .exec();
+  
+      return notifications;
+    } catch (error) {
+      console.error('Error fetching notifications:', error);
+      throw new InternalServerErrorException('Failed to fetch notifications');
+    }
+  }}

@@ -63,6 +63,11 @@ export const constTexts = {
     update: ":id",
     delete: ":id",
     getOne: ":id",
+  },  
+  notificationRoute:{
+    name:"notifications",
+    viewMyNotification:"viewMyNotification"
+
   },
 
   reviewsRoute: {

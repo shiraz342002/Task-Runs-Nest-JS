@@ -14,16 +14,19 @@ const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
 const constants_1 = require("./constants");
 const posts_service_1 = require("./modules/posts/posts.service");
+const decorators_1 = require("./decorators");
+const userRoles_1 = require("./casl/userRoles");
 let AppController = class AppController {
     constructor(postService) {
         this.postService = postService;
     }
     async getShuffledPosts() {
-        return this.postService.getAllPosts();
+        return this.postService.getShuffledPosts();
     }
 };
 __decorate([
     (0, common_1.Get)('HomePage'),
+    (0, decorators_1.Auth)(userRoles_1.Action.Read, "User"),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)

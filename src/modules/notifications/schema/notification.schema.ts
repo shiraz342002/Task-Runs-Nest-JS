@@ -1,14 +1,14 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Schema as MongooseSchema } from 'mongoose';
 
 export type NotificationDocument = Notification & Document;
 
 @Schema({ timestamps: true })
 export class Notification {
-  @Prop({ required: true })
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User' })
   senderId: string;
 
-  @Prop({ required: true })
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User' })
   recipientId: string;
 
   @Prop({ required: true })
@@ -17,19 +17,19 @@ export class Notification {
   @Prop({ required: true })
   content: string;
 
-  @Prop({ required: false })
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'PostEntity', required: false })
   postId?: string;
 
-  @Prop({ required: false })
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Comment', required: false })
   commentId?: string;
 
-  @Prop({ required: false })
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Order', required: false })
   orderId?: string;
 
-  @Prop({ required: false })
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Message', required: false })
   messageId?: string;
 
-  @Prop({ required: false })
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Review', required: false })
   reviewId?: string;
 
   @Prop({ default: false })

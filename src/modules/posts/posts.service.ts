@@ -184,15 +184,28 @@ export class PostsService {
 
 
 
-  async getAllPosts(): Promise<PostEntity[]> {
+  async getShuffledPosts(): Promise<PostEntity[]> {
     try {
-      return await this.postModel.find().exec();
+      const posts = await this.postService.find().exec()
+      console.log(typeof posts);
+      
+      const shuffledPosts = shuffleArray(posts);
+      return shuffledPosts;
     } catch (error) {
-      console.error('Error fetching all posts:', error);
-      throw new InternalServerErrorException('Failed to fetch posts');
+      throw new InternalServerErrorException('Failed to retrieve  posts');
+    }
+    function shuffleArray<T>(array: T[]): T[] {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
     }
   }
-   
+  
+  
 }
+  
+
 
 
