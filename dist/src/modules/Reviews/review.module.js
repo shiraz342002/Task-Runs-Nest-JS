@@ -13,13 +13,14 @@ const review_service_1 = require("./review.service");
 const review_controller_1 = require("./review.controller");
 const review_schema_1 = require("./schema/review.schema");
 const user_module_1 = require("../user/user.module");
+const notification_module_1 = require("../notifications/notification.module");
 let ReviewsModule = class ReviewsModule {
 };
 ReviewsModule = __decorate([
     (0, common_1.Module)({
         imports: [
             mongoose_1.MongooseModule.forFeature([{ name: review_schema_1.Review.name, schema: review_schema_1.ReviewSchema }]),
-            user_module_1.UserModule
+            user_module_1.UserModule, notification_module_1.NotificationModule
         ],
         controllers: [review_controller_1.ReviewsController],
         providers: [review_service_1.ReviewsService],

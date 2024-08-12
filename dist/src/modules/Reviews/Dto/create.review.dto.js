@@ -28,5 +28,15 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateReviewDto.prototype, "text", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        description: 'The Post User has Completed',
+        example: '60d21b4667d0d8992e610c85',
+        type: String,
+    }),
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsMongoId)(),
+    __metadata("design:type", String)
+], CreateReviewDto.prototype, "postId", void 0);
 exports.CreateReviewDto = CreateReviewDto;
 //# sourceMappingURL=create.review.dto.js.map

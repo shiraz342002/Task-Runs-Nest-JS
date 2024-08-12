@@ -22,6 +22,12 @@ export class Review {
   @ApiProperty({ description: 'Review text' })
   @Prop({ type: String, required: true })
   text: string;
+
+  @ApiProperty({description:'Post Id about which the review is'})
+  @Prop({type:Types.ObjectId,ref:'PostEntity',required:true})
+  postId:Types.ObjectId;
+ 
+
 }
 
 export const ReviewSchema = SchemaFactory.createForClass(Review);

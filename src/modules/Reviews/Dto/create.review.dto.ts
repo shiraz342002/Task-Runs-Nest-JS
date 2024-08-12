@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, IsNumber, Min, Max } from 'class-validator';
+import { IsNotEmpty, IsString, IsNumber, Min, Max, IsMongoId } from 'class-validator';
 
 export class CreateReviewDto {
 //   @ApiProperty({ description: 'ID of the reviewee (person being reviewed)' })
@@ -18,4 +18,14 @@ export class CreateReviewDto {
   @IsNotEmpty()
   @IsString()
   text: string;
+
+  @ApiProperty({
+    description: 'The Post User has Completed',
+    example: '60d21b4667d0d8992e610c85',
+    type: String,
+  })
+  @IsNotEmpty()
+  @IsMongoId()
+  postId: string;
+
 }

@@ -4,6 +4,8 @@ import { Model, Types } from 'mongoose';
 import { Review, ReviewDocument } from './schema/review.schema';
 import { CreateReviewDto } from './Dto/create.review.dto';
 import { UserService } from '../user/user.service';
+import { NotificationService } from '../notifications/notification.service';
+import { NotificationType } from 'src/casl/notification';
 
 
 @Injectable()
@@ -11,10 +13,11 @@ export class ReviewsService {
   constructor(
     @InjectModel(Review.name) private readonly reviewModel: Model<ReviewDocument>,
     private readonly userService: UserService,
+    private readonly notificationService:NotificationService,
   ) {}
 
   async create(reviewerId: string,revieweeId:string,createReviewDto: CreateReviewDto): Promise<Review> {
-    if(revieweeId==revieweeId){
+    if(reviewerId==revieweeId){
       throw new InternalServerErrorException("Cannot Post Reviews On Your Own Profile")
     }
     const review = new this.reviewModel({
@@ -25,6 +28,12 @@ export class ReviewsService {
     const savedReview = await review.save();
     await this.userService.updateReviews(revieweeId,savedReview.id)
     await this.userService.CalcRatings(revieweeId,createReviewDto.rating)
+    await this.notificationService.createNotification(
+      reviewerId,
+      revieweeId,
+      NotificationType.USER_REVIEWED,
+      { postId: createReviewDto.postId.toString() }
+    );
     return savedReview
   }
 

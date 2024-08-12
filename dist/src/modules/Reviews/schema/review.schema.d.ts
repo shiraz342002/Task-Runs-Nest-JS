@@ -30,5 +30,6 @@ export declare class Review {
     revieweeId: Types.ObjectId;
     rating: number;
     text: string;
+    postId: Types.ObjectId;
 }
 export declare const ReviewSchema: import("mongoose").Schema<Review, import("mongoose").Model<Review, any, any, any, any>, {}, {}, {}, {}, import("mongoose").DefaultSchemaOptions, Review>;

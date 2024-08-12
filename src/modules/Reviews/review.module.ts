@@ -5,11 +5,12 @@ import { ReviewsController } from './review.controller';
 import { Review, ReviewSchema } from './schema/review.schema';
 
 import { UserModule } from '../user/user.module';
+import { NotificationModule } from '../notifications/notification.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Review.name, schema: ReviewSchema }]),
-  UserModule],
+  UserModule,NotificationModule],
   controllers: [ReviewsController],
   providers: [ReviewsService],
   exports:[ReviewsService]

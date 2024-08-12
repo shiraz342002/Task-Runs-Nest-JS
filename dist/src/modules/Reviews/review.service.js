@@ -18,13 +18,16 @@ const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 const review_schema_1 = require("./schema/review.schema");
 const user_service_1 = require("../user/user.service");
+const notification_service_1 = require("../notifications/notification.service");
+const notification_1 = require("../../casl/notification");
 let ReviewsService = class ReviewsService {
-    constructor(reviewModel, userService) {
+    constructor(reviewModel, userService, notificationService) {
         this.reviewModel = reviewModel;
         this.userService = userService;
+        this.notificationService = notificationService;
     }
     async create(reviewerId, revieweeId, createReviewDto) {
-        if (revieweeId == revieweeId) {
+        if (reviewerId == revieweeId) {
             throw new common_1.InternalServerErrorException("Cannot Post Reviews On Your Own Profile");
         }
         const review = new this.reviewModel(Object.assign({ reviewerId,
@@ -32,6 +35,7 @@ let ReviewsService = class ReviewsService {
         const savedReview = await review.save();
         await this.userService.updateReviews(revieweeId, savedReview.id);
         await this.userService.CalcRatings(revieweeId, createReviewDto.rating);
+        await this.notificationService.createNotification(reviewerId, revieweeId, notification_1.NotificationType.USER_REVIEWED, { postId: createReviewDto.postId.toString() });
         return savedReview;
     }
     async findByRevieweeId(revieweeId) {
@@ -75,7 +79,8 @@ ReviewsService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, mongoose_1.InjectModel)(review_schema_1.Review.name)),
     __metadata("design:paramtypes", [mongoose_2.Model,
-        user_service_1.UserService])
+        user_service_1.UserService,
+        notification_service_1.NotificationService])
 ], ReviewsService);
 exports.ReviewsService = ReviewsService;
 //# sourceMappingURL=review.service.js.map

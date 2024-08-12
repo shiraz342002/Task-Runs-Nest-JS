@@ -35,6 +35,11 @@ __decorate([
     (0, mongoose_1.Prop)({ type: String, required: true }),
     __metadata("design:type", String)
 ], Review.prototype, "text", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Post Id about which the review is' }),
+    (0, mongoose_1.Prop)({ type: mongoose_2.Types.ObjectId, ref: 'PostEntity', required: true }),
+    __metadata("design:type", mongoose_2.Types.ObjectId)
+], Review.prototype, "postId", void 0);
 Review = __decorate([
     (0, mongoose_1.Schema)({ timestamps: true })
 ], Review);
