@@ -13,13 +13,14 @@ const comments_schema_1 = require("./schema/comments.schema");
 const posts_module_1 = require("../posts/posts.module");
 const comments_service_1 = require("./comments.service");
 const comments_controller_1 = require("./comments.controller");
+const notification_module_1 = require("../notifications/notification.module");
 let CommentsModule = class CommentsModule {
 };
 CommentsModule = __decorate([
     (0, common_1.Module)({
         imports: [
             mongoose_1.MongooseModule.forFeature([{ name: comments_schema_1.Comment.name, schema: comments_schema_1.CommentSchema }]),
-            posts_module_1.PostsModule,
+            posts_module_1.PostsModule, notification_module_1.NotificationModule,
         ],
         providers: [comments_service_1.CommentsService],
         controllers: [comments_controller_1.CommentController],

@@ -30,7 +30,7 @@ export class Notification {
   messageId?: string;
 
   @Prop({ required: false })
-  reviewId?: string; // Added reviewId field
+  reviewId?: string;
 
   @Prop({ default: false })
   isRead: boolean;

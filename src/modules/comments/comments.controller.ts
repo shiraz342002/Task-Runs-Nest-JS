@@ -52,7 +52,6 @@ constructor(private readonly commentService: CommentsService) { }
        await this.commentService.replyComment(comentId, user.id, content);
        return { message: 'Reply added successfully' };
      } catch (error) {
-      //  console.error('Error adding Reply:', error);
        throw new HttpException('Unable to add Reply', HttpStatus.INTERNAL_SERVER_ERROR);
      }
   }

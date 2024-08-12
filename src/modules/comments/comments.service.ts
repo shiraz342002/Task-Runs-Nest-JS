@@ -4,12 +4,15 @@ import { Comment, CommentDocument } from './schema/comments.schema';
 import { PostsService } from '../posts/posts.service';
 import { Model, Types } from 'mongoose';
 import { UpdateCommentDto } from './Dto/comments.dto';
+import { NotificationService } from '../notifications/notification.service';
+import { NotificationType } from 'src/casl/notification';
 
 @Injectable()
 export class CommentsService {
   constructor(
     @InjectModel(Comment.name) private commentModel: Model<CommentDocument>,
-    private readonly postService: PostsService
+    private readonly postService: PostsService,
+    private readonly Notificationservice:NotificationService,
   ) { }
 
   //Add a Comment
@@ -24,7 +27,7 @@ export class CommentsService {
     });
     await comment.save();
     post.comments.push(comment._id);
-    await post.save();
+    await this.Notificationservice.createNotification(userId,post.userId,NotificationType.COMMENT_ON_POST,{postId,commentId: comment._id.toString()})
   }
 
   //Reply to Comment
@@ -42,6 +45,7 @@ export class CommentsService {
     await orignal_coment.save();
   }
 
+  //Bug ha isme id ka (fix it)
   // Get Specefic Comment With Replies
  async getCommentWithReplies(commentId: string): Promise<CommentDocument> {
     try {

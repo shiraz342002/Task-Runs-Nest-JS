@@ -351,6 +351,10 @@ let UserService = class UserService {
         }
         await this.userModel.findByIdAndUpdate(userId, { $inc: { task_completed: 1 } }, { new: true });
     }
+    async findName(userId) {
+        const user = await this.userModel.findById(userId).select('name').lean();
+        return user.name;
+    }
 };
 UserService = __decorate([
     (0, common_1.Injectable)(),

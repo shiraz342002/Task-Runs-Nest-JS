@@ -483,6 +483,11 @@ export class UserService {
       { new: true }
     );
   }
+
+  async findName(userId:string){
+    const user = await this.userModel.findById(userId).select('name').lean();
+    return user.name
+  }
 }
 
 

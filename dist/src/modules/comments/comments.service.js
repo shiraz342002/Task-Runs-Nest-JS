@@ -29,10 +29,13 @@ const mongoose_1 = require("@nestjs/mongoose");
 const comments_schema_1 = require("./schema/comments.schema");
 const posts_service_1 = require("../posts/posts.service");
 const mongoose_2 = require("mongoose");
+const notification_service_1 = require("../notifications/notification.service");
+const notification_1 = require("../../casl/notification");
 let CommentsService = class CommentsService {
-    constructor(commentModel, postService) {
+    constructor(commentModel, postService, Notificationservice) {
         this.commentModel = commentModel;
         this.postService = postService;
+        this.Notificationservice = Notificationservice;
     }
     async addComment(postId, userId, content) {
         const post = await this.postService.findById(postId);
@@ -45,7 +48,7 @@ let CommentsService = class CommentsService {
         });
         await comment.save();
         post.comments.push(comment._id);
-        await post.save();
+        await this.Notificationservice.createNotification(userId, post.userId, notification_1.NotificationType.COMMENT_ON_POST, { postId, commentId: comment._id.toString() });
     }
     async replyComment(comentId, userId, content) {
         const orignal_coment = await this.commentModel.findById(comentId);
@@ -154,7 +157,8 @@ CommentsService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, mongoose_1.InjectModel)(comments_schema_1.Comment.name)),
     __metadata("design:paramtypes", [mongoose_2.Model,
-        posts_service_1.PostsService])
+        posts_service_1.PostsService,
+        notification_service_1.NotificationService])
 ], CommentsService);
 exports.CommentsService = CommentsService;
 //# sourceMappingURL=comments.service.js.map
