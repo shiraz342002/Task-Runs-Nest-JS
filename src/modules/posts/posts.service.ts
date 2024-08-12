@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from "@nestjs/common";
+import { HttpException, Injectable, InternalServerErrorException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { PostDocument, PostEntity } from "./schema/post.schema";
 import { Model } from "mongoose";
@@ -12,6 +12,7 @@ import { UserService } from "../user/user.service";
 
 @Injectable()
 export class PostsService {
+  postModel: any;
   constructor(
     @InjectModel(PostEntity.name) private postService: Model<PostDocument>,
     private readonly userService: UserService
@@ -178,7 +179,20 @@ export class PostsService {
       { new: true }
     )
   }
+ 
 
+
+
+
+  async getAllPosts(): Promise<PostEntity[]> {
+    try {
+      return await this.postModel.find().exec();
+    } catch (error) {
+      console.error('Error fetching all posts:', error);
+      throw new InternalServerErrorException('Failed to fetch posts');
+    }
+  }
+   
 }
 
 

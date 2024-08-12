@@ -140,6 +140,15 @@ let PostsService = class PostsService {
     async changeisCompleteFlag(postId) {
         await this.postService.findByIdAndUpdate(postId, { $set: { isCompleted: true } }, { new: true });
     }
+    async getAllPosts() {
+        try {
+            return await this.postModel.find().exec();
+        }
+        catch (error) {
+            console.error('Error fetching all posts:', error);
+            throw new common_1.InternalServerErrorException('Failed to fetch posts');
+        }
+    }
 };
 PostsService = __decorate([
     (0, common_1.Injectable)(),

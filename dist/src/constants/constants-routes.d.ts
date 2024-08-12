@@ -23,6 +23,7 @@ export declare const constTexts: {
         name: string;
         getAllPosts: string;
         my: string;
+        Home: string;
         specific: string;
         reply: string;
         completedByOther: string;

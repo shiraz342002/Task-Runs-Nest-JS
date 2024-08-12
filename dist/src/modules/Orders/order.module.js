@@ -14,13 +14,14 @@ const order_controller_1 = require("./order.controller");
 const order_service_1 = require("./order.service");
 const user_module_1 = require("../user/user.module");
 const posts_module_1 = require("../posts/posts.module");
+const notification_module_1 = require("../notifications/notification.module");
 let OrdersModule = class OrdersModule {
 };
 OrdersModule = __decorate([
     (0, common_1.Module)({
         imports: [
             mongoose_1.MongooseModule.forFeature([{ name: order_schema_1.Order.name, schema: order_schema_1.OrderSchema }]),
-            user_module_1.UserModule, posts_module_1.PostsModule
+            user_module_1.UserModule, posts_module_1.PostsModule, notification_module_1.NotificationModule
         ],
         controllers: [order_controller_1.OrderController],
         providers: [order_service_1.OrderService],

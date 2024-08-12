@@ -19,15 +19,22 @@ const mongoose_2 = require("mongoose");
 const order_schema_1 = require("./Schema/order.schema");
 const user_service_1 = require("../user/user.service");
 const posts_service_1 = require("../posts/posts.service");
+const notification_service_1 = require("../notifications/notification.service");
+const notification_1 = require("../../casl/notification");
 let OrderService = class OrderService {
-    constructor(orderModel, userService, postService) {
+    constructor(orderModel, userService, postService, notificationService) {
         this.orderModel = orderModel;
         this.userService = userService;
         this.postService = postService;
+        this.notificationService = notificationService;
     }
     async assignTask(userId, TaskAssignedToId, CreateOrderDto) {
+        if (userId === TaskAssignedToId) {
+            throw new common_1.InternalServerErrorException("Cannot Assign an order to yourself");
+        }
         const order = new this.orderModel(Object.assign({ TaskAssignedBy: userId, TaskAssignedTo: TaskAssignedToId }, CreateOrderDto));
         const Assignedorder = await order.save();
+        await this.notificationService.createNotification(userId, TaskAssignedToId, notification_1.NotificationType.ORDER_ASSIGNED, { postId: CreateOrderDto.PostId.toString(), orderId: Assignedorder.id });
         return Assignedorder;
     }
     async getOrderInfo(userId, orderId) {
@@ -85,6 +92,7 @@ let OrderService = class OrderService {
         await this.userService.incrementMyOrder(customer_id);
         await this.postService.changeisCompleteFlag(post_id);
         await this.userService.incrementTaskCompleted(service_provider_id);
+        await this.notificationService.createNotification(service_provider_id, customer_id, notification_1.NotificationType.ORDER_COMPLETED, { postId: post_id, orderId: orderId });
         return updatedOrder;
     }
     async changeTask(userId, orderId, updateOrderDto) {
@@ -107,7 +115,8 @@ OrderService = __decorate([
     __param(0, (0, mongoose_1.InjectModel)(order_schema_1.Order.name)),
     __metadata("design:paramtypes", [mongoose_2.Model,
         user_service_1.UserService,
-        posts_service_1.PostsService])
+        posts_service_1.PostsService,
+        notification_service_1.NotificationService])
 ], OrderService);
 exports.OrderService = OrderService;
 //# sourceMappingURL=order.service.js.map

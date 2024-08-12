@@ -214,5 +214,5 @@ export class PostsController {
   ): Promise<PostEntity[]> {
     return this.postsService.viewMyAds(user.id);
   }
-
+ 
 }

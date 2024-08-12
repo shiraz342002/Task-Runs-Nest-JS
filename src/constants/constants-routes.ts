@@ -23,6 +23,7 @@ export const constTexts = {
     name: "post",
     getAllPosts: "getAllPosts",
     my: "myPost",
+    Home:"Home",
     specific: "specific",
     reply: "reply/:id",
     completedByOther: "completedByOther",

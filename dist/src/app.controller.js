@@ -11,19 +11,27 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppController = void 0;
 const common_1 = require("@nestjs/common");
+const swagger_1 = require("@nestjs/swagger");
+const constants_1 = require("./constants");
+const posts_service_1 = require("./modules/posts/posts.service");
 let AppController = class AppController {
-    findOne() {
-        return { message: 'Hello world!' };
+    constructor(postService) {
+        this.postService = postService;
+    }
+    async getShuffledPosts() {
+        return this.postService.getAllPosts();
     }
 };
 __decorate([
-    (0, common_1.Get)(),
+    (0, common_1.Get)('HomePage'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], AppController.prototype, "findOne", null);
+    __metadata("design:returntype", Promise)
+], AppController.prototype, "getShuffledPosts", null);
 AppController = __decorate([
-    (0, common_1.Controller)()
+    (0, common_1.Controller)(),
+    (0, swagger_1.ApiTags)(constants_1.constTexts.postRoute.Home),
+    __metadata("design:paramtypes", [posts_service_1.PostsService])
 ], AppController);
 exports.AppController = AppController;
 //# sourceMappingURL=app.controller.js.map

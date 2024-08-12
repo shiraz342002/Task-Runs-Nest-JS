@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
+import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { Order } from "./Schema/order.schema";
@@ -6,21 +6,28 @@ import { AssignOrderDto } from "./Dto/create.order.dto";
 import { UserService } from "../user/user.service";
 import { PostsService } from "../posts/posts.service";
 import { UpdateOrderDto } from "./Dto/update.order.dto";
+import { NotificationService } from "../notifications/notification.service";
+import { NotificationType } from "src/casl/notification";
 
 @Injectable()
 export class OrderService {
 constructor(
    @InjectModel(Order.name) private orderModel: Model<Order>,
    private readonly userService:UserService,
-   private readonly postService:PostsService
+   private readonly postService:PostsService,
+   private readonly notificationService:NotificationService,
 ) {}
  async assignTask(userId: string, TaskAssignedToId: string, CreateOrderDto:AssignOrderDto): Promise<Order> {    
+   if(userId===TaskAssignedToId){
+      throw new InternalServerErrorException("Cannot Assign an order to yourself")
+   }
   const order = new this.orderModel({
     TaskAssignedBy: userId,
     TaskAssignedTo: TaskAssignedToId,
    ...CreateOrderDto
   });
   const Assignedorder= await order.save();
+  await this.notificationService.createNotification(userId,TaskAssignedToId,NotificationType.ORDER_ASSIGNED,{postId:CreateOrderDto.PostId.toString(),orderId:Assignedorder.id})
   return Assignedorder
  }
 
@@ -87,6 +94,7 @@ constructor(
    await this.userService.incrementMyOrder(customer_id);
    await this.postService.changeisCompleteFlag(post_id)
    await this.userService.incrementTaskCompleted(service_provider_id)
+   await this.notificationService.createNotification(service_provider_id,customer_id,NotificationType.ORDER_COMPLETED,{postId:post_id,orderId:orderId},)
    return updatedOrder
  }
 
