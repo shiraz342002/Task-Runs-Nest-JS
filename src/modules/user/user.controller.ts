@@ -120,7 +120,7 @@ export class UserController {
     @Param('id') id: string, 
     @AuthUser() user: User 
   ): Promise<User> {
-    return this.userService.viewOtherProfile(id);
+    return this.userService.viewOtherProfile(id,user.id);
   }
 
   @Get(constTexts.userRoute.viewCompProfile)

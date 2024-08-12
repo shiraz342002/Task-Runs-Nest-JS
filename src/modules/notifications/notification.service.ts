@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Notification, NotificationDocument } from './schema/notification.schema';
@@ -9,7 +9,7 @@ import { UserService } from '../user/user.service';
 export class NotificationService {
   constructor(
     @InjectModel(Notification.name) private notificationModel: Model<NotificationDocument>,
-    private readonly userService:UserService
+    @Inject(forwardRef(() => UserService)) private userService: UserService
   ) {}
 
   async createNotification(
@@ -29,7 +29,6 @@ export class NotificationService {
     });
     return await notification.save();
   }
-
   private generateNotificationContent(type: NotificationType, user_name: any): string {
     switch (type) {
       case NotificationType.COMMENT_ON_POST:
@@ -44,6 +43,8 @@ export class NotificationService {
         return `${user_name} reviewed you.`;
       case NotificationType.USER_MESSAGE:
         return `${user_name} sent you a message.`;
+      case NotificationType.VISITED_PROFILE:
+        return `${user_name} visited your profile`;
       default:
         return 'You have a new notification.';
     }

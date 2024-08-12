@@ -20,10 +20,13 @@ const utils_1 = require("../../common/utils");
 const exceptions_1 = require("../../exceptions");
 const mail_service_1 = require("../mail/mail.service");
 const user_schema_1 = require("./schema/user.schema");
+const notification_service_1 = require("../notifications/notification.service");
+const notification_1 = require("../../casl/notification");
 let UserService = class UserService {
-    constructor(userModel, sendMail) {
+    constructor(userModel, sendMail, notificationService) {
         this.userModel = userModel;
         this.sendMail = sendMail;
+        this.notificationService = notificationService;
     }
     async sendForgetPassword(ForgetPasswordDto) {
         const getFourDigitRandomNumber = this.generateString(4);
@@ -236,7 +239,7 @@ let UserService = class UserService {
         });
         return data;
     }
-    async viewOtherProfile(userId) {
+    async viewOtherProfile(userId, viewerid) {
         const fieldsToSelect = 'avatar name profession ratings createdAt task_completed city zip_code about reviews';
         try {
             const data = await this.userModel
@@ -254,6 +257,7 @@ let UserService = class UserService {
             if (!data) {
                 throw new common_1.HttpException('User not found', exceptions_1.ResponseCode.NOT_FOUND);
             }
+            await this.notificationService.createNotification(viewerid, userId, notification_1.NotificationType.VISITED_PROFILE);
             return data;
         }
         catch (err) {
@@ -360,7 +364,8 @@ UserService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, mongoose_1.InjectModel)(user_schema_1.User.name)),
     __metadata("design:paramtypes", [mongoose_2.Model,
-        mail_service_1.MailService])
+        mail_service_1.MailService,
+        notification_service_1.NotificationService])
 ], UserService);
 exports.UserService = UserService;
 //# sourceMappingURL=user.service.js.map

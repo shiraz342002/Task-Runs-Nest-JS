@@ -11,10 +11,12 @@ import { ForgotPasswordDto } from "../auth/dto/forgot-password.dto";
 import { VerifyAccountDto } from "../auth/dto/verify-account.dto";
 import { UserSignupDto } from "../auth/dto/user.signup.dto";
 import { VerifyAccountOnlyDto } from "../auth/dto/verify-account-only.dto";
+import { NotificationService } from "../notifications/notification.service";
 export declare class UserService {
     private userModel;
     private sendMail;
-    constructor(userModel: Model<UserDocument>, sendMail: MailService);
+    private notificationService;
+    constructor(userModel: Model<UserDocument>, sendMail: MailService, notificationService: NotificationService);
     sendForgetPassword(ForgetPasswordDto: ForgotPasswordDto): Promise<{
         message: ResponseMessage;
         successCode: ResponseCode;
@@ -53,7 +55,7 @@ export declare class UserService {
     viewProfile(userId: string): Promise<User & import("mongoose").Document<any, any, any> & {
         _id: Types.ObjectId;
     }>;
-    viewOtherProfile(userId: string): Promise<User & import("mongoose").Document<any, any, any> & {
+    viewOtherProfile(userId: string, viewerid: string): Promise<User & import("mongoose").Document<any, any, any> & {
         _id: Types.ObjectId;
     }>;
     findCustomData(userId: string, custom_fields: any): Promise<User & import("mongoose").Document<any, any, any> & {

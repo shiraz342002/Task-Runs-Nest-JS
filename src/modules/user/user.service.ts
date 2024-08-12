@@ -18,12 +18,15 @@ import { ForgotPasswordDto } from "../auth/dto/forgot-password.dto";
 import { VerifyAccountDto } from "../auth/dto/verify-account.dto";
 import { UserSignupDto } from "../auth/dto/user.signup.dto";
 import { VerifyAccountOnlyDto } from "../auth/dto/verify-account-only.dto";
+import { NotificationService } from "../notifications/notification.service";
+import { NotificationType } from "src/casl/notification";
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
-    private sendMail: MailService
+    private sendMail: MailService,
+    private notificationService:NotificationService
   ) {}
   /**
    * get user schema
@@ -348,7 +351,7 @@ export class UserService {
     return data
   }
 
-  async viewOtherProfile(userId: string) {
+  async viewOtherProfile(userId: string,viewerid:string) {
     const fieldsToSelect = 'avatar name profession ratings createdAt task_completed city zip_code about reviews';
     
     try {
@@ -367,7 +370,7 @@ export class UserService {
       if (!data) {
         throw new HttpException('User not found', ResponseCode.NOT_FOUND);
       }
-      
+      await this.notificationService.createNotification(viewerid,userId,NotificationType.VISITED_PROFILE)
       return data;
     } catch (err) {
       throw new HttpException(err.message, ResponseCode.NOT_FOUND);

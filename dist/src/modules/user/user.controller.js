@@ -53,7 +53,7 @@ let UserController = class UserController {
         return this.userService.viewProfile(user.id);
     }
     async viewOtherProfile(id, user) {
-        return this.userService.viewOtherProfile(id);
+        return this.userService.viewOtherProfile(id, user.id);
     }
     async ViewMyCompleteProfile(user) {
         return this.userService.viewMyCompleteProfile(user.id);

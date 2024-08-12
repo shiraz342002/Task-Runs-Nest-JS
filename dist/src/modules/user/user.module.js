@@ -15,6 +15,7 @@ const user_schema_1 = require("./schema/user.schema");
 const logger_service_1 = require("../../logger/logger.service");
 const mail_service_1 = require("../mail/mail.service");
 const posts_module_1 = require("../posts/posts.module");
+const notification_module_1 = require("../notifications/notification.module");
 let UserModule = class UserModule {
 };
 UserModule = __decorate([
@@ -22,6 +23,7 @@ UserModule = __decorate([
         imports: [
             mongoose_1.MongooseModule.forFeature([{ name: user_schema_1.User.name, schema: user_schema_1.UserSchema }]),
             (0, common_1.forwardRef)(() => posts_module_1.PostsModule),
+            (0, common_1.forwardRef)(() => notification_module_1.NotificationModule),
         ],
         controllers: [user_controller_1.UserController],
         providers: [user_service_1.UserService, logger_service_1.LoggerService, mail_service_1.MailService],
