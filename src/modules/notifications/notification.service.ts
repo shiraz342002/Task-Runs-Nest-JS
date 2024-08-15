@@ -4,14 +4,12 @@ import { Model } from 'mongoose';
 import { Notification, NotificationDocument } from './schema/notification.schema';
 import { NotificationType } from '../../casl/notification';
 import { UserService } from '../user/user.service';
-
 @Injectable()
 export class NotificationService {
   constructor(
     @InjectModel(Notification.name) private notificationModel: Model<NotificationDocument>,
     @Inject(forwardRef(() => UserService)) private userService: UserService
   ) {}
-
   async createNotification(
     senderId: string,
     recipientId: string,

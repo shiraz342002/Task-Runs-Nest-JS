@@ -438,14 +438,12 @@ export class UserService {
       if (!user) {
         throw new NotFoundException('User not found');
       }
-  
       return user.reviews;
     } catch (error) {
       console.error('Error in UserService.getProfileReviews:', error);
       throw new InternalServerErrorException('An error occurred while fetching reviews');
     }
   }
-
   async viewMyCompleteProfile(userId:string):Promise<User>{
     const user = await this.userModel.findById(userId).populate({
       path:'reviews',
